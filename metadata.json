@@ -1,0 +1,6 @@
+{
+  "name": "LeadFlow",
+  "description": "An AI-powered client prospecting, design audit, and hyper-personalized human outreach generator for freelance web designers. Find local businesses with website flaws and generate targeted outreach copies.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

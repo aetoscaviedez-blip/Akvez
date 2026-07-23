@@ -1,0 +1,36 @@
+@import url('https://fonts.cdnfonts.com/css/clash-display');
+@import url('https://fonts.cdnfonts.com/css/cabinet-grotesk');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Cabinet Grotesk", "Space Grotesk", "Inter", sans-serif;
+  --font-display: "Clash Display", "Outfit", sans-serif;
+  
+  --color-dark-bg: #0a0a0a;
+  --color-dark-surface: #121212;
+  --color-accent-green: #ff7a00;
+  --color-secondary-orange: #8b5cf6;
+  --color-app-text: #fafafa;
+  --color-app-muted: #9ca3af;
+  --color-app-border: #1f1f1f;
+}
+
+body {
+  background-color: var(--color-dark-bg);
+  color: var(--color-app-text);
+  font-family: var(--font-sans);
+}
+
+/* Custom glow effects for card elements */
+.neon-glow {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 122, 0, 0.03);
+}
+
+.neon-border {
+  border-color: rgba(255, 122, 0, 0.15);
+}
+
+.neon-border:focus {
+  border-color: var(--color-accent-green);
+  box-shadow: 0 0 0 2px rgba(255, 122, 0, 0.08);
+}
