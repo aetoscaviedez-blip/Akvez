@@ -9,7 +9,7 @@ import DesignStyleConfigPanel from "./components/DesignStyleConfigPanel";
 import SearchCtaButton from "./components/SearchCtaButton";
 import SearchingLoader from "./components/SearchingLoader";
 import {
-  SectionHeader, EmptyState, Surface, Callout
+  SectionHeader, EmptyState, Surface, Callout, Button
 } from "../../../shared/components/ui";
 import ResultsHeader from "./components/ResultsHeader";
 import LoadMoreControls from "./components/LoadMoreControls";
@@ -100,14 +100,28 @@ export default function LeadHunter({
     onRequestedLeadConsumed();
   }, [requestedLeadId]);
 
-  // Scanning progression animation messages in Spanish
+  // Scanning progression animation messages in Spanish.
+  //
+  // ⚠️ **H-11.1 · Estos textos son los más vistos del producto:** ocupan la
+  // pantalla completa durante los ~30 s de la búsqueda. Por eso deben nombrar
+  // exactamente lo que el sistema hace, sin licencias narrativas.
+  //
+  // Dos decían lo que no es:
+  //
+  //   «Google Search»  → el descubrimiento se hace contra **Google Places**
+  //                      (`placesSearchAdapter`). Search no interviene.
+  //   «Lead Score»     → nombre retirado del producto. La puntuación se llama
+  //                      **Opportunity Score** en todas las demás pantallas.
+  //
+  // Un jurado que oye un nombre aquí y lee otro en la interfaz encuentra la
+  // costura. No es un matiz de estilo: era información incorrecta.
   const scanMessages = [
     "Iniciando Agente LeadHunter Colombia...",
-    "Buscando listados reales en Google Search...",
+    "Buscando listados reales en Google Places...",
     "Filtrando negocios informales y corporaciones...",
     "Analizando velocidad de carga y adaptación móvil...",
     "Evaluando fugas de conversión y falta de llamados a la acción (CTA)...",
-    "Calculando el Lead Score y estructurando el ángulo comercial..."
+    "Calculando el Opportunity Score y estructurando el ángulo comercial..."
   ];
 
   React.useEffect(() => {
@@ -367,16 +381,44 @@ export default function LeadHunter({
             />
           )}
 
-          {/* Empty State when no searches performed yet */}
+          {/*
+            **Estado vacío — H-11.1 · la acción vive donde ya está el ojo.**
+
+            Antes este bloque era un cartel que apuntaba a otro sitio: ocupaba
+            la mayor superficie de la pantalla de entrada y su texto decía
+            «Configura el nicho y la ciudad **a la izquierda**». El ojo aterriza
+            en el centro, lee, y tiene que volver atrás para actuar.
+
+            Y la instrucción era además **falsa**: el nicho y la ciudad ya
+            vienen puestos (`NICHE_PRESETS[0]` y «Bogotá»). No había nada que
+            configurar. El usuario estaba a un clic de su primer resultado y el
+            producto le pedía trabajo que ya estaba hecho.
+
+            Ahora el bloque **dice lo que hay y ofrece hacerlo**, con el nicho y
+            la ciudad reales escritos en el propio botón. El panel de filtros no
+            desaparece: queda para quien quiera cambiarlos, que es su función.
+          */}
           {!searching && displayedLeads.length === 0 && !searchError && (
             <EmptyState
               variant="panel"
               icon={<Search className="h-6 w-6" />}
-              title={hasSearched ? "No se encontraron leads" : "Inicia la búsqueda de leads"}
+              title={hasSearched ? "No se encontraron leads" : "Todo listo para buscar"}
+              action={
+                hasSearched ? undefined : (
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    onClick={() => handleSearch()}
+                    icon={<Search className="h-4 w-4" />}
+                  >
+                    Buscar {activeNicheName} en {city}
+                  </Button>
+                )
+              }
             >
               {hasSearched
                 ? `No identificamos negocios de "${activeNicheName}" en ${city} sin sitio web corporativo propio. Intenta con otra combinación de nicho o localización.`
-                : "Configura el nicho y la ciudad a la izquierda. AKVEZ buscará en Google Places, analizará cada negocio y calculará su Opportunity Score."}
+                : "AKVEZ consultará Google Places, analizará cada negocio y calculará su Opportunity Score. Puedes cambiar el nicho o la ciudad a la izquierda."}
             </EmptyState>
           )}
 

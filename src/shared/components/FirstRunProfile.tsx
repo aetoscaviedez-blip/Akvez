@@ -4,7 +4,12 @@ import { Surface, SectionHeader, Button, Eyebrow } from "./ui";
 import { ArrowRight, PenLine } from "lucide-react";
 
 /**
- * **Alta inicial — la única vez que AKVEZ pregunta algo antes de trabajar.**
+ * **Alta — la única vez que AKVEZ pregunta algo, y ya no es al principio.**
+ *
+ * Se rinde desde el Composition Root cuando el usuario entra a «Generar
+ * mensaje» sin perfil (H-11.1). El nombre del fichero se conserva —sigue
+ * siendo el alta de primer uso— pero el momento cambió: ya no bloquea la
+ * entrada al producto, sino que completa el único paso que lo necesita.
  *
  * ── QUÉ PROBLEMA DE PRODUCTO RESUELVE ────────────────────────────────────────
  *
@@ -66,12 +71,24 @@ export default function FirstRunProfile({
 
   return (
     <div className="mx-auto w-full max-w-2xl py-8">
+      {/*
+        **El microcopy cambió porque cambió el momento (H-11.1).**
+
+        Este formulario ya no abre la aplicación: aparece al pulsar «Generar
+        mensaje», cuando el usuario ya ha buscado, ha visto resultados y ha
+        elegido un negocio. El texto anterior —«Antes de empezar · ¿Quién
+        eres?»— sonaba a puerta de entrada porque lo era.
+
+        Ahora tiene que sonar a lo que es: **el último dato que falta para
+        escribir**, pedido justo cuando su utilidad es evidente. El botón ya no
+        dice «Empezar a buscar» (eso ya ocurrió); dice a dónde lleva.
+      */}
       <SectionHeader
         level="screen"
         icon={<PenLine className="h-3.5 w-3.5" />}
-        eyebrow="Antes de empezar"
-        title="¿Quién eres?"
-        lead="AKVEZ escribe los mensajes en tu nombre. Necesita saber cómo firmarlos y a qué te dedicas. Nada más."
+        eyebrow="Falta tu firma"
+        title="¿Quién escribe este mensaje?"
+        lead="AKVEZ va a redactarlo en tu nombre y el negocio lo recibirá firmado por ti. Necesita saber cómo llamarte y a qué te dedicas. Nada más."
       >
         <Surface as="section" padding="xl" className="space-y-6">
           <form onSubmit={submit} className="space-y-5">
@@ -121,7 +138,7 @@ export default function FirstRunProfile({
                 disabled={!ready}
                 iconRight={<ArrowRight className="h-4 w-4" />}
               >
-                Empezar a buscar
+                Continuar al mensaje
               </Button>
             </div>
           </form>

@@ -77,10 +77,34 @@ export default function EmptyState({
           {title}
         </p>
       )}
-      <p className="mx-auto mt-3 max-w-measure font-sans text-sm text-app-muted">
+      {/*
+        **H-11.1 · la acción va antes que la explicación.**
+
+        El orden era título → explicación → acción: el usuario tenía que leer
+        un párrafo entero para descubrir que abajo había un botón. En la
+        pantalla de entrada del producto eso significaba explicar durante tres
+        líneas algo que se resolvía en un clic.
+
+        Invertido, el bloque se lee **qué es · qué hago · por qué**. La
+        explicación no se pierde —queda debajo, para quien la quiera— pero deja
+        de bloquear el camino a la acción.
+
+        Se corrige en la primitiva y no en cada llamada: los tres estados
+        vacíos con acción del producto (Lead Hunter, Biblioteca y Pitch
+        Generator) sufrían el mismo orden invertido.
+      */}
+      {action && <div className="mt-6 flex justify-center">{action}</div>}
+      {/* Sin acción el párrafo sigue al título de cerca; con acción necesita
+          separarse de ella para no leerse como su pie. */}
+      <p
+        className={
+          action
+            ? "mx-auto mt-6 max-w-measure font-sans text-sm text-app-muted"
+            : "mx-auto mt-3 max-w-measure font-sans text-sm text-app-muted"
+        }
+      >
         {children}
       </p>
-      {action && <div className="mt-6 flex justify-center">{action}</div>}
     </Surface>
   );
 }

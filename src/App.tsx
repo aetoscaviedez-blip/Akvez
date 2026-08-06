@@ -139,24 +139,6 @@ export default function App() {
     setActiveTab("hunter");
   };
 
-  /**
-   * **Alta inicial.** Mientras no haya perfil, el producto no enseña su espacio
-   * de trabajo: pregunta quién es su usuario. Es la única puerta del producto y
-   * se cruza una sola vez.
-   */
-  if (!designerProfile) {
-    return (
-      <div className="min-h-screen bg-dark-bg text-app-text font-sans antialiased selection:bg-brand/20 selection:text-brand">
-        <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <span className="font-brand text-2xl font-bold tracking-tight text-app-text">
-            AK<span className="text-brand">V</span>EZ
-          </span>
-        </div>
-        <FirstRunProfile onComplete={setDesignerProfile} />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-dark-bg text-app-text font-sans antialiased selection:bg-brand/20 selection:text-brand flex flex-col">
       
@@ -224,21 +206,27 @@ export default function App() {
               <button type="button" className="p-2.5 rounded-full hover:bg-surface-raised text-app-muted hover:text-app-text transition cursor-pointer">
                 <Settings className="w-5 h-5" />
               </button>
-              <div className="flex items-center gap-2.5">
-                <span className="hidden text-right sm:block">
-                  <span className="block font-sans text-xs font-semibold leading-tight text-app-text">
-                    {designerProfile.name}
-                  </span>
-                  {designerProfile.company && (
-                    <span className="block font-sans text-eyebrow leading-tight text-app-muted">
-                      {designerProfile.company}
+              {/* **Solo cuando el producto sabe a quién nombrar.** Antes del
+                  alta —que ahora ocurre al generar el primer mensaje— no hay
+                  identidad que mostrar, y un avatar vacío o genérico diría
+                  menos que su ausencia. */}
+              {designerProfile && (
+                <div className="flex items-center gap-2.5">
+                  <span className="hidden text-right sm:block">
+                    <span className="block font-sans text-xs font-semibold leading-tight text-app-text">
+                      {designerProfile.name}
                     </span>
-                  )}
-                </span>
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-brand/30 bg-brand/20 font-sans text-xs font-bold text-brand">
-                  {initials(designerProfile.name)}
+                    {designerProfile.company && (
+                      <span className="block font-sans text-eyebrow leading-tight text-app-muted">
+                        {designerProfile.company}
+                      </span>
+                    )}
+                  </span>
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-brand/30 bg-brand/20 font-sans text-xs font-bold text-brand">
+                    {initials(designerProfile.name)}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
           </div>
@@ -347,7 +335,16 @@ export default function App() {
           `order` la mueve visualmente sin alterar el orden del DOM, de modo que
           un lector de pantalla la sigue encontrando junto a la navegación.
         */}
-        <div className={`order-last ${activeTab === "dashboard" ? "hidden" : "block"}`}>
+        {/* Durante el alta tampoco se rinde: su texto del Pitch («Selecciona
+            cualquier lead mapeado…») describe una pantalla que el usuario
+            todavía no está viendo. */}
+        <div
+          className={`order-last ${
+            activeTab === "dashboard" || (activeTab === "pitch" && !designerProfile)
+              ? "hidden"
+              : "block"
+          }`}
+        >
           <div className="flex flex-col gap-3 rounded-container border border-app-border bg-dark-surface/60 p-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
               <Compass className="mt-0.5 h-4 w-4 shrink-0 text-app-muted" />
@@ -409,6 +406,28 @@ export default function App() {
                (APS-04 §A.3.4), y la Biblioteca es la única que refleja lo que
                realmente quedó registrado en persistencia. */
             <LeadLibrary />
+          ) : !designerProfile ? (
+            /*
+              **H-11.1 · el alta dejó de ser la puerta de entrada.**
+
+              Antes bloqueaba la aplicación entera: nadie veía AKVEZ hasta
+              rellenar cinco campos. El perfil, sin embargo, **solo se usa al
+              redactar el mensaje** —el paso 4 de 5 del recorrido—, así que se
+              estaba pidiendo unos 90 segundos antes de servir para nada, y
+              **duplicaba el tiempo hasta el primer valor**: de tres pasos
+              (abrir → buscar → resultados) a cinco.
+
+              Ahora vive exactamente donde se necesita. El usuario abre, busca,
+              explora resultados y abre una oportunidad sin que nadie le
+              pregunte nada. Al pulsar «Generar mensaje» —y solo entonces— el
+              producto le pide su firma, que es cuando la petición se explica
+              sola: va a escribir en su nombre.
+
+              Se cruza una sola vez; después, esta rama no vuelve a rendirse.
+              `PitchGenerator` conserva su contrato intacto: nunca recibe un
+              perfil nulo.
+            */
+            <FirstRunProfile onComplete={setDesignerProfile} />
           ) : (
             <PitchGenerator
               leads={leads}
