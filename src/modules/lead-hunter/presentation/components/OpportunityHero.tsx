@@ -56,9 +56,19 @@ export default function OpportunityHero({ lead }: { lead: Prospect }) {
         {/* ── Identidad del negocio ─────────────────────────────────────────── */}
         <div className="min-w-0 space-y-5">
           <div className="flex flex-wrap items-center gap-2">
-            {/* Un dato de ejemplo debe declararse como tal, también aquí. */}
+            {/*
+              Un dato de ejemplo debe declararse como tal, también aquí.
+
+              **Se usa `pill`, no el chip neutro.** La regla del sistema —«el
+              icono lleva el color, el texto no»— existe para que una fila de
+              chips de dato no se convierta en un semáforo. **Pero esto no es un
+              chip de dato: es una declaración de integridad**, y en la
+              inspección F2.5 se comprobó que el tratamiento neutro la dejaba
+              indistinguible de la fuente y del estado del sitio. `pill` tiñe
+              texto, fondo y borde, que es el peso que esta afirmación necesita.
+            */}
             {lead.isDemo && (
-              <Badge tone="warn" icon={<AlertTriangle className="h-3 w-3" />}>
+              <Badge variant="pill" tone="warn" icon={<AlertTriangle className="h-3.5 w-3.5" />}>
                 Dato de ejemplo — no es un resultado real
               </Badge>
             )}

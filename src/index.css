@@ -141,6 +141,35 @@ body {
   font-family: var(--font-sans);
 }
 
+/* ── 🔴 Corrección crítica de H-07 F2.5 ──────────────────────────────────────
+
+   **Clash Display en los pesos que AKVEZ usa tiene el espacio de palabra roto.**
+
+   Medido en el navegador, ancho del carácter espacio por cada 100 px de cuerpo:
+
+       Clash Display 700/900 ......  14  ← el peso de TODOS los titulares
+       Cabinet Grotesk 700 ........  21
+       Arial ......................  28
+
+   **Es dos tercios de lo normal**, y sobre él se aplicaba además `tracking-tight`
+   (−0.025em), que resta otro tanto. El resultado medible: en un titular de 48 px
+   el hueco entre palabras quedaba en ~5,5 px donde debería rondar los 13.
+
+   En pantalla, «Embudo de oportunidad» se leía **«Embudodeoportunidad»**. Afectaba
+   a **todos los titulares de las cinco pantallas** —es la primera cosa que un
+   jurado ve— y no se detectó en las Fases 1 y 2 porque `tsc` y `vite build`
+   compilan igual de bien con la tipografía rota.
+
+   `word-spacing` se declara en `em`, de modo que escala con el cuerpo y corrige
+   por igual un rótulo de 11 px y el Score de 96. Se deja **fuera de toda `@layer`**
+   a propósito: el CSS sin capa gana a cualquier utilidad de Tailwind, y así la
+   corrección no depende del orden en que se generen las clases.
+
+   ────────────────────────────────────────────────────────────────────────── */
+.font-display {
+  word-spacing: 0.12em;
+}
+
 /* ── Profundidad ─────────────────────────────────────────────────────────────
 
    **Aquí vivían `.neon-glow` y `.neon-border`, y se han retirado.**
