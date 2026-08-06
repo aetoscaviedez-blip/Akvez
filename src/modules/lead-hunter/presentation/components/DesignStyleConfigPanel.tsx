@@ -43,7 +43,7 @@ export default function DesignStyleConfigPanel({
           className="w-full bg-surface-raised border border-app-border rounded-xl p-3 text-xs text-app-text placeholder:text-app-muted focus:outline-none focus:border-brand transition"
         />
       ) : (
-        <div className="bg-surface-raised/40 p-3 border border-app-border/60 rounded-xl text-[10.5px] text-app-muted italic leading-relaxed">
+        <div className="bg-surface-raised/40 p-3 border border-app-border/60 rounded-xl text-xs text-app-muted italic">
           Usando: &ldquo;{designerStyle ? designerStyle.slice(0, 45) + "..." : "Diseño premium minimalista"}&rdquo;
         </div>
       )}

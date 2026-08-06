@@ -252,7 +252,7 @@ function SummaryTile({
         <IconFrame size="sm">{icon}</IconFrame>
         <div className="min-w-0">
           <h4 className="font-display text-sm font-bold text-app-text">{title}</h4>
-          <p className="mt-0.5 font-sans text-xs leading-snug text-app-muted">
+          <p className="mt-1 font-sans text-xs text-app-muted">
             {caption}
           </p>
         </div>

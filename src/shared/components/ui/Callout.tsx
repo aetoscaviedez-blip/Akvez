@@ -62,10 +62,13 @@ export default function Callout({
         </span>
       )}
       <div className="min-w-0 space-y-1.5">
+        {/* **F4.5 · R-08.** El título iba a 12 px sobre un cuerpo de 16, lo que
+            invierte la relación título-cuerpo. A 14 px en versalitas recupera el
+            orden sin robarle peso al párrafo que encabeza. */}
         {title && (
           <h4
-            className={`font-sans text-eyebrow font-bold uppercase tracking-widest ${
-              tone === "neutral" ? "text-app-text/70" : TONE[tone].text
+            className={`font-sans text-xs font-bold uppercase tracking-widest ${
+              tone === "neutral" ? "text-app-text" : TONE[tone].text
             }`}
           >
             {title}

@@ -40,32 +40,41 @@ export default function FunnelStage({
       className="motion-safe:animate-ak-rise"
       style={{ animationDelay: `${index * 70}ms` }}
     >
-      <Surface padding="lg" className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0 space-y-1">
-          <h4 className="font-display text-base font-bold text-app-text">{label}</h4>
-          <p className="font-sans text-xs leading-snug text-app-muted">{caption}</p>
-        </div>
+      <Surface padding="lg" className="space-y-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0 space-y-1">
+            <h4 className="font-display text-lg font-bold text-app-text">{label}</h4>
+            <p className="max-w-measure font-sans text-xs text-app-muted">{caption}</p>
+          </div>
 
-        <div className="flex shrink-0 items-baseline gap-3">
-          <span className="font-display text-4xl font-black leading-none tabular-nums text-app-text">
-            {value}
-          </span>
-          {previous !== undefined && (
-            <span className="font-mono text-xs text-app-muted">
-              de {previous}
+          <div className="flex shrink-0 items-baseline gap-3">
+            <span className="font-display text-4xl font-black leading-none tabular-nums text-app-text">
+              {value}
             </span>
-          )}
+            {previous !== undefined && (
+              <span className="font-mono text-xs text-app-muted">
+                de {previous}
+              </span>
+            )}
+          </div>
         </div>
-      </Surface>
 
-      {/* Barra proporcional al tramo anterior. */}
-      <div className="mt-2">
+        {/* Barra proporcional al tramo anterior.
+
+            **Estaba fuera de la tarjeta, a sangre y en naranja.** Tres tramos
+            seguidos al 100 % producían tres reglas naranjas gruesas que se leían
+            como divisores, no como medidas — y el naranja está reservado a marca
+            y acción, que es justo lo que una proporción no es.
+
+            Ahora vive **dentro** de la tarjeta, donde el ojo la asocia al dato
+            que acompaña, y en violeta, que es el color del análisis. */}
         <Meter
           value={Math.min(100, Math.round(ratio * 100))}
+          tone="intel"
           size="xs"
           delay={index * 70 + 120}
         />
-      </div>
+      </Surface>
 
       {!isLast && (
         <div aria-hidden="true" className="mx-auto my-3 h-5 w-px bg-app-border" />

@@ -64,6 +64,7 @@ export function StatTile({
   tone = "neutral",
   size = "md",
   level = "card",
+  emphasis = false,
   meter,
   fallback,
   hint,
@@ -85,6 +86,14 @@ export function StatTile({
    * Fase 1 corrigió en el resto del producto.
    */
   level?: "card" | "raised";
+  /**
+   * Tiñe la cifra con el tono en lugar de dejarla blanca.
+   *
+   * **Reservado a la cifra que *es* ese tono** — el Opportunity Score en
+   * naranja. Usarlo en varias celdas de una misma rejilla las hace competir y
+   * anula el efecto.
+   */
+  emphasis?: boolean;
   /** Barra proporcional al mismo porcentaje que ya muestra `value`. */
   meter?: number;
   fallback?: string;
@@ -111,9 +120,22 @@ export function StatTile({
         {label}
       </Eyebrow>
 
+      {/* **La cifra es blanca; el tono viaja en el icono de su rótulo.**
+          Cuatro cifras teñidas de dos colores distintos —naranja, naranja,
+          violeta, naranja— se leían como una asignación arbitraria y **ninguna
+          de las cuatro dominaba**. El color aquí no informa de nada que la
+          etiqueta no diga ya.
+
+          `emphasis` reserva el tono para la cifra que sí *es* ese tono: el
+          Opportunity Score, que el ADN pinta de naranja porque es lo que la
+          marca vende. */}
       <div
         className={`mt-2.5 ${valueClass} ${
-          present ? (tone === "neutral" ? "text-app-text" : TONE[tone].text) : "text-app-muted/50"
+          present
+            ? emphasis && tone !== "neutral"
+              ? TONE[tone].text
+              : "text-app-text"
+            : "text-app-muted/50"
         }`}
       >
         {present ? value : fallback ?? "No disponible"}
@@ -128,7 +150,7 @@ export function StatTile({
       {/* La definición viaja con la cifra: sin ella, el número no se puede
           comprobar. */}
       {caption && (
-        <p className="mt-2.5 font-sans text-xs leading-snug text-app-muted">
+        <p className="mt-2.5 max-w-measure font-sans text-xs text-app-muted">
           {caption}
         </p>
       )}

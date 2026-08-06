@@ -77,9 +77,14 @@ export default function ActionCard({
         </span>
       )}
 
+      {/* **F4.5 · R-03.** El subtítulo corría a 123 caracteres por línea, y es
+          la frase que explica qué hace la acción primaria de cada pantalla.
+
+          Sube a 16 px con la medida acotada, y el título a 20 px: una acción
+          principal debe leerse de un vistazo, no descifrarse. */}
       <span className="min-w-0 flex-1">
         <span
-          className={`block font-display text-sm font-bold ${
+          className={`block font-display text-lg font-bold leading-tight ${
             available ? (solid ? "" : "text-app-text") : "text-app-muted/60"
           }`}
         >
@@ -87,8 +92,8 @@ export default function ActionCard({
         </span>
         {detail && (
           <span
-            className={`mt-0.5 block truncate font-sans text-xs ${
-              solid ? "opacity-70" : "text-app-muted"
+            className={`mt-1 block max-w-measure font-sans text-sm ${
+              solid ? "opacity-75" : "text-app-muted"
             }`}
           >
             {detail}

@@ -4,7 +4,7 @@ import LeadCard from "../../lead-hunter/presentation/components/LeadCard";
 import FunnelStage from "./components/FunnelStage";
 import SystemStatus, { StatusItem } from "./components/SystemStatus";
 import {
-  SectionHeader, EmptyState, Surface, ActionCard, Badge, StatGrid, StatTile
+  SectionHeader, EmptyState, Surface, Callout, ActionCard, Badge, StatGrid, StatTile
 } from "../../../shared/components/ui";
 import {
   Search, Radar, Brain, Flame, Check, AlertTriangle, Activity, Layers, ShieldCheck
@@ -181,17 +181,17 @@ export default function ExecutiveDashboard({
           incluyen.** Callarlo convertiría el panel en una afirmación falsa sobre
           cuánto trabajo real hay hecho.
         */}
+        {/* **Era el último aviso de integridad escrito a mano.** Ahora usa
+            `Callout`, como sus hermanos del producto: misma anatomía, mismo
+            cuerpo y misma medida de lectura. */}
         {demoCount > 0 && (
-          <Surface tone="warn" padding="sm" className="flex items-start gap-3">
-            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-warn" />
-            <p className="font-sans text-xs leading-relaxed text-app-text">
-              <strong className="text-warn">
-                {demoCount} de estos {found} negocios son datos de ejemplo.
-              </strong>{" "}
-              No proceden de una búsqueda real y están incluidos en todas las
-              cifras de esta pantalla.
-            </p>
-          </Surface>
+          <Callout tone="warn" icon={<AlertTriangle className="h-4 w-4" />} size="sm">
+            <strong className="text-warn">
+              {demoCount} de estos {found} negocios son datos de ejemplo.
+            </strong>{" "}
+            No proceden de una búsqueda real y están incluidos en todas las
+            cifras de esta pantalla.
+          </Callout>
         )}
 
         {/* ── 6 · CTA ─────────────────────────────────────────────────────────

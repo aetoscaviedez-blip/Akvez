@@ -43,13 +43,20 @@ export default function EmptyState({
 }) {
   if (variant === "inline") {
     return (
-      <Surface variant="dashed" radius="container" className="px-6 py-6">
+      <Surface variant="dashed" radius="container" className="px-7 py-6">
         {title && (
-          <p className="mb-1.5 font-display text-sm font-bold text-app-text">
+          <p className="mb-2 font-display text-lg font-bold text-app-text">
             {title}
           </p>
         )}
-        <p className="font-sans text-xs leading-relaxed text-app-muted">
+        {/* **F4.5 · R-02.** Estos bloques corrían a 125-135 caracteres por línea
+            —las líneas más largas de toda la aplicación— y a 14 px.
+
+            **Son el corazón del argumento de integridad de AKVEZ:** explican
+            *por qué* falta un dato en lugar de dejar un hueco, y son justo lo
+            que un jurado lee si pregunta «¿y aquí por qué no hay nada?».
+            Merecen el mismo cuerpo que cualquier otro párrafo del producto. */}
+        <p className="max-w-measure font-sans text-sm text-app-muted">
           {children}
         </p>
       </Surface>
@@ -66,11 +73,11 @@ export default function EmptyState({
         </div>
       )}
       {title && (
-        <p className="font-display text-lg font-bold tracking-tight text-app-text">
+        <p className="font-display text-xl font-bold tracking-tight text-app-text">
           {title}
         </p>
       )}
-      <p className="mx-auto mt-2 max-w-md font-sans text-xs leading-relaxed text-app-muted">
+      <p className="mx-auto mt-3 max-w-measure font-sans text-sm text-app-muted">
         {children}
       </p>
       {action && <div className="mt-6 flex justify-center">{action}</div>}

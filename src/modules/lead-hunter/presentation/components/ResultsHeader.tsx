@@ -1,4 +1,5 @@
 import React from "react";
+import { Eyebrow } from "../../../../shared/components/ui";
 
 interface ResultsHeaderProps {
   visibleCount: number;
@@ -8,14 +9,17 @@ interface ResultsHeaderProps {
 
 export default function ResultsHeader({ visibleCount, totalLeads, references }: ResultsHeaderProps) {
   return (
-    <div className="flex items-center justify-between">
-      <h3 className="font-display font-bold uppercase text-xs tracking-wider text-app-muted">
-        Leads Detectados en Colombia ({Math.min(visibleCount, totalLeads)} de {totalLeads})
-      </h3>
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      {/* **F2.5 · V-08.** Era la cuarta anatomía de encabezado que sobrevivía en
+          una pantalla ya unificada: display, mayúsculas y tamaño propios. Ahora
+          usa el mismo rótulo en versalitas que el resto del sistema. */}
+      <Eyebrow as="h4">
+        Leads detectados en Colombia ({Math.min(visibleCount, totalLeads)} de {totalLeads})
+      </Eyebrow>
 
       {references.length > 0 && (
         <div className="text-xs text-brand flex items-center gap-1 shrink-0">
-          <span className="font-bold">Fuentes de Búsqueda:</span>
+          <span className="font-bold">Fuentes de búsqueda:</span>
           <div className="flex gap-1.5">
             {references.slice(0, 3).map((ref, idx) => (
               <a

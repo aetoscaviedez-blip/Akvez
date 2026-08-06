@@ -250,12 +250,14 @@ export default function PitchGenerator({
                   )}
                   {/* **`typeof === "number"`, nunca `!!score`**: `0` es una
                       puntuación real y `null` una ausencia legítima (R-45). */}
+                  {/* **F2.5 · V-04.** Era el último chip del producto escrito a
+                      mano: tintado de naranja junto a distintivos neutros, en la
+                      misma fila. Ahora comparte anatomía con todos los demás. */}
                   {typeof activeLead.score === "number" && (
-                    <span className="inline-flex items-center gap-1.5 rounded-md border border-brand/30 bg-brand/10 px-2.5 py-1 font-sans text-eyebrow font-bold uppercase tracking-widest text-brand">
-                      <Flame className="h-3 w-3" />
+                    <Badge tone="brand" icon={<Flame className="h-3 w-3" />}>
                       Score {activeLead.score}
                       {activeLead.band ? ` · ${activeLead.band}` : ""}
-                    </span>
+                    </Badge>
                   )}
                 </div>
 
@@ -299,11 +301,11 @@ export default function PitchGenerator({
                     entre comillas: sin `description`, la pantalla mostraba unas
                     comillas vacías. */}
                 {activeLead.description ? (
-                  <p className="border-t border-app-border/60 pt-4 font-sans text-sm leading-relaxed text-app-muted">
+                  <p className="max-w-measure border-t border-app-border/60 pt-5 font-sans text-sm text-app-muted">
                     {activeLead.description}
                   </p>
                 ) : (
-                  <p className="border-t border-app-border/60 pt-4 font-sans text-xs italic leading-relaxed text-app-muted">
+                  <p className="max-w-measure border-t border-app-border/60 pt-5 font-sans text-sm italic text-app-muted">
                     El análisis no produjo una descripción de este negocio.
                   </p>
                 )}

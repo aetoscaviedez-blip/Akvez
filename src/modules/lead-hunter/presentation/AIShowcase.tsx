@@ -286,6 +286,7 @@ export default function AIShowcase({
           <StatTile
             label="Opportunity Score"
             tone="brand"
+            emphasis
             size="lg"
             value={hasScore ? lead.score : undefined}
             fallback="—"

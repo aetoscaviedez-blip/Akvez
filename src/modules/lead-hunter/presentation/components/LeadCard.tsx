@@ -137,11 +137,17 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
 
           {/* El nombre abre la Opportunity View. Es la vía de acceso disponible
               **siempre**, también cuando el Lead no trae Evaluación y por tanto
-              no rinde la franja de inteligencia. */}
+              no rinde la franja de inteligencia.
+
+              **F4.5 · R-06 — baja de 26 px a 22.** Iba exactamente al mismo
+              tamaño y peso que el título de la sección que contiene la lista, y
+              dos niveles distintos de la jerarquía no pueden verse iguales.
+              **La sección es el contenedor y debe pesar más**, así que cede la
+              tarjeta. */}
           <button
             type="button"
             onClick={() => onOpenOpportunity(lead.id)}
-            className="block cursor-pointer text-left font-display text-2xl font-bold leading-tight tracking-tight text-app-text transition-colors hover:text-brand"
+            className="block cursor-pointer text-left font-display text-xl font-bold leading-tight tracking-tight text-app-text transition-colors hover:text-brand"
           >
             {lead.name}
           </button>
@@ -312,9 +318,15 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
       {/* ── 3 · POR QUÉ ────────────────────────────────────────────────────── */}
       <div className="space-y-7 border-t border-app-border px-6 py-7">
 
-        {/* Se omite si el análisis no la produjo. */}
+        {/* Se omite si el análisis no la produjo.
+
+            **F4.5 · R-01 — era el peor hallazgo de legibilidad del producto.**
+            Iba a 14 px en una caja de 750 px: ~110 caracteres por línea. Y
+            estaba justo encima de las tarjetas de problemas, que van a 16 px,
+            de modo que **lo que presenta el negocio se leía más pequeño que el
+            detalle que lo matiza**: la jerarquía al revés. */}
         {lead.description && (
-          <p className="font-sans text-xs leading-relaxed text-app-muted">
+          <p className="max-w-measure font-sans text-sm text-app-muted">
             {lead.description}
           </p>
         )}
