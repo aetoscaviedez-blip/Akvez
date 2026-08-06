@@ -205,7 +205,7 @@ export default function OpportunityView({
                 {lead.revenueLoss && (
                   <Callout
                     icon={<DollarSign className="h-4 w-4 text-warn" />}
-                    title="Impacto financiero estimado"
+                    title="Cuánto les cuesta hoy"
                     tone="warn"
                   >
                     {lead.revenueLoss}
@@ -229,7 +229,7 @@ export default function OpportunityView({
         <SectionHeader
           icon={<EyeOff className="h-4 w-4 text-app-muted" />}
           eyebrow="Límites del análisis"
-          title="Qué falta medir"
+          title="Lo que AKVEZ no pudo medir"
           lead="Estos factores forman parte del modelo pero no pudieron medirse con la información pública disponible. No puntúan cero: quedan fuera del cálculo y reducen la cobertura declarada."
         >
           <FactorInventory breakdown={breakdown} variant="unmeasured" />
@@ -245,7 +245,7 @@ export default function OpportunityView({
         <div className="space-y-6">
           <Callout
             icon={<Zap className="h-4 w-4 text-brand" />}
-            title="Ángulo de oportunidad"
+            title="Lo que le venderías"
             tone="brand"
           >
             {/* **Sin ángulo no se inventa uno.** */}

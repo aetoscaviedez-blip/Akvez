@@ -70,7 +70,14 @@ export default function App() {
   // por decisión vinculante: el Workspace muestra «el resultado de una
   // ejecución» y la Biblioteca contiene «todo». Por eso el Workspace conserva su
   // estado local y la Biblioteca lee siempre del servidor.
-  const [activeTab, setActiveTab] = React.useState<"dashboard" | "hunter" | "library" | "pitch">("dashboard");
+  //
+  // **Se abre por «Oportunidades», no por el Panel.**
+  //
+  // Un panel resume trabajo acumulado, y en el minuto cero no hay ninguno: sus
+  // cifras mayores son un cero y unos doses. **Abrir así comunica vacío antes
+  // que valor.** El Hunter abre enseñando que basta con elegir nicho y ciudad,
+  // que es la propuesta de valor sin una sola frase de marketing.
+  const [activeTab, setActiveTab] = React.useState<"dashboard" | "hunter" | "library" | "pitch">("hunter");
 
   /**
    * Búsquedas ejecutadas en esta sesión.
@@ -228,9 +235,54 @@ export default function App() {
       {/* Main Workspace Container */}
       <main className="flex max-w-7xl w-full mx-auto flex-col px-4 sm:px-6 lg:px-8 py-10 flex-grow gap-10">
         
-        {/* Module Navigation Tabs */}
+        {/*
+          **El orden de las pestañas ES el orden de la historia.**
+
+          Antes empezaba por «Panel» — un resumen de trabajo acumulado que en el
+          minuto cero está vacío, y que responde «¿qué ha pasado aquí?» antes de
+          que nadie se haya preguntado «¿para qué sirve esto?».
+
+          Ahora el recorrido va **descubrimiento → acción → consecuencia**:
+
+              Oportunidades  · se encuentran negocios reales
+              Generar mensaje · se contacta con uno
+              Panel          · lo que queda después de hacerlo varias veces
+              Biblioteca     · el archivo
+
+          El Panel no desaparece: **cambia de significado por cambiar de sitio**.
+          Al final se lee como «esto se acumula»; al principio se leía como
+          «esto está vacío».
+        */}
         <div className="border-b border-app-border pb-px">
           <div className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab("hunter")}
+              id="tab-hunter"
+              type="button"
+              className={`flex items-center gap-2.5 py-4 px-1 border-b-2 font-display text-base font-bold tracking-tight transition-all cursor-pointer ${
+                activeTab === "hunter"
+                  ? "border-brand text-app-text"
+                  : "border-transparent text-app-muted hover:text-app-text hover:border-app-border/40"
+              }`}
+            >
+              <MapPin className={`w-4 h-4 ${activeTab === "hunter" ? "text-brand" : "text-app-muted"}`} />
+              <span>Oportunidades</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab("pitch")}
+              id="tab-pitch"
+              type="button"
+              className={`flex items-center gap-2.5 py-4 px-1 border-b-2 font-display text-base font-bold tracking-tight transition-all cursor-pointer ${
+                activeTab === "pitch"
+                  ? "border-brand text-app-text"
+                  : "border-transparent text-app-muted hover:text-app-text hover:border-app-border/40"
+              }`}
+            >
+              <MessageSquare className={`w-4 h-4 ${activeTab === "pitch" ? "text-brand" : "text-app-muted"}`} />
+              <span>Generar mensaje</span>
+            </button>
+
             <button
               onClick={() => setActiveTab("dashboard")}
               id="tab-dashboard"
@@ -246,20 +298,6 @@ export default function App() {
             </button>
 
             <button
-              onClick={() => setActiveTab("hunter")}
-              id="tab-hunter"
-              type="button"
-              className={`flex items-center gap-2.5 py-4 px-1 border-b-2 font-display text-base font-bold tracking-tight transition-all cursor-pointer ${
-                activeTab === "hunter"
-                  ? "border-brand text-app-text"
-                  : "border-transparent text-app-muted hover:text-app-text hover:border-app-border/40"
-              }`}
-            >
-              <MapPin className={`w-4 h-4 ${activeTab === "hunter" ? "text-brand" : "text-app-muted"}`} />
-              <span>Oportunidades</span>
-            </button>
-            
-            <button
               onClick={() => setActiveTab("library")}
               id="tab-library"
               type="button"
@@ -271,20 +309,6 @@ export default function App() {
             >
               <Library className={`w-4 h-4 ${activeTab === "library" ? "text-brand" : "text-app-muted"}`} />
               <span>Biblioteca</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("pitch")}
-              id="tab-pitch"
-              type="button"
-              className={`flex items-center gap-2.5 py-4 px-1 border-b-2 font-display text-base font-bold tracking-tight transition-all cursor-pointer ${
-                activeTab === "pitch"
-                  ? "border-brand text-app-text"
-                  : "border-transparent text-app-muted hover:text-app-text hover:border-app-border/40"
-              }`}
-            >
-              <MessageSquare className={`w-4 h-4 ${activeTab === "pitch" ? "text-brand" : "text-app-muted"}`} />
-              <span>Generar mensaje</span>
             </button>
           </div>
         </div>

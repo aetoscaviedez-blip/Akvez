@@ -347,7 +347,7 @@ export default function PitchGenerator({
                   {activeLead.revenueLoss ? (
                     <Callout
                       icon={<DollarSign className="h-4 w-4 text-warn" />}
-                      title="Impacto comercial estimado"
+                      title="Cuánto les cuesta hoy"
                       tone="warn"
                     >
                       {activeLead.revenueLoss}
@@ -388,7 +388,7 @@ export default function PitchGenerator({
               {activeLead.angle ? (
                 <Callout
                   icon={<Zap className="h-4 w-4 text-brand" />}
-                  title="Ángulo de oportunidad"
+                  title="Lo que le venderías"
                   tone="brand"
                 >
                   {activeLead.angle}

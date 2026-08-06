@@ -14,7 +14,7 @@ export default function ResultsHeader({ visibleCount, totalLeads, references }: 
           una pantalla ya unificada: display, mayúsculas y tamaño propios. Ahora
           usa el mismo rótulo en versalitas que el resto del sistema. */}
       <Eyebrow as="h4">
-        Leads detectados en Colombia ({Math.min(visibleCount, totalLeads)} de {totalLeads})
+        Negocios encontrados ({Math.min(visibleCount, totalLeads)} de {totalLeads})
       </Eyebrow>
 
       {references.length > 0 && (

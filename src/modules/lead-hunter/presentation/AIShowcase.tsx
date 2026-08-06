@@ -1,7 +1,6 @@
 import React from "react";
 import { Prospect } from "../../../shared/types";
 import ScoreBreakdown from "../../../shared/components/ScoreBreakdown";
-import ScoreCategoryCard from "./components/ScoreCategoryCard";
 import {
   SectionHeader, EmptyState, Surface, Callout, Button, StatGrid, StatTile, IconFrame
 } from "../../../shared/components/ui";
@@ -233,18 +232,23 @@ export default function AIShowcase({
       >
         {breakdown.length > 0 ? (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {breakdown.map((entry, index) => (
-                <ScoreCategoryCard key={entry.category} entry={entry} index={index} />
-              ))}
-            </div>
-
             {/*
-              **`ScoreBreakdown` se reutiliza, pero no a la vez que las
-              tarjetas.** Ambos componentes pintan las mismas seis categorías:
-              mostrarlos juntos sería enseñar el mismo dato dos veces. Aquí sirve
-              a un fin distinto —comprobar la aritmética— y por eso se despliega
-              a petición.
+              ── LA REJILLA DE CATEGORÍAS SE HA RETIRADO DE ESTA PANTALLA ──────
+
+              **Era la redundancia más cara del recorrido.** Las mismas seis
+              tarjetas se pintaban aquí y en la Opportunity View: una bajo el
+              rótulo «¿Por qué obtuvo ese Score?» y otra bajo «¿Cómo calculó el
+              Score?».
+
+              En el producto la distinción se sostiene —una responde *qué
+              concluyó* y la otra *cómo lo hizo*—. **En una demo de dos minutos
+              es contar la misma idea dos veces**, y era el tramo donde más
+              atención se perdía.
+
+              **El desglose se queda donde es el clímax: la Opportunity View.**
+              Aquí queda lo que esta pantalla sí aporta en exclusiva — la
+              comprobación aritmética, que es la prueba de que el número es
+              reproducible y no una alucinación del modelo.
             */}
             {hasScore && (
               <Surface level="raised" className="overflow-hidden">

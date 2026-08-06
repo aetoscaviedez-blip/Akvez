@@ -331,6 +331,33 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
           </p>
         )}
 
+        {/*
+          ⭐ **«Lo que le venderías» sube al primer plano.**
+
+          Estaba al final de la tarjeta, después del diagnóstico y de la lista
+          de problemas. **Es lo único de todo el producto que responde a «¿y esto
+          qué gano yo?»**: es el trabajo concreto que el freelance puede cobrarle
+          a este negocio.
+
+          Donde la referencia pone el valor económico del proyecto —un dato que
+          AKVEZ no tiene y no va a inventar— **AKVEZ tiene esto, que es su
+          equivalente honesto**. Enterrarlo era desperdiciar el único apetito
+          verdadero que el producto genera.
+
+          **Sin ángulo no se inventa uno**: se declara que no se generó.
+        */}
+        <Callout
+          tone={lead.angle ? "brand" : "neutral"}
+          icon={lead.angle ? <Zap className="h-4 w-4" /> : <Quote className="h-4 w-4" />}
+          title="Lo que le venderías"
+        >
+          {lead.angle ?? (
+            <span className="italic text-app-muted">
+              No se generó un ángulo de oportunidad para este negocio.
+            </span>
+          )}
+        </Callout>
+
         <div
           className={`grid grid-cols-1 gap-4 ${
             diagnosisCount === 2 ? "lg:grid-cols-2" : ""
@@ -350,7 +377,7 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
             <Callout
               tone="warn"
               icon={<DollarSign className="h-4 w-4" />}
-              title="Impacto financiero estimado"
+              title="Cuánto les cuesta hoy"
             >
               {lead.revenueLoss}
             </Callout>
@@ -359,7 +386,7 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
 
         <div className="space-y-3">
           <Eyebrow as="h4" icon={<AlertTriangle className="h-3.5 w-3.5 text-warn" />}>
-            Problemas web detectados
+            Lo que puedes arreglar
           </Eyebrow>
 
           {/* Lista vacía = **el análisis no detectó problemas**. Es un
@@ -387,19 +414,6 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
             </p>
           )}
         </div>
-
-        {/* **Sin ángulo no se inventa uno**: se declara que no se generó. */}
-        <Callout
-          tone={lead.angle ? "brand" : "neutral"}
-          icon={lead.angle ? <Zap className="h-4 w-4" /> : <Quote className="h-4 w-4" />}
-          title="Ángulo de oportunidad"
-        >
-          {lead.angle ?? (
-            <span className="italic text-app-muted">
-              No se generó un ángulo de oportunidad para este negocio.
-            </span>
-          )}
-        </Callout>
       </div>
 
       {/* ── 4 · QUÉ HACER ──────────────────────────────────────────────────────

@@ -276,12 +276,24 @@ export default function LeadHunter({
   return (
     <div className="space-y-8" id="lead-hunter-container">
       {/* Intro Header */}
+      {/*
+        **Es la pantalla de apertura, así que su titular es la propuesta de
+        valor.** Decía «Encuentra negocios reales con deficiencias de
+        conversión»: correcto, y jerga. «Deficiencias de conversión» no
+        significa nada fuera del oficio.
+
+        La entradilla recoge la mejor frase que tenía el producto —estaba de
+        subtítulo de un botón, debajo de cuatro contadores— y la sube a donde
+        se lee primero. **Sigue siendo literalmente cierta:** todo Lead que
+        devuelve la búsqueda tiene ausencia de sitio web o una deficiencia
+        clasificada.
+      */}
       <SectionHeader
         level="screen"
         icon={<Target className="h-3.5 w-3.5" />}
         eyebrow="Lead Hunter Colombia"
-        title="Encuentra negocios reales con deficiencias de conversión"
-        lead="El sistema calcula un Opportunity Score para cada negocio y explica la fuga financiera de su sitio actual."
+        title="Encuentra negocios que necesitan una web mejor"
+        lead="Elige nicho y ciudad. El agente rastrea Google Places, analiza cada negocio y te dice cuáles merecen tu tiempo."
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:items-start">

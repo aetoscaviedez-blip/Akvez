@@ -1,7 +1,6 @@
 import React from "react";
 import { Prospect, SearchSummary } from "../../../shared/types";
 import LeadCard from "../../lead-hunter/presentation/components/LeadCard";
-import FunnelStage from "./components/FunnelStage";
 import SystemStatus, { StatusItem } from "./components/SystemStatus";
 import {
   SectionHeader, EmptyState, Surface, Callout, ActionCard, Badge, StatGrid, StatTile
@@ -116,37 +115,34 @@ export default function ExecutiveDashboard({
     <div className="space-y-12 pb-4">
 
       {/* ── 1 · HERO ────────────────────────────────────────────────────────── */}
+      {/*
+        **El Panel deja de ser la introducción y pasa a ser la consecuencia.**
+
+        Ya no abre la aplicación: se llega a él después de haber encontrado un
+        negocio y haberle escrito. Por eso su titular ya no presenta el producto
+        —eso lo hace el Hunter— sino que **resume lo que queda cuando el agente
+        lleva un rato trabajando**.
+
+        **Se retiró la métrica «Búsquedas · 0».** Era el número más grande de la
+        pantalla y medía la sesión, no el valor: comunicaba vacío y nada más.
+        Las tres que quedan cuentan negocios, que es lo que el usuario acumula.
+      */}
       <SectionHeader
         level="screen"
         icon={<Radar className="h-3.5 w-3.5" />}
-        eyebrow="Panel del agente"
+        eyebrow="Tu espacio de trabajo"
         title={
           found > 0
-            ? "Esto es lo que AKVEZ ha encontrado para ti"
-            : "AKVEZ está listo para buscar por ti"
+            ? "Todo lo que AKVEZ lleva encontrado"
+            : "Aquí se acumula lo que AKVEZ encuentre"
         }
         lead={
           found > 0
-            ? "Todas las cifras cuentan negocios reales que están en tu espacio de trabajo. Ninguna es una estimación."
-            : "Todavía no hay negocios en tu espacio de trabajo. Lanza una búsqueda y el agente empezará a trabajar."
+            ? "Cada negocio que devuelve una búsqueda queda aquí, con su puntuación y su análisis. Ninguna cifra es una estimación."
+            : "Lanza una búsqueda en Oportunidades y cada negocio descubierto quedará registrado aquí."
         }
       >
-        <StatGrid columns={4}>
-          {/*
-            ⚠️ **«Búsquedas realizadas» no existía en el producto.** Es un
-            recuento de sesión: cuenta búsquedas que esta pestaña ejecutó de
-            verdad, y **se pierde al recargar**. Se rotula como tal en lugar de
-            presentarse como un histórico que nadie guarda.
-          */}
-          <StatTile
-            icon={<Search className="h-4 w-4" />}
-            tone="brand"
-            label="Búsquedas"
-            caption="Ejecutadas en esta sesión"
-            value={searchHistory.length}
-            size="lg"
-            delay={0}
-          />
+        <StatGrid columns={3}>
           <StatTile
             icon={<Radar className="h-4 w-4" />}
             tone="brand"
@@ -154,7 +150,7 @@ export default function ExecutiveDashboard({
             caption="En tu espacio de trabajo"
             value={found}
             size="lg"
-            delay={60}
+            delay={0}
           />
           <StatTile
             icon={<Brain className="h-4 w-4" />}
@@ -163,16 +159,16 @@ export default function ExecutiveDashboard({
             caption="Con descripción o problemas detectados"
             value={analyzed}
             size="lg"
-            delay={120}
+            delay={60}
           />
           <StatTile
             icon={<Flame className="h-4 w-4" />}
             tone="brand"
-            label="Con Opportunity Score"
-            caption="Con Evaluación emitida"
+            label="Puntuados"
+            caption="Con desglose por categorías"
             value={scored}
             size="lg"
-            delay={180}
+            delay={120}
           />
         </StatGrid>
 
@@ -210,72 +206,41 @@ export default function ExecutiveDashboard({
         />
       </SectionHeader>
 
-      {/* ── 2 · EMBUDO ──────────────────────────────────────────────────────── */}
-      <SectionHeader
-        icon={<Layers className="h-4 w-4 text-brand" />}
-        eyebrow="Progresión"
-        title="Embudo de oportunidad"
-        lead="Cuántos negocios llegan a cada etapa. Son recuentos, no tasas de conversión: AKVEZ no guarda histórico con el que compararlos."
-      >
-        {found > 0 ? (
-          <div className="space-y-0">
-            <FunnelStage
-              index={0}
-              label="Encontrados"
-              caption="Negocios descubiertos y registrados"
-              value={found}
-            />
-            <FunnelStage
-              index={1}
-              label="Analizados"
-              caption="El análisis produjo descripción o problemas detectados"
-              value={analyzed}
-              previous={found}
-            />
-            <FunnelStage
-              index={2}
-              label="Con Score emitido"
-              caption="Tienen Opportunity Score y su desglose por categorías"
-              value={scored}
-              previous={analyzed}
-            />
-            <FunnelStage
-              index={3}
-              label="Con mensaje generado"
-              caption="Ya tienen un texto de contacto redactado"
-              value={pitched}
-              previous={scored}
-              isLast
-            />
+      {/*
+        ── EL EMBUDO SE HA RETIRADO ───────────────────────────────────────────
 
-            {/* Distribución por banda. **Etiquetas del dominio, sin umbrales
-                propios**: AKVEZ no descarta ningún Lead por su puntuación. */}
-            {bands.length > 0 && (
-              <Surface level="raised" padding="lg" className="mt-8">
-                <h4 className="font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted">
-                  Reparto por nivel de oportunidad
-                </h4>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  {bands.map(([band, count]) => (
-                    <Badge key={band} tone="brand">
-                      <span className="font-display font-black tabular-nums text-brand">
-                        {count}
-                      </span>
-                      {band}
-                    </Badge>
-                  ))}
-                </div>
-                <p className="mt-4 font-sans text-xs leading-relaxed text-app-muted">
-                  El nivel es una <strong>etiqueta de prioridad</strong>, nunca un
-                  filtro: ningún negocio se descarta por su puntuación.
-                </p>
-              </Surface>
-            )}
+        Ocupaba cerca de 1.200 px de altura para mostrar **exactamente las
+        mismas cifras que la rejilla de arriba**, 400 px más abajo. Lo único que
+        añadía era la relación entre ellas —«2 de 2»—, y eso cabe en un renglón.
+
+        Era además la mayor acumulación de masa idéntica del producto: cuatro
+        tarjetas grandes seguidas.
+
+        **Un producto premium no dice dos veces lo mismo.** Decirlo dos veces
+        comunica que no había bastante que decir.
+
+        El reparto por nivel de oportunidad sí aporta —es información que no
+        está en ningún otro sitio— y se conserva aquí abajo.
+      */}
+      {bands.length > 0 && (
+        <SectionHeader
+          icon={<Layers className="h-4 w-4 text-brand" />}
+          eyebrow="Prioridad"
+          title="Reparto por nivel de oportunidad"
+          lead="El nivel es una etiqueta de prioridad, nunca un filtro: ningún negocio se descarta por su puntuación."
+        >
+          <div className="flex flex-wrap gap-3">
+            {bands.map(([band, count]) => (
+              <Badge key={band} tone="brand">
+                <span className="font-display font-bold tabular-nums text-brand">
+                  {count}
+                </span>
+                {band}
+              </Badge>
+            ))}
           </div>
-        ) : (
-          <EmptyState>El embudo se llena con la primera búsqueda.</EmptyState>
-        )}
-      </SectionHeader>
+        </SectionHeader>
+      )}
 
       {/* ── 3 · ACTIVIDAD ───────────────────────────────────────────────────── */}
       <SectionHeader

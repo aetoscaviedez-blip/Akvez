@@ -52,24 +52,39 @@ export default function PitchOutput({
     : lead.generatedPitch || "";
 
   return (
-    <Surface className="overflow-hidden motion-safe:animate-ak-rise">
+    /*
+      ⭐ **Este bloque es el clímax de la demo.**
 
+      Es lo único que AKVEZ *entrega*: todo lo anterior explica, mide y
+      justifica; esto se puede copiar y enviar. Y llegaba presentado como un
+      bloque más, con el mismo peso que los pasos de preparación.
+
+      **Una carta debe parecer una carta.** El borde de marca lo separa de todo
+      lo demás de la pantalla, y el cuerpo del mensaje sube a 17 px con
+      interlineado de lectura larga sobre su propia superficie: deja de leerse
+      como interfaz y pasa a leerse como documento.
+
+      **No cambia una coma de su contenido ni de su lógica.** Cambia el rango.
+    */
+    <Surface
+      className="overflow-hidden !border-brand/40 motion-safe:animate-ak-rise"
+    >
       {/* Encabezado */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-app-border px-6 py-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-app-border bg-brand/5 px-7 py-5">
         <div className="min-w-0 space-y-1">
-          <span className="block font-sans text-eyebrow font-bold uppercase tracking-[0.2em] text-app-muted">
-            Mensaje generado
+          <span className="block font-sans text-eyebrow font-bold uppercase tracking-[0.2em] text-brand">
+            Listo para enviar
           </span>
-          <span className="block font-display text-sm font-bold text-app-text">
+          <span className="block font-display text-lg font-semibold text-app-text">
             {/* **Sin canal registrado no se afirma ninguno.** */}
             {channelLabel ?? "Canal no registrado"}
           </span>
         </div>
 
         <Button
-          size="sm"
+          variant="primary"
           onClick={() => onCopy(clipboardText)}
-          icon={copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+          icon={copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
         >
           {copied ? "Copiado" : "Copiar mensaje"}
         </Button>
@@ -123,7 +138,11 @@ export default function PitchOutput({
         )}
 
         {/* ── Cuerpo ───────────────────────────────────────────────────────── */}
-        <Surface level="raised" radius="inset" padding="lg" className="max-h-[460px] overflow-y-auto whitespace-pre-wrap font-sans text-sm leading-[1.75] text-app-text">
+        <Surface
+          level="raised"
+          radius="inset"
+          className="max-h-[520px] overflow-y-auto whitespace-pre-wrap px-8 py-7 font-sans text-base leading-[1.8] text-app-text"
+        >
           {lead.generatedPitch}
         </Surface>
       </div>
