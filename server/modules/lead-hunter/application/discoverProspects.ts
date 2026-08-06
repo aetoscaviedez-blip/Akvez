@@ -102,11 +102,14 @@ export function createDiscoverProspects(
     const allResults = [...places, ...socialResult.leads, ...directoryResult.leads];
 
     const dedupStartedAt = Date.now();
-    const deduplicatedLeads = deduplicateLeads(allResults, excludeNames);
+    const { leads: deduplicatedLeads, discards } = deduplicateLeads(allResults, excludeNames);
     recordDeduplication({
       before: allResults.length,
       after: deduplicatedLeads.length,
-      ms: Date.now() - dedupStartedAt
+      ms: Date.now() - dedupStartedAt,
+      // H-12.1 · P0.4 — sin esto, «llegaron 40 y quedaron 12» no distingue un
+      // filtro trabajando de una fuente devolviendo poco.
+      discards
     });
     console.log(`[LeadHunter] Fusión completada. Bruto: ${allResults.length} -> Deduplicados: ${deduplicatedLeads.length}`);
 

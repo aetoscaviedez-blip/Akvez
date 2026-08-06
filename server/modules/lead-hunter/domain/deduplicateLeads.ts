@@ -1,6 +1,28 @@
 import { buildIdentityFingerprint } from "./leadIdentity";
 
 /**
+ * Recuento de lo que **no** sobrevivió a la deduplicación, por motivo.
+ *
+ * Existe porque un descarte silencioso es indistinguible de un negocio que
+ * Google Places nunca devolvió (H-12.1 · P0.4). Es un dato **descriptivo**: el
+ * dominio lo calcula y lo devuelve, pero no lo registra ni lo imprime — la
+ * observabilidad vive en `application/`, y `domain/` no la conoce (ADR-04).
+ */
+export interface DeduplicationDiscards {
+  /** Sin denominación utilizable: no hay identidad que comparar. */
+  unnamed: number;
+  /** Ya en pantalla del usuario — `excludeNames` de «Buscar más». */
+  excluded: number;
+  /** Misma Huella de Identidad que un candidato ya conservado. */
+  duplicate: number;
+}
+
+export interface DeduplicationOutcome {
+  leads: any[];
+  discards: DeduplicationDiscards;
+}
+
+/**
  * Deduplica el conjunto descubierto y aplica las exclusiones del usuario.
  *
  * ── CLAVE DE DEDUPLICACIÓN ──────────────────────────────────────────────────
@@ -31,7 +53,9 @@ import { buildIdentityFingerprint } from "./leadIdentity";
  * ya tiene en pantalla, y existe para que «Buscar más» no repita lo ya mostrado.
  * No determina qué Leads existen ni retira nada de la Biblioteca (R-42 · R-44).
  */
-export function deduplicateLeads(allResults: any[], excludeNames: string[]): any[] {
+export function deduplicateLeads(allResults: any[], excludeNames: string[]): DeduplicationOutcome {
+  const discards: DeduplicationDiscards = { unnamed: 0, excluded: 0, duplicate: 0 };
+
   const exclusionSet = new Set(excludeNames.map((n: string) => n.toLowerCase().trim()));
   const normalizedExclusionSet = new Set(
     excludeNames.map((n: string) => n.toLowerCase().replace(/[^a-z0-9]/g, "").trim())
@@ -46,9 +70,10 @@ export function deduplicateLeads(allResults: any[], excludeNames: string[]): any
     const name = String(lead.name || "");
     const normName = name.toLowerCase().replace(/[^a-z0-9]/g, "").trim();
     const lowerName = name.toLowerCase().trim();
-    if (!normName) return;
+    if (!normName) { discards.unnamed++; return; }
 
     if (exclusionSet.has(lowerName) || normalizedExclusionSet.has(normName)) {
+      discards.excluded++;
       return;
     }
 
@@ -66,6 +91,8 @@ export function deduplicateLeads(allResults: any[], excludeNames: string[]): any
       key = fingerprint === null ? null : `fp:${source.toLowerCase()}|${fingerprint}`;
     }
 
+    // **No es un descarte:** sin identidad determinable el candidato se
+    // conserva aparte (S-3), nunca se fusiona ni se pierde.
     if (key === null) {
       unidentifiable.push(lead);
       return;
@@ -79,11 +106,13 @@ export function deduplicateLeads(allResults: any[], excludeNames: string[]): any
 
     // Misma identidad hallada dos veces: se conserva la variante con más
     // información comercial. «Google Maps» aporta calificación y reseñas que las
-    // demás fuentes no traen.
+    // demás fuentes no traen. **Aquí sí desaparece un candidato:** el que no se
+    // conserva es el duplicado que el reporte debe poder nombrar.
+    discards.duplicate++;
     if (lead.source === "Google Maps" && existing.source !== "Google Maps") {
       uniqueLeadsMap.set(key, lead);
     }
   });
 
-  return [...uniqueLeadsMap.values(), ...unidentifiable];
+  return { leads: [...uniqueLeadsMap.values(), ...unidentifiable], discards };
 }

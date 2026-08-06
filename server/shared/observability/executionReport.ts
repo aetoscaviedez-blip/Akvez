@@ -24,6 +24,18 @@
 // registro**, no en el llamador, para que ninguna capa pueda omitirlo.
 
 import { AsyncLocalStorage } from "async_hooks";
+import { isProduction } from "../config/env";
+
+/**
+ * Desglose de descartes, o su ausencia declarada. Nunca imprime ceros
+ * inventados: si nadie registró el detalle, se dice que no está.
+ */
+function formatDiscards(d?: { unnamed: number; excluded: number; duplicate: number }): string {
+  if (!d) return "No disponible";
+  const total = d.unnamed + d.excluded + d.duplicate;
+  if (total === 0) return "0";
+  return `${total} (duplicados: ${d.duplicate} · ya en pantalla: ${d.excluded} · sin nombre: ${d.unnamed})`;
+}
 
 /** IDs mostrados antes de resumir el resto. Mantiene el reporte legible cuando
  *  una búsqueda persiste decenas de leads. */
@@ -58,6 +70,11 @@ export interface DeduplicationMetrics {
   before: number;
   after: number;
   ms: number;
+  /**
+   * Desglose de los descartes por motivo (H-12.1 · P0.4). Opcional para no
+   * romper a quien registre solo los totales.
+   */
+  discards?: { unnamed: number; excluded: number; duplicate: number };
 }
 
 export interface PersistenceMetrics {
@@ -270,6 +287,17 @@ export function recordResponse(returned: number): void {
  * puede convertir una operación exitosa en un error.
  */
 export function printExecutionReport(): void {
+  // ⚠️ **H-12.1 · P0.4 — el reporte es instrumentación de desarrollo.**
+  //
+  // Se imprimía en todos los entornos. En Cloud Run eso significa volcar en los
+  // logs del servicio, por cada búsqueda, el nicho y la ciudad consultados y el
+  // desglose completo del pipeline. Es ruido operativo y superficie de
+  // información innecesaria en un entorno donde nadie lo está leyendo.
+  //
+  // La recolección sigue activa siempre —es barata y no altera el flujo—; lo
+  // que se condiciona es **la impresión**.
+  if (isProduction()) return;
+
   const report = current();
   if (!report) return;
   try {
@@ -331,6 +359,9 @@ function leadHunterSections(report: ExecutionReport): string[] {
     "Deduplication",
     `${pad("Before:")}${count(dedup?.before)}`,
     `${pad("After:")}${count(dedup?.after)}`,
+    // El «por qué» del descarte (H-12.1 · P0.4). Se declara ausente en lugar de
+    // imprimir ceros cuando nadie lo registró: R-38 vale también para el log.
+    `${pad("Discarded:")}${formatDiscards(dedup?.discards)}`,
     `${pad("Time:")}${duration(dedup?.ms)}`,
     "",
     "Persistence",
