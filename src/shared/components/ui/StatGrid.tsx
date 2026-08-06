@@ -1,4 +1,5 @@
 import React from "react";
+import Eyebrow from "./Eyebrow";
 import { TONE, Tone } from "./tone";
 import Meter from "./Meter";
 
@@ -62,6 +63,7 @@ export function StatTile({
   icon,
   tone = "neutral",
   size = "md",
+  level = "card",
   meter,
   fallback,
   hint,
@@ -74,6 +76,15 @@ export function StatTile({
   tone?: Tone;
   /** `lg` es la cifra protagonista de una rejilla. */
   size?: "sm" | "md" | "lg";
+  /**
+   * Posición en la pila de profundidad.
+   *
+   * **`raised` cuando la rejilla vive dentro de una tarjeta.** Sin esto, las
+   * celdas comparten fondo con su contenedor y la rejilla se lee como un hueco
+   * en lugar de como una capa — que es justo la inversión de jerarquía que la
+   * Fase 1 corrigió en el resto del producto.
+   */
+  level?: "card" | "raised";
   /** Barra proporcional al mismo porcentaje que ya muestra `value`. */
   meter?: number;
   fallback?: string;
@@ -91,13 +102,14 @@ export function StatTile({
 
   return (
     <div
-      className="bg-dark-surface px-6 py-6 motion-safe:animate-ak-rise"
+      className={`px-6 py-6 motion-safe:animate-ak-rise ${
+        level === "raised" ? "bg-surface-raised" : "bg-dark-surface"
+      }`}
       style={{ animationDelay: `${delay}ms` }}
     >
-      <span className="flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-app-muted">
-        {icon && <span className={TONE[tone].icon}>{icon}</span>}
+      <Eyebrow icon={icon && <span className={TONE[tone].icon}>{icon}</span>}>
         {label}
-      </span>
+      </Eyebrow>
 
       <div
         className={`mt-2.5 ${valueClass} ${

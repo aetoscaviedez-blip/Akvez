@@ -5,7 +5,7 @@ import ExecutiveSummary from "./components/ExecutiveSummary";
 import ScoreCategoryCard from "./components/ScoreCategoryCard";
 import FactorInventory from "./components/FactorInventory";
 import {
-  SectionHeader, EmptyState, Surface, Callout, Button, ActionCard
+  SectionHeader, EmptyState, Surface, Callout, Button, ActionCard, Eyebrow
 } from "../../../shared/components/ui";
 import {
   ArrowLeft, ArrowRight, MessageSquare, DollarSign, AlertTriangle,
@@ -154,7 +154,7 @@ export default function OpportunityView({
         <div className="space-y-8">
           {breakdown.length > 0 && (
             <div className="space-y-4">
-              <SubHeading text="Factores medidos por el motor de puntuación" />
+              <Eyebrow as="h4">Factores medidos por el motor de puntuación</Eyebrow>
               <FactorInventory breakdown={breakdown} variant="measured" />
             </div>
           )}
@@ -165,7 +165,7 @@ export default function OpportunityView({
                   mide un modelo determinista; lo de aquí procede del análisis del
                   negocio. Fundirlos en una sola lista atribuiría a uno lo que
                   produjo el otro. */}
-              <SubHeading text="Hallazgos del análisis del negocio" />
+              <Eyebrow as="h4">Hallazgos del análisis del negocio</Eyebrow>
 
               {lead.description && (
                 <p className="max-w-3xl font-sans text-sm leading-relaxed text-app-muted">
@@ -278,20 +278,5 @@ export default function OpportunityView({
         </div>
       </SectionHeader>
     </div>
-  );
-}
-
-/**
- * Sub-rótulo dentro de una sección.
- *
- * **Es un estilo tipográfico, no una anatomía**: separa dos listas cuya
- * atribución es distinta —lo que midió el motor determinista y lo que produjo el
- * análisis del negocio— sin abrir una sección nueva.
- */
-function SubHeading({ text }: { text: string }) {
-  return (
-    <h4 className="font-sans text-[10px] font-bold uppercase tracking-widest text-app-muted">
-      {text}
-    </h4>
   );
 }
