@@ -1,4 +1,5 @@
 import React from "react";
+import { SectionHeader, EmptyState, Callout, Badge, Button, Surface, Eyebrow } from "../../../shared/components/ui";
 import { Library, RefreshCw, Globe, PhoneCall, Star, MapPin, AlertTriangle, Sparkles, ChevronDown, ChevronRight } from "lucide-react";
 import { loadLeadLibrary, RegisteredLeadView } from "../application/loadLeadLibrary";
 // **Extraído a `shared/components` en H-03 Fase 2**: la misma explicación la
@@ -63,84 +64,77 @@ export default function LeadLibrary() {
   return (
     <div className="space-y-6">
 
-      {/* Encabezado */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-dark-surface border border-app-border rounded-xl flex items-center justify-center text-brand shrink-0">
-            <Library className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-lg font-bold text-app-text font-display uppercase tracking-wide">
-              Biblioteca de Leads
-            </h2>
-            <p className="text-xs text-app-muted mt-0.5 max-w-2xl leading-relaxed">
-              Todos los Leads registrados por el agente, sin excepción, ordenados por Opportunity
-              Score descendente. La Biblioteca solo crece: ningún Lead se oculta ni se elimina,
-              por baja que sea su puntuación.
-            </p>
-            {activeProfileVersion && (
-              /* Trazabilidad del criterio (ADR-14 R-VIN · §6.4): el usuario debe
-                 poder saber con qué Perfil se puntuó lo que está viendo. */
-              <p className="text-eyebrow text-app-muted/80 mt-1.5 font-mono">
-                Perfil de Ponderación <span className="text-brand">{activeProfileVersion}</span>
-                {scored < total && ` · ${scored} de ${total} evaluados`}
-              </p>
-            )}
-          </div>
-        </div>
+      {/*
+        **H-09 · P4 — la Biblioteca entra en el Design System.**
 
-        <div className="flex items-center gap-3 shrink-0">
-          {/* Recuento real: procede del servidor, no se deduce de la lista */}
-          <span className="text-xs text-app-muted font-mono px-3 py-1.5 rounded-full border border-app-border bg-dark-surface">
-            {total} {total === 1 ? "Lead registrado" : "Leads registrados"}
-          </span>
-          <button
-            type="button"
-            onClick={load}
-            disabled={isLoading}
-            className="flex items-center gap-2 text-xs font-semibold text-app-text px-3.5 py-2 rounded-lg border border-app-border bg-dark-surface hover:border-brand/40 transition disabled:opacity-50 cursor-pointer"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 text-brand ${isLoading ? "animate-spin" : ""}`} />
-            Actualizar
-          </button>
-        </div>
-      </div>
+        Era la única pantalla que seguía siendo la de antes de H-07: encabezado
+        en mayúsculas display, contador en monoespaciada, estado vacío hecho a
+        mano y ni una primitiva importada. **Y está a un clic desde las otras
+        cuatro.**
+      */}
+      <SectionHeader
+        level="screen"
+        icon={<Library className="h-3.5 w-3.5" />}
+        eyebrow="Archivo"
+        title="Todo lo que el agente ha registrado"
+        lead="Ordenados por Opportunity Score descendente. La Biblioteca solo crece: ningún Lead se oculta ni se elimina, por baja que sea su puntuación."
+        action={
+          <div className="flex items-center gap-3">
+            {/* Recuento real: procede del servidor, no se deduce de la lista */}
+            <Badge>
+              {total} {total === 1 ? "Lead registrado" : "Leads registrados"}
+            </Badge>
+            <Button
+              size="sm"
+              onClick={load}
+              disabled={isLoading}
+              icon={<RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />}
+            >
+              Actualizar
+            </Button>
+          </div>
+        }
+      >
+        {activeProfileVersion && (
+          /* Trazabilidad del criterio (ADR-14 R-VIN · §6.4): el usuario debe
+             poder saber con qué Perfil se puntuó lo que está viendo. */
+          <p className="font-mono text-xs text-app-muted">
+            Perfil de Ponderación <span className="text-brand">{activeProfileVersion}</span>
+            {scored < total && ` · ${scored} de ${total} evaluados`}
+          </p>
+        )}
+      </SectionHeader>
 
       {/* Error — un fallo de carga NO se presenta como "Biblioteca vacía" */}
       {error && (
-        <div className="border border-app-border rounded-2xl p-5 bg-dark-surface flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-brand shrink-0 mt-0.5" />
-          <div>
-            <h3 className="text-sm font-bold text-app-text font-display uppercase tracking-wide">
-              No se pudo cargar la Biblioteca
-            </h3>
-            <p className="text-xs text-app-muted mt-1">{error}</p>
-          </div>
-        </div>
+        <Callout
+          tone="danger"
+          icon={<AlertTriangle className="h-5 w-5" />}
+          title="No se pudo cargar la Biblioteca"
+        >
+          {error}
+        </Callout>
       )}
 
       {/* Cargando */}
       {isLoading && !error && (
-        <div className="border border-dashed border-app-border rounded-2xl p-12 text-center bg-dark-surface/30">
-          <RefreshCw className="w-6 h-6 text-brand animate-spin mx-auto mb-3" />
-          <p className="text-xs text-app-muted">Consultando la Biblioteca…</p>
-        </div>
+        <EmptyState variant="panel" icon={<RefreshCw className="h-6 w-6 animate-spin" />}>
+          Consultando la Biblioteca…
+        </EmptyState>
       )}
 
       {/* Biblioteca vacía — estado válido, no un error */}
       {!isLoading && !error && leads.length === 0 && (
-        <div className="border border-dashed border-app-border rounded-2xl p-12 text-center bg-dark-surface/30">
-          <div className="w-12 h-12 bg-dark-surface border border-app-border rounded-xl flex items-center justify-center text-app-muted mx-auto mb-4">
-            <Library className="w-6 h-6 text-app-muted" />
-          </div>
-          <h3 className="text-lg font-bold text-app-text font-display uppercase tracking-wide">
-            Tu Biblioteca está vacía
-          </h3>
-          <p className="text-xs text-app-muted max-w-md mx-auto mt-2">
+        <EmptyState
+          variant="panel"
+          icon={<Library className="h-6 w-6" />}
+          title="Tu Biblioteca está vacía"
+        >
+          <>
             Ejecuta una búsqueda en <strong className="text-app-text">Oportunidades</strong> y cada
             empresa descubierta quedará registrada aquí de forma permanente.
-          </p>
-        </div>
+          </>
+        </EmptyState>
       )}
 
       {/* Conjunto completo — sin truncar (UI-4) */}
@@ -191,7 +185,7 @@ function LeadLibraryRow({ lead }: { lead: RegisteredLeadView }) {
   const hasScore = typeof lead.score === "number";
 
   return (
-    <div className="border border-app-border rounded-2xl p-4 bg-dark-surface hover:border-brand/30 transition">
+    <Surface padding="sm" className="transition-colors hover:border-brand/40">
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
 
         <div className="min-w-0 space-y-2">
@@ -199,7 +193,7 @@ function LeadLibraryRow({ lead }: { lead: RegisteredLeadView }) {
             <h3 className="text-sm font-bold text-app-text font-display truncate">{lead.name}</h3>
 
             {/* Estadio del Lead. Vocabulario sujeto a la desviación A-01. */}
-            <span className="text-eyebrow text-app-muted font-mono uppercase tracking-wider px-2 py-0.5 rounded border border-app-border bg-surface-raised">
+            <span className="rounded-control border border-app-border bg-surface-raised px-2 py-0.5 font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted">
               {lead.status}
             </span>
 
@@ -315,6 +309,6 @@ function LeadLibraryRow({ lead }: { lead: RegisteredLeadView }) {
           )}
         </>
       )}
-    </div>
+    </Surface>
   );
 }

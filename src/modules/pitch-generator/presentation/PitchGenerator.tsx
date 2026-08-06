@@ -196,7 +196,7 @@ export default function PitchGenerator({
             */}
             {leads.map((p) => (
               <option key={p.id} value={p.id}>
-                {p.isDemo ? "⚠️ EJEMPLO" : "🗺️"} {p.name}
+                {p.isDemo ? "⚠️ EJEMPLO · " : ""}{p.name}
                 {p.website ? ` (${p.website})` : " — sin sitio web"}
               </option>
             ))}

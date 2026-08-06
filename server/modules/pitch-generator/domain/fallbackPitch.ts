@@ -1,24 +1,79 @@
+/**
+ * Plantilla de respaldo — el texto que se envía cuando el modelo no responde.
+ *
+ * ── ⚠️ POR QUÉ SE REESCRIBIÓ ENTERA (H-09 · Prioridad 1) ─────────────────────
+ *
+ * La versión anterior hacía **tres afirmaciones que AKVEZ no puede sostener**, y
+ * las tres las habría firmado el usuario delante de un negocio real:
+ *
+ * 1. **«He creado un boceto», «preparé un boceto visual preliminar», «he
+ *    diseñado un borrador».** **AKVEZ no produce ningún boceto.** Quien enviara
+ *    ese mensaje estaría prometiendo un entregable inexistente a un tercero.
+ *
+ * 2. **«puede incrementar las reservas hasta en un 40 %»** y **«podrían
+ *    multiplicar sus reservas y clientes».** Cifras y promesas sin ningún dato
+ *    detrás.
+ *
+ * 3. **«me llamó poderosamente la atención la calidad de sus servicios».** El
+ *    respaldo no ha leído nada del negocio: actúa precisamente cuando el
+ *    análisis del modelo **no** está disponible.
+ *
+ * **Lo único que el respaldo sabe con certeza son los problemas detectados**
+ * —que llegan del análisis— y los datos de la firma. La plantilla nueva se
+ * limita a eso: presenta al remitente, enumera lo observado y **pide permiso
+ * para conversar**. No promete nada que no exista.
+ *
+ * El texto es más corto y más sobrio que el anterior. Es el precio de que sea
+ * verdad, y es un precio que este producto ya decidió pagar hace seis sprints.
+ */
 export function generateFallbackPitch(designer: any, lead: any, channel: string) {
   const designerName = designer.name || "Diseñador freelance";
-  const designerStyle = designer.style || "diseño moderno y minimalista";
   const businessName = lead.name;
-  
+
   let subjectLine = "";
   let message = "";
-  let strategyExplanation = "Esta propuesta de outreach se ha estructurado con técnicas de copy de alta conversión diseñadas especialmente para negocios de Colombia.";
 
-  const flawsStr = Array.isArray(lead.flaws) && lead.flaws.length > 0 
+  // **Sin adjetivos sobre el resultado.** El texto anterior afirmaba usar
+  // «técnicas de copy de alta conversión», que no es comprobable.
+  const strategyExplanation =
+    "Texto de respaldo: se redactó a partir de los problemas detectados en el análisis, sin intervención del modelo generativo.";
+
+  const hasFlaws = Array.isArray(lead.flaws) && lead.flaws.length > 0;
+  const flawsStr = hasFlaws
     ? lead.flaws.map((f: string) => `• ${f}`).join("\n")
-    : "• Falta de canal interactivo de conversión.";
+    : "";
+
+  // **Si no hay hallazgos, no se inventa ninguno.** El mensaje se apoya
+  // entonces en el único hecho disponible: no tienen sitio web propio.
+  const observed = hasFlaws
+    ? `Revisando su presencia digital anoté lo siguiente:\n\n${flawsStr}`
+    : "Revisando su presencia digital vi que todavía no cuentan con un sitio web propio.";
 
   if (channel.toLowerCase() === "whatsapp") {
-    message = `¡Hola! Me topé con el perfil de *${businessName}* en internet y me encantó la gran reputación y calidad del trabajo que tienen. ¡Muchos éxitos con su proyecto! 👏\n\nAnalizando su presencia digital, noté un punto clave donde podrían estar perdiendo clientes potenciales:\n${flawsStr}\n\nHoy en día, la rapidez es todo. He creado un boceto rápido e interactivo de una página web con estilo *${designerStyle}*, especialmente pensado para facilitar que sus clientes les coticen o programen reservas de inmediato sin perder tiempo.\n\n¿Te interesaría que te comparta el borrador visual rápido y sin ningún compromiso para ver qué opinas?\n\nUn saludo,\n*${designerName}*`;
+    message =
+      `¡Hola! Escribo desde ${designerName}. Me encontré con *${businessName}* buscando negocios de la zona.\n\n` +
+      `${observed}\n\n` +
+      `Me dedico al diseño y desarrollo de sitios web, y creo que hay margen para mejorar ahí. ` +
+      `¿Les interesaría que lo comentemos sin compromiso?\n\n` +
+      `Un saludo,\n*${designerName}*`;
   } else if (channel.toLowerCase() === "email" || channel.toLowerCase() === "correo") {
-    subjectLine = `Propuesta de conversión digital y diseño para ${businessName} 📈`;
-    message = `Estimado equipo de ${businessName},\n\nEspero que estén teniendo una excelente semana. Les escribo porque descubrí su marca y me llamó poderosamente la atención la calidad de sus servicios en Colombia.\n\nRevisando su presencia digital detalladamente, identifiqué algunas oportunidades tácticas que podrían estar limitando su captación de clientes de forma automática:\n\n${flawsStr}\n\nEn mi experiencia, ofrecer un portal web rápido y responsivo ayuda a mitigar la fricción de compra y puede incrementar las reservas hasta en un 40%.\n\nComo especialista, preparé de forma proactiva un boceto visual preliminar con estilo ${designerStyle} diseñado exclusivamente para expandir el prestigio gráfico y los canales de contacto de su negocio.\n\n¿Me permitirían enviarles el link de la propuesta gráfica para que la revisen de manera gratuita y sin ningún compromiso?\n\nAtentamente,\n\n${designerName}`;
+    subjectLine = `Sobre la web de ${businessName}`;
+    message =
+      `Estimado equipo de ${businessName},\n\n` +
+      `Les escribo porque me encontré con su negocio buscando empresas de su sector en Colombia.\n\n` +
+      `${observed}\n\n` +
+      `Me dedico al diseño y desarrollo de sitios web para negocios como el suyo. ` +
+      `Si les parece, puedo contarles con más detalle qué haría en su caso concreto — sin compromiso por su parte.\n\n` +
+      `¿Les interesa que hablemos?\n\n` +
+      `Atentamente,\n\n${designerName}`;
   } else {
-    // DM or generic
-    message = `¡Hola! Qué gran trabajo hacen en *${businessName}*. Me llamó mucho la atención la calidad de sus servicios en redes.\n\nAnalizando su presencia digital por encima, identifiqué algunas oportunidades que podrían multiplicar sus reservas y clientes sin aumentar su publicidad:\n${flawsStr}\n\nMe dedico profesionalmente al diseño web corporativo. He diseñado de forma gratuita un borrador preliminar con estilo *${designerStyle}* ideal para su nicho. ¿Te gustaría que te comparta el enlace sin compromiso para ver si es algo que les sume valor?\n\n¡Un fuerte saludo!\n*${designerName}*`;
+    // DM o canal genérico.
+    message =
+      `¡Hola! Me encontré con *${businessName}* buscando negocios del sector.\n\n` +
+      `${observed}\n\n` +
+      `Me dedico al diseño web y creo que puedo ayudarles con eso. ` +
+      `¿Les interesaría que lo comentemos?\n\n` +
+      `Un saludo,\n*${designerName}*`;
   }
 
   return {

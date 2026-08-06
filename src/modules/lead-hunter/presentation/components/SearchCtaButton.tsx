@@ -1,5 +1,6 @@
 import React from "react";
 import { Search } from "lucide-react";
+import { Button } from "../../../../shared/components/ui";
 
 interface SearchCtaButtonProps {
   searching: boolean;
@@ -7,34 +8,31 @@ interface SearchCtaButtonProps {
 }
 
 /**
- * **Acción primaria del Lead Hunter — la segunda pantalla del recorrido.**
+ * **Acción primaria de la pantalla de apertura.**
  *
- * Antes se pintaba `#E28A5D` con texto blanco, mientras la del Panel —la
- * pantalla inmediatamente anterior— era `#ff7a00` con texto oscuro: **el
- * recorrido repintaba su propia acción principal al pasar de una a otra.**
+ * Era el último control del producto escrito a mano: su propio relleno, su
+ * propio radio, su propia altura y su propia tipografía. **Ahora usa `Button`**,
+ * de modo que comparte anatomía exacta con todas las demás acciones primarias
+ * del recorrido.
  *
- * Ahora comparten relleno (`brand`) y tratamiento de texto. El texto oscuro
- * sobre naranja da **7,9:1** de contraste; el blanco daba **2,9:1**.
+ * El estado de carga se conserva íntegro: mismo texto, mismo indicador.
  */
 export default function SearchCtaButton({ searching, onSearch }: SearchCtaButtonProps) {
   return (
-    <button
-      type="button"
+    <Button
+      variant="primary"
+      size="lg"
+      fullWidth
       onClick={onSearch}
       disabled={searching}
-      className="w-full bg-brand hover:brightness-110 text-dark-bg font-bold font-display uppercase tracking-widest text-xs py-4 rounded-xl transition cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98]"
+      icon={
+        searching ? (
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-dark-bg border-t-transparent" />
+        ) : undefined
+      }
+      iconRight={searching ? undefined : <Search className="h-4 w-4" />}
     >
-      {searching ? (
-        <>
-          <div className="w-4.5 h-4.5 border-2 border-dark-bg border-t-transparent rounded-full animate-spin" />
-          <span>Rastreando...</span>
-        </>
-      ) : (
-        <>
-          <span>Encuentra oportunidades</span>
-          <Search className="w-4 h-4" />
-        </>
-      )}
-    </button>
+      {searching ? "Rastreando…" : "Encuentra oportunidades"}
+    </Button>
   );
 }

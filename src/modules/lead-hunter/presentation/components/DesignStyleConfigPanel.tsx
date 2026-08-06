@@ -1,4 +1,5 @@
 import React from "react";
+import { Surface } from "../../../../shared/components/ui";
 
 interface DesignStyleConfigPanelProps {
   designerStyle: string;
@@ -22,7 +23,7 @@ export default function DesignStyleConfigPanel({
   setCustomNiche
 }: DesignStyleConfigPanelProps) {
   return (
-    <div className="bg-dark-surface border border-app-border rounded-2xl p-4.5 space-y-4">
+    <Surface padding="md" className="space-y-4">
       <div className="flex justify-between items-center">
         <span className="text-xs font-bold uppercase tracking-widest text-app-muted font-display">Estilo de Diseño</span>
         <button
@@ -40,10 +41,10 @@ export default function DesignStyleConfigPanel({
           onChange={(e) => setDesignerStyle(e.target.value)}
           rows={3}
           placeholder="Menciona tu enfoque de diseño..."
-          className="w-full bg-surface-raised border border-app-border rounded-xl p-3 text-xs text-app-text placeholder:text-app-muted focus:outline-none focus:border-brand transition"
+          className="w-full bg-surface-raised border border-app-border rounded-control p-3 text-xs text-app-text placeholder:text-app-muted focus:outline-none focus:border-brand transition"
         />
       ) : (
-        <div className="bg-surface-raised/40 p-3 border border-app-border/60 rounded-xl text-xs text-app-muted italic">
+        <div className="bg-surface-raised/40 p-3 border border-app-border/60 rounded-control text-xs text-app-muted italic">
           Usando: &ldquo;{designerStyle ? designerStyle.slice(0, 45) + "..." : "Diseño premium minimalista"}&rdquo;
         </div>
       )}
@@ -65,10 +66,10 @@ export default function DesignStyleConfigPanel({
           value={customNiche}
           onChange={(e) => setCustomNiche(e.target.value)}
           placeholder="Ej: Tienda de café, Veterinarias..."
-          className="w-full bg-surface-raised border border-app-border rounded-xl px-3 py-2.5 text-xs text-app-text placeholder:text-app-muted focus:outline-none focus:border-brand transition mt-1"
+          className="w-full bg-surface-raised border border-app-border rounded-control px-3 py-2.5 text-xs text-app-text placeholder:text-app-muted focus:outline-none focus:border-brand transition mt-1"
           required
         />
       )}
-    </div>
+    </Surface>
   );
 }

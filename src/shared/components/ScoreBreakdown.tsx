@@ -1,5 +1,6 @@
 import React from "react";
 import { ScoreBreakdownEntry } from "../types";
+import { Eyebrow, Meter } from "./ui";
 
 /**
  * Desglose del Opportunity Score — **la explicación que APS-08 §9 exige**.
@@ -42,9 +43,7 @@ export default function ScoreBreakdown({
 
   return (
     <div className="mt-3 pt-3 border-t border-app-border space-y-2">
-      <p className="text-eyebrow text-app-muted uppercase tracking-widest font-display">
-        Cómo se compone el Score
-      </p>
+      <Eyebrow as="h5">Cómo se compone el Score</Eyebrow>
 
       <div className="space-y-2">
         {breakdown.map((entry) => (
@@ -61,17 +60,17 @@ export default function ScoreBreakdown({
 
             {/* Barra proporcional a la contribución. Referencia: 25, el peso
                 máximo de WP-01, para que las barras sean comparables entre sí. */}
-            <div className="mt-1 h-1 rounded-full bg-surface-raised overflow-hidden">
-              <div
-                className="h-full bg-brand/60 rounded-full"
-                style={{ width: `${Math.min(100, (entry.contribution / 25) * 100)}%` }}
+            <div className="mt-1.5">
+              <Meter
+                value={Math.min(100, (entry.contribution / 25) * 100)}
+                size="xs"
               />
             </div>
 
-            <p className="text-eyebrow text-app-muted mt-1 leading-relaxed">{entry.rationale}</p>
+            <p className="mt-1.5 font-sans text-xs text-app-muted">{entry.rationale}</p>
 
             {entry.unmeasuredFactors.length > 0 && (
-              <p className="text-eyebrow text-app-muted mt-0.5 italic">
+              <p className="mt-1 font-sans text-xs italic text-app-muted">
                 No medible con datos públicos: {entry.unmeasuredFactors.join(", ")}.
               </p>
             )}
@@ -82,7 +81,7 @@ export default function ScoreBreakdown({
       {/* La suma reconstruye el Score: es la Reproducibilidad de ADR-14 §6.3
           hecha visible. Se redondea igual que el Score publicado. */}
       <div className="flex items-baseline justify-between gap-3 pt-2 border-t border-app-border text-xs">
-        <span className="text-app-text font-bold font-display uppercase tracking-wide">Opportunity Score</span>
+        <Eyebrow>Opportunity Score</Eyebrow>
         <span className="font-mono text-app-muted">
           {totalContribution.toFixed(2)} ≈ <span className="text-brand font-black">{score}</span>
         </span>

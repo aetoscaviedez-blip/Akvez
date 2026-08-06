@@ -44,10 +44,24 @@ async function generatePitchWithGemini(
         - Empieza con un cumplido MUY específico sobre "${lead.name}" — algo que notaste en su negocio.
         - Menciona un problema concreto que observaste (sin website, sin reservas, etc.)
         - Conecta ese problema con pérdida de clientes o dinero — de forma empática.
-        - Ofrece valor primero: "Hice un boceto de cómo podría verse tu web. ¿Te lo mando?"
+        - Ofrece abrir una conversación sobre lo que has detectado, sin prometer
+          ninguna entrega previa.
         - NUNCA pidas reunión, presupuesto o llamada de inmediato.
         - Tono: ${designer.tone || "Cálido, cercano y profesional"}
         - Sonar como lo escribió una persona real, no una IA.
+
+        ⚠️ INTEGRIDAD — estas reglas son inviolables:
+        - NUNCA afirmes que ya existe un boceto, maqueta, diseño, propuesta
+          gráfica, informe o archivo. **No existe ninguno.** Quien envíe este
+          mensaje no ha preparado nada todavía, y prometerlo le haría mentir a
+          un negocio real.
+        - NUNCA inventes cifras, porcentajes, mejoras ni plazos ("hasta un 40 %",
+          "el triple de reservas", "en dos semanas"). **No hay ningún dato que
+          los respalde.**
+        - NUNCA afirmes haber revisado, medido o auditado nada que no esté en la
+          lista de problemas que se te entrega abajo.
+        - Solo puedes afirmar lo que aparece literalmente en PROBLEMAS y en
+          OPORTUNIDAD. Todo lo demás es invención.
         
         DISEÑADOR:
         - Nombre: ${designer.name || "Diseñador freelance"}

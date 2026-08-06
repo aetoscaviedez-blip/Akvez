@@ -4,7 +4,7 @@ import LeadHunter from "./modules/lead-hunter/presentation/LeadHunter";
 import LeadLibrary from "./modules/lead-hunter/presentation/LeadLibrary";
 import PitchGenerator from "./modules/pitch-generator/presentation/PitchGenerator";
 import ExecutiveDashboard from "./modules/dashboard/presentation/ExecutiveDashboard";
-import { Sparkles, Search, Send, Compass, Code, Info, Moon, Sliders, ArrowRight, MapPin, Mail, Settings, User, MessageSquare, Library, LayoutDashboard } from "lucide-react";
+import { Compass, Code, ArrowRight, MapPin, Settings, User, MessageSquare, Library, LayoutDashboard } from "lucide-react";
 
 // ── DATOS DE EJEMPLO — NO SON RESULTADOS REALES ─────────────────────────────
 //
@@ -31,7 +31,7 @@ const CL_SAMPLE_LEADS: Prospect[] = [
     status: "Prospect",
     dateCreated: "Jun 5",
     score: 85,
-    classification: "🔥 Lead Excelente",
+    classification: "Sitio web deficiente",
     revenueLoss: "Pierden aproximadamente de 15 a 20 reservas en línea los fines de semana debido a la lentitud del PDF y la falta de contacto directo."
   },
   {
@@ -49,8 +49,8 @@ const CL_SAMPLE_LEADS: Prospect[] = [
     status: "Prospect",
     dateCreated: "Jun 4",
     score: 72,
-    classification: "✅ Lead Bueno",
-    revenueLoss: "Se estima que pierden hasta un 25% de visitas interesadas de Instagram porque el proceso de agendamiento tiene demasiados campos y fricciones."
+    classification: "Sitio web deficiente",
+    revenueLoss: "El proceso de agendamiento pide diez campos y respuesta por correo, de modo que las visitas que llegan desde Instagram se pierden antes de completarlo."
   }
 ];
 
