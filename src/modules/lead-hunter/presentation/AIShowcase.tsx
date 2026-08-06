@@ -2,10 +2,10 @@ import React from "react";
 import { Prospect } from "../../../shared/types";
 import ScoreBreakdown from "../../../shared/components/ScoreBreakdown";
 import {
-  SectionHeader, EmptyState, Surface, Callout, Button, StatGrid, StatTile, IconFrame
+  SectionHeader, EmptyState, Surface, Callout, Button, ActionCard, StatGrid, StatTile, IconFrame
 } from "../../../shared/components/ui";
 import {
-  ArrowLeft, Globe, MapPin, Search, Layers, AlertTriangle, Target,
+  ArrowLeft, Globe, MapPin, Search, Layers, AlertTriangle, Target, MessageSquare,
   FileText, Calculator, Trophy, Cpu, Sparkles, HelpCircle, ChevronDown, Check, Minus
 } from "lucide-react";
 
@@ -58,12 +58,15 @@ export default function AIShowcase({
   lead,
   searchContext,
   engineState,
-  onBack
+  onBack,
+  onGeneratePitch
 }: {
   lead: Prospect;
   searchContext?: SearchContext;
   engineState: AnalysisEngineState;
   onBack: () => void;
+  /** Cierra el recorrido: lleva al generador con este negocio enfocado. */
+  onGeneratePitch: (id: string) => void;
 }) {
   // **`typeof === "number"`, nunca `!!score`**: `0` es una puntuación real y
   // `null` una ausencia legítima (R-45).
@@ -360,6 +363,23 @@ export default function AIShowcase({
           </Callout>
         )}
       </SectionHeader>
+
+      {/*
+        **H-10.1 · P5 — la pantalla dejaba de pedir nada.**
+
+        Terminaba en un bloque de estado: la escena no cerraba, se apagaba. Y es
+        la penúltima parada del recorrido, justo antes del desenlace.
+
+        Ahora invita al paso siguiente, que es el único que queda: escribirle.
+      */}
+      <ActionCard
+        variant="solid"
+        tone="brand"
+        icon={<MessageSquare className="h-5 w-5" />}
+        title={`Escribirle a ${lead.name}`}
+        detail="Ya sabes por qué es una oportunidad. El mensaje se redacta a partir de este mismo análisis."
+        onClick={() => onGeneratePitch(lead.id)}
+      />
     </div>
   );
 }

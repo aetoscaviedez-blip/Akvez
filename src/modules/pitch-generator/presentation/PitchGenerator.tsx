@@ -7,7 +7,7 @@ import PitchOutput, { CHANNEL_LABELS } from "./components/PitchOutput";
 import DesignerSignaturePanel from "./components/DesignerSignaturePanel";
 import {
   Send, Sparkles, Mail, Linkedin, Instagram, AlertTriangle, MessageSquareText,
-  Globe, MapPin, Phone, Target, DollarSign, Zap, Flame
+  Globe, MapPin, Phone, Target, DollarSign, Zap, Flame, ArrowRight
 } from "lucide-react";
 
 /**
@@ -84,6 +84,13 @@ export default function PitchGenerator({
   const [editProfile, setEditProfile] = React.useState(false);
 
   const activeLead = leads.find((p) => p.id === selectedLeadId);
+
+  /**
+   * **El siguiente negocio sin mensaje.** No se recomienda ni se puntúa: es el
+   * inmediato de la lista que todavía no tiene texto redactado. `undefined`
+   * cuando ya se ha escrito a todos.
+   */
+  const nextLead = leads.find((p) => p.id !== selectedLeadId && !p.generatedPitch);
 
   /** Origen declarado del pitch mostrado. `undefined` = no consta. */
   const pitchSource = activeLead ? resolvePitchSource(activeLead) : undefined;
@@ -529,7 +536,33 @@ export default function PitchGenerator({
               isLast
             >
               {activeLead.generatedPitch ? (
-                <NextActions lead={activeLead} />
+                <div className="space-y-6">
+                  <NextActions lead={activeLead} />
+
+                  {/*
+                    **H-10.1 · P5 — el recorrido dejaba de pedir nada aquí.**
+
+                    Se generaba el mensaje, se copiaba, y la pantalla se
+                    apagaba. **La prospección es un bucle y el producto la
+                    presentaba como una línea recta**: sin un «siguiente», nada
+                    comunica que esto se repite — que es justamente donde está
+                    el valor.
+
+                    El siguiente negocio **no se elige ni se recomienda**: es el
+                    inmediato de la lista que todavía no tiene mensaje. Si no
+                    queda ninguno, el bloque no se rinde.
+                  */}
+                  {nextLead && (
+                    <ActionCard
+                      variant="solid"
+                      tone="brand"
+                      icon={<ArrowRight className="h-5 w-5" />}
+                      title="Siguiente oportunidad"
+                      detail={`${nextLead.name} — todavía no le has escrito.`}
+                      onClick={() => onSelectLeadId(nextLead.id)}
+                    />
+                  )}
+                </div>
               ) : (
                 <EmptyState>
                   Genera el mensaje para ver las vías de contacto disponibles.

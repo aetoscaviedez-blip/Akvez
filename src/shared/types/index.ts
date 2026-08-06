@@ -1,3 +1,18 @@
+/**
+ * Perfil del freelance que usa AKVEZ.
+ *
+ * ── LOS TRES CAMPOS NUEVOS SON OPCIONALES, Y POR QUÉ ─────────────────────────
+ *
+ * `company`, `city` y `website` los pide el alta inicial (H-10.1 · P1) para que
+ * el producto sepa quién es su usuario. **Se añaden como opcionales a
+ * propósito:** el backend recibe `designer` sin validación de forma y solo lee
+ * `name`, `style`, `skills`, `tone` y `caseStudies`, de modo que los campos
+ * nuevos viajan y se ignoran sin romper nada.
+ *
+ * **No son dominio.** No participan del Opportunity Score, ni del
+ * descubrimiento, ni de ningún contrato del Blueprint: describen al usuario, no
+ * al negocio analizado.
+ */
 export interface DesignerProfile {
   name: string;
   style: string;
@@ -5,6 +20,12 @@ export interface DesignerProfile {
   tone: string;
   caseStudies: string;
   targetNiche: string;
+  /** Nombre del estudio o marca, si el freelance trabaja bajo uno. */
+  company?: string;
+  /** Ciudad del freelance. Contexto para el mensaje; no filtra la búsqueda. */
+  city?: string;
+  /** Portafolio propio, si lo tiene. */
+  website?: string;
 }
 
 export type LeadStatus = 'Prospect' | 'Audited' | 'Pitched' | 'Replied' | 'Won' | 'Stale';

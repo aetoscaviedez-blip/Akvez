@@ -35,6 +35,6 @@ export async function startServer(): Promise<void> {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Servidor LeadFlow corriendo en http://0.0.0.0:${PORT}`);
+    console.log(`Servidor AKVEZ corriendo en http://0.0.0.0:${PORT}`);
   });
 }

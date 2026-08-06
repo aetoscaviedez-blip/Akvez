@@ -35,7 +35,7 @@ async function generatePitchWithGemini(
   customInstructions?: string
 ): Promise<PitchDraft> {
       const prompt = `
-        Eres LeadFlow, experto en escribir mensajes de outreach para diseñadores web freelance en Colombia.
+        Eres AKVEZ, experto en escribir mensajes de outreach para diseñadores web freelance en Colombia.
         Canal: "${channel}"
         
         REGLAS — NUNCA las violes:

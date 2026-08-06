@@ -259,6 +259,7 @@ export default function LeadHunter({
             hasSearched && !usedFallbackEngine ? "AI_CONFIRMED" : "UNDETERMINED"
           }
           onBack={() => setShowcaseOpen(false)}
+          onGeneratePitch={onSelectLead}
         />
       );
     }
@@ -436,6 +437,9 @@ export default function LeadHunter({
                 visibleCount={visibleCount}
                 totalLeads={displayedLeads.length}
                 references={references}
+                leads={displayedLeads}
+                city={city}
+                hasSearched={hasSearched}
               />
 
               {/* Grid representation */}

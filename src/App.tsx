@@ -4,64 +4,23 @@ import LeadHunter from "./modules/lead-hunter/presentation/LeadHunter";
 import LeadLibrary from "./modules/lead-hunter/presentation/LeadLibrary";
 import PitchGenerator from "./modules/pitch-generator/presentation/PitchGenerator";
 import ExecutiveDashboard from "./modules/dashboard/presentation/ExecutiveDashboard";
-import { Compass, Code, ArrowRight, MapPin, Settings, User, MessageSquare, Library, LayoutDashboard } from "lucide-react";
+import FirstRunProfile from "./shared/components/FirstRunProfile";
+import { Compass, Code, ArrowRight, MapPin, Settings, MessageSquare, Library, LayoutDashboard } from "lucide-react";
 
-// ── DATOS DE EJEMPLO — NO SON RESULTADOS REALES ─────────────────────────────
-//
-// Se cargan **solo cuando no hay nada guardado**, para que la aplicación no
-// arranque vacía. **Cada uno lleva `isDemo: true`**, y la interfaz los rotula
-// como ejemplo allí donde se muestran.
-//
-// **La marca no es decorativa:** sin ella, un Lead inventado —con score,
-// clasificación y problemas detectados— es indistinguible de uno devuelto por
-// una búsqueda real. **Ningún Lead procedente del servidor lleva `isDemo`.**
-const CL_SAMPLE_LEADS: Prospect[] = [
-  {
-    id: "sample-col-1",
-    name: "La Fogata Parrilla - Bogotá",
-    website: "lafogataparrillabogota.co",
-    description: "Auténtico e histórico restaurante de asados y comida típica colombiana en la sabana de Bogotá. Cuentan con excelentes reseñas y un flujo masivo de clientes presenciales los fines de semana, pero su sitio web tiene más de 8 años de antigüedad.",
-    flaws: [
-      "El menú para ordenar online es un archivo PDF escaneado de 15MB que tarda más de 20 segundos en descargar en celulares",
-      "No tienen botón de reservas disponible ni integración con WhatsApp, obligando al comensal a hacer engorrosas llamadas telefónicas",
-      "La tipografía del sitio web tiene poquísimo contraste y el diseño usa colores oscuros opacos que dificultan leer el horario de atención"
-    ],
-    angle: "Reemplazar el PDF estático por una carta digital interactiva e instantánea adaptada a móviles. Introducir un popup de reserva rápida por WhatsApp para asegurar las cenas de eventos empresariales.",
-    isDemo: true,
-    status: "Prospect",
-    dateCreated: "Jun 5",
-    score: 85,
-    classification: "Sitio web deficiente",
-    revenueLoss: "Pierden aproximadamente de 15 a 20 reservas en línea los fines de semana debido a la lentitud del PDF y la falta de contacto directo."
-  },
-  {
-    id: "sample-col-2",
-    name: "OdontoEstética Medellín",
-    website: "odontoesteticamedellin.com",
-    description: "Exitosa clínica dental privada en El Poblado que ofrece servicios de alta gama como diseño de sonrisa y ortodoncia invisible. Su reputación es impecable, pero su portal digital parece una plantilla genérica fría.",
-    flaws: [
-      "No muestran casos de éxito antes/después ni testimonios reales de pacientes, lo que limita la persuasión indispensable en medicina estética",
-      "Carecen de un sistema rápido de agendamiento — el usuario debe llenar un formulario de 10 campos y esperar un correo de respuesta",
-      "No es responsive en tablets y pantallas móviles pequeñas, desconfigurando los datos de la dirección física"
-    ],
-    angle: "Crear una landing page moderna con foco en retratos humanos de alta definición. Añadir testimonios en video optimizados de pacientes reales y un widget conversacional interactivo para reservas instantáneas.",
-    isDemo: true,
-    status: "Prospect",
-    dateCreated: "Jun 4",
-    score: 72,
-    classification: "Sitio web deficiente",
-    revenueLoss: "El proceso de agendamiento pide diez campos y respuesta por correo, de modo que las visitas que llegan desde Instagram se pierden antes de completarlo."
-  }
-];
+/**
+ * Claves de persistencia.
+ *
+ * **Se renombraron desde `leadflow_*` (H-10.1 · P1).** El producto se llama
+ * AKVEZ; el nombre anterior sobrevivía en el almacenamiento, en el perfil por
+ * defecto y —lo más grave— en la firma de los mensajes generados.
+ *
+ * El cambio de clave **descarta el trabajo guardado bajo el nombre viejo**. Es
+ * intencionado: ese almacenamiento contenía los Leads de ejemplo y un perfil
+ * firmado con una marca que no existe.
+ */
+const LEADS_KEY = "akvez_leads_v1";
+const PROFILE_KEY = "akvez_profile_v1";
 
-const DEFAULT_PROFILE: DesignerProfile = {
-  name: "Estudio Creativo LeadFlow",
-  style: "Diseño premium minimalista, elegante, moderno, con fotografía inmersiva de alta fidelidad, colores oscuros limpios y tipografía de autor adaptable a dispositivos móviles.",
-  skills: "Webflow, WordPress, Custom React, Tailwind CSS",
-  tone: "Empático, cercano, profesional y centrado en aportar valor antes de vender",
-  caseStudies: "Especializado en mejorar las tasas de conversión móvil en negocios de gastronomía y salud.",
-  targetNiche: "Cafeterías y Restaurantes"
-};
 
 export default function App() {
   // Vistas: "hunter" (Workspace), "library" (Biblioteca, P-08) o "pitch".
@@ -92,22 +51,41 @@ export default function App() {
   /** Negocio que el panel pide abrir en la Opportunity View del Hunter. */
   const [requestedLeadId, setRequestedLeadId] = React.useState<string | null>(null);
 
-  // State: Leads Scouted in Colombia
+  /**
+   * ⚠️ **H-10.1 · P2 — el producto arranca vacío.**
+   *
+   * Antes se precargaban dos negocios inventados para que la aplicación no
+   * abriera en blanco. El efecto era el contrario del buscado: **la pantalla de
+   * entrada quedaba dominada por un aviso ámbar diciendo que nada era real**, y
+   * esos Leads contaminaban todas las cifras del Panel y dejaban la Opportunity
+   * View llena de «No disponible», porque los datos de muestra no traen
+   * desglose del Score.
+   *
+   * **Una pantalla vacía con una acción clara es más producto que una llena de
+   * datos rotulados como falsos.** El estado vacío ya estaba escrito y hace de
+   * puerta de entrada.
+   */
   const [leads, setLeads] = React.useState<Prospect[]>(() => {
-    const saved = localStorage.getItem("leadflow_leads_v2");
-    return saved ? JSON.parse(saved) : CL_SAMPLE_LEADS;
+    const saved = localStorage.getItem(LEADS_KEY);
+    return saved ? JSON.parse(saved) : [];
   });
 
-  // State: Designer profile (firm info)
-  const [designerProfile, setDesignerProfile] = React.useState<DesignerProfile>(() => {
-    const saved = localStorage.getItem("leadflow_designer_v2");
-    return saved ? JSON.parse(saved) : DEFAULT_PROFILE;
+  /**
+   * **Perfil del freelance. `null` significa que todavía no se ha presentado.**
+   *
+   * No hay perfil por defecto: el anterior firmaba los mensajes como «Estudio
+   * Creativo LeadFlow» —el nombre viejo del proyecto— y ese texto salía dentro
+   * del mensaje generado, que es el momento culminante del recorrido.
+   */
+  const [designerProfile, setDesignerProfile] = React.useState<DesignerProfile | null>(() => {
+    const saved = localStorage.getItem(PROFILE_KEY);
+    return saved ? JSON.parse(saved) : null;
   });
 
   // State: Designer style used in Colombian Search API
-  const [designerStyle, setDesignerStyle] = React.useState<string>(() => {
-    return designerProfile.style || "Diseño moderno, limpio, responsive, estética refinada y adaptable a celulares.";
-  });
+  const [designerStyle, setDesignerStyle] = React.useState<string>(
+    () => designerProfile?.style ?? ""
+  );
 
   // Active Selected Lead ID in Pitch Generator
   const [selectedLeadId, setSelectedLeadId] = React.useState<string>(() => {
@@ -116,17 +94,17 @@ export default function App() {
 
   // LocalStorage sync
   React.useEffect(() => {
-    localStorage.setItem("leadflow_leads_v2", JSON.stringify(leads));
+    localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
   }, [leads]);
 
   React.useEffect(() => {
-    localStorage.setItem("leadflow_designer_v2", JSON.stringify(designerProfile));
+    if (designerProfile) localStorage.setItem(PROFILE_KEY, JSON.stringify(designerProfile));
   }, [designerProfile]);
 
   // Keep search style preference in sync with profile definition
   React.useEffect(() => {
-    setDesignerStyle(designerProfile.style);
-  }, [designerProfile.style]);
+    if (designerProfile) setDesignerStyle(designerProfile.style);
+  }, [designerProfile?.style]);
 
   // Add search results to Leads Database without duplicating existing names
   const handleAddLeads = (newLeads: Prospect[]) => {
@@ -160,6 +138,24 @@ export default function App() {
     setRequestedLeadId(id);
     setActiveTab("hunter");
   };
+
+  /**
+   * **Alta inicial.** Mientras no haya perfil, el producto no enseña su espacio
+   * de trabajo: pregunta quién es su usuario. Es la única puerta del producto y
+   * se cruza una sola vez.
+   */
+  if (!designerProfile) {
+    return (
+      <div className="min-h-screen bg-dark-bg text-app-text font-sans antialiased selection:bg-brand/20 selection:text-brand">
+        <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <span className="font-brand text-2xl font-bold tracking-tight text-app-text">
+            AK<span className="text-brand">V</span>EZ
+          </span>
+        </div>
+        <FirstRunProfile onComplete={setDesignerProfile} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-dark-bg text-app-text font-sans antialiased selection:bg-brand/20 selection:text-brand flex flex-col">
@@ -218,13 +214,30 @@ export default function App() {
               </span>
             </div>
 
-            {/* Settings & Profile Icons */}
+            {/*
+              **El producto sabe quién eres, y lo dice.** El avatar era un icono
+              genérico sin nombre: nada en la interfaz indicaba que el espacio
+              de trabajo fuera de alguien. Ahora lleva las iniciales del
+              freelance y su nombre al lado.
+            */}
             <div className="flex items-center gap-3">
               <button type="button" className="p-2.5 rounded-full hover:bg-surface-raised text-app-muted hover:text-app-text transition cursor-pointer">
                 <Settings className="w-5 h-5" />
               </button>
-              <div className="w-9 h-9 rounded-full bg-brand/20 border border-brand/30 flex items-center justify-center text-brand">
-                <User className="w-4 h-4" />
+              <div className="flex items-center gap-2.5">
+                <span className="hidden text-right sm:block">
+                  <span className="block font-sans text-xs font-semibold leading-tight text-app-text">
+                    {designerProfile.name}
+                  </span>
+                  {designerProfile.company && (
+                    <span className="block font-sans text-eyebrow leading-tight text-app-muted">
+                      {designerProfile.company}
+                    </span>
+                  )}
+                </span>
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-brand/30 bg-brand/20 font-sans text-xs font-bold text-brand">
+                  {initials(designerProfile.name)}
+                </div>
               </div>
             </div>
 
@@ -430,4 +443,14 @@ export default function App() {
 
     </div>
   );
+}
+
+/** Iniciales para el avatar. Como mucho dos letras. */
+function initials(name: string): string {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? "")
+    .join("");
 }

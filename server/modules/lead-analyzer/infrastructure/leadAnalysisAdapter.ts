@@ -130,7 +130,7 @@ async function analyzeBatch(
         });
 
         const prompt = `
-          Eres el agente LeadFlow, un consultor de diseño web experto en analizar negocios de Colombia para optimizar su conversión y lanzar propuestas de outreach atractivas.
+          Eres el agente AKVEZ, un consultor de diseño web experto en analizar negocios de Colombia para optimizar su conversión y lanzar propuestas de outreach atractivas.
           
           Analiza este lote de ${batchInput.length} negocios de la ciudad de "${location}, Colombia" en el nicho "${industry}".
           El estilo del diseñador web que propone el servicio es: "${designerStyle || "moderno y minimalista"}".

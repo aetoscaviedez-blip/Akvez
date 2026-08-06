@@ -5,7 +5,7 @@ import {
 } from "../../../../shared/components/ui";
 import {
   MapPin, Globe, AlertTriangle, Zap, DollarSign, Target, Phone,
-  MessageSquare, Star, Calendar, Search, ShieldCheck, Gauge, Award, Quote
+  MessageSquare, Star, Calendar, Search, ShieldCheck, Gauge, Award, Quote, CheckCheck
 } from "lucide-react";
 
 interface LeadCardProps {
@@ -97,6 +97,23 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
             {lead.isDemo && (
               <Badge variant="pill" tone="warn" icon={<AlertTriangle className="h-3.5 w-3.5" />}>
                 Dato de ejemplo — no es un resultado real
+              </Badge>
+            )}
+
+            {/*
+              **H-10.1 · P3 — el trabajo hecho se ve donde se trabaja.**
+
+              `status` se marcaba desde el primer sprint y **solo se mostraba en
+              la Biblioteca**. Un freelance que volviera al día siguiente no
+              tenía forma de saber a quién ya había escrito sin salir de la
+              pantalla en la que trabaja.
+
+              **No se añade estado nuevo: se enseña el que ya se guardaba.**
+              Verde porque es trabajo conseguido, no una marca.
+            */}
+            {lead.status === "Pitched" && (
+              <Badge tone="success" icon={<CheckCheck className="h-3 w-3" />}>
+                Ya contactado
               </Badge>
             )}
 
