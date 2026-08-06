@@ -72,9 +72,18 @@ export default function Surface({
 
   const dimmed = variant === "dashed" && !tinted ? "bg-dark-surface/40" : "";
 
+  // **La luz.** Un degradado vertical de blanco al 4,5 % que se agota en 140 px,
+  // más un borde superior más claro que el resto. No se ve; se nota — y es lo
+  // que convierte un rectángulo pintado en un objeto con una cara superior.
+  //
+  // **No se aplica a lo punteado ni a lo tintado:** un bloque que declara una
+  // ausencia no debe parecer sólido, y un panel con tono ya tiene su propia
+  // materia. Iluminar todo por igual anularía la distinción.
+  const lit = variant === "solid" && !tinted && level !== "flush" ? "ak-lit" : "";
+
   return (
     <Tag
-      className={`${RADIUS[radius]} ${border} ${dimmed || background} ${PADDING[padding]} ${className}`.replace(/\s+/g, " ").trim()}
+      className={`${RADIUS[radius]} ${border} ${dimmed || background} ${lit} ${PADDING[padding]} ${className}`.replace(/\s+/g, " ").trim()}
       style={style}
     >
       {children}

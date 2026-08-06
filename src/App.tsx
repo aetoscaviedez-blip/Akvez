@@ -162,17 +162,26 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             
-            {/* Logo Group */}
-            <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 bg-brand rounded-full flex items-center justify-center text-white font-extrabold text-sm">
-                AK
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-black font-display uppercase tracking-widest text-app-text text-lg">VEZ</span>
-                <span className="text-eyebrow text-app-text font-black uppercase tracking-widest px-2.5 py-1 rounded border border-app-border bg-surface-raised/40">
-                  PRO
-                </span>
-              </div>
+            {/*
+              **Logotipo — H-08 · el tratamiento de la referencia.**
+
+              Eran **tres objetos**: un círculo naranja con «AK», la palabra
+              «VEZ» aparte con `tracking-widest`, y un chip «PRO». El ojo tenía
+              que ensamblarlos para leer una marca, y el resultado se leía
+              literalmente partido: «AK VEZ».
+
+              Ahora es **una sola palabra con la V en naranja** — que es donde
+              vive el acento de la marca y el único sitio del producto donde
+              sobrevive la tipografía con carácter. Más presencia, mejor lectura
+              y una personalidad que el ensamblaje anterior no tenía.
+            */}
+            <div className="flex items-center gap-3">
+              <span className="font-brand text-2xl font-bold tracking-tight text-app-text">
+                AK<span className="text-brand">V</span>EZ
+              </span>
+              <span className="rounded-control border border-app-border bg-surface-raised px-2 py-0.5 font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted">
+                Pro
+              </span>
             </div>
 
             {/* Live active agent indicator */}

@@ -71,7 +71,7 @@ export default function OpportunityView({
     !!lead.description || !!lead.whyWebsiteNeeded || !!lead.revenueLoss || lead.flaws.length > 0;
 
   return (
-    <div className="space-y-16 pb-4">
+    <div className="space-y-12 pb-4">
 
       {/* ── Navegación ──────────────────────────────────────────────────────── */}
       <Button
@@ -258,7 +258,7 @@ export default function OpportunityView({
 
           {/* **La única acción primaria de esta pantalla.** */}
           <Surface className="flex flex-col items-center gap-4 px-8 py-10 text-center">
-            <h4 className="max-w-xl font-display text-xl font-bold tracking-tight text-app-text">
+            <h4 className="max-w-xl font-display text-xl font-semibold text-app-text">
               ¿Contactamos a {lead.name}?
             </h4>
             <p className="max-w-md font-sans text-xs leading-relaxed text-app-muted">

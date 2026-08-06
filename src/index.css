@@ -25,8 +25,26 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
+  /* ── Tipografías ─────────────────────────────────────────────────────────
+
+     **H-08 · El cambio de mayor efecto de toda la dirección de arte.**
+
+     Clash Display es una tipografía **de cartel**: letterforms con carácter,
+     pensadas para poco texto y tamaños grandes. AKVEZ la usaba en *todos* los
+     titulares, subtítulos, nombres de tarjeta y cifras — y eso es exactamente
+     lo que hacía que la interfaz «gritara».
+
+     **En la referencia, «Dashboard» está en una grotesca neutra de peso medio.
+     El carácter vive únicamente en el logotipo.** Es lo que separa a Linear,
+     Vercel o Stripe de una landing page: el producto se calla y deja hablar al
+     contenido.
+
+     Por eso `font-display` **deja de ser una familia distinta**: el producto es
+     silencioso y usa una sola grotesca. `font-brand` conserva Clash Display y
+     se reserva a la marca. */
   --font-sans: "Cabinet Grotesk", "Space Grotesk", "Inter", sans-serif;
-  --font-display: "Clash Display", "Outfit", sans-serif;
+  --font-display: "Cabinet Grotesk", "Space Grotesk", "Inter", sans-serif;
+  --font-brand: "Clash Display", "Outfit", sans-serif;
 
   /* ── Superficies ─────────────────────────────────────────────────────────
      **Jerarquía lumínica ascendente: cada nivel de anidamiento sube.** Es lo
@@ -140,14 +158,24 @@
   --text-xl: 1.375rem;              /* 22 */
   --text-xl--line-height: 1.35;
 
-  --text-2xl: 1.625rem;             /* 26 */
-  --text-2xl--line-height: 1.25;
+  /* **H-08 · Los titulares bajan el tono de voz.**
 
-  --text-3xl: 2rem;                 /* 32 */
-  --text-3xl--line-height: 1.15;
+     No se trata de hacerlos pequeños: se trata de que sean **importantes en
+     lugar de gigantes**. A 48 px con peso 900 y tracking negativo, un titular
+     no comunica jerarquía — comunica volumen, y obliga al resto de la pantalla
+     a competir con él.
 
-  --text-4xl: 2.5rem;               /* 40 */
-  --text-4xl--line-height: 1.1;
+     La referencia pone «Dashboard» en unos 34 px de peso medio, y el contenido
+     sigue mandando. El Score gana protagonismo relativo **sin crecer un solo
+     píxel**, porque deja de tener un rival del mismo tamaño. */
+  --text-2xl: 1.375rem;             /* 22 — título de sección */
+  --text-2xl--line-height: 1.3;
+
+  --text-3xl: 1.75rem;              /* 28 */
+  --text-3xl--line-height: 1.25;
+
+  --text-4xl: 2.125rem;             /* 34 — titular de pantalla */
+  --text-4xl--line-height: 1.2;
 
   --text-5xl: 3rem;                 /* 48 */
   --text-5xl--line-height: 1;
@@ -228,9 +256,64 @@ body {
    corrección no depende del orden en que se generen las clases.
 
    ────────────────────────────────────────────────────────────────────────── */
-.font-display {
+.font-brand {
   word-spacing: 0.12em;
 }
+
+/* ── Materialidad ────────────────────────────────────────────────────────────
+
+   **H-08 · Lo que convierte un rectángulo pintado en un objeto.**
+
+   Las tarjetas eran relleno plano más un borde uniforme de 1 px: divs. Un
+   objeto real tiene **una fuente de luz**, y basta insinuarla para que el ojo
+   le atribuya volumen.
+
+   Dos gestos, ninguno llamativo:
+
+   1. **Un degradado vertical de blanco al 4,5 %** que se agota en 140 px. No se
+      ve; se nota. Simula luz cenital cayendo sobre la cara superior.
+   2. **El borde superior más claro que el resto.** Es lo que hace un canto
+      biselado bajo una luz alta, y es el detalle que Linear y Stripe usan en
+      todas sus superficies.
+
+   **Sin sombras, sin blur, sin cristal.** La profundidad sigue siendo lumínica,
+   como manda el ADN: lo único que cambia es que ahora hay una luz.
+
+   ────────────────────────────────────────────────────────────────────────── */
+.ak-lit {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.045) 0%,
+    rgba(255, 255, 255, 0) 140px
+  );
+  border-top-color: rgba(255, 255, 255, 0.09);
+}
+
+/* ── Foco ────────────────────────────────────────────────────────────────────
+   F6-06: no existía ninguna regla de foco en toda la aplicación. Un jurado que
+   tabule tiene que ver dónde está. */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ── Barra de desplazamiento ─────────────────────────────────────────────────
+   F6-04: la barra nativa del sistema era el único gris claro de la interfaz, y
+   uno de los marcadores clásicos de «prototipo». */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-app-border) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--color-surface-raised);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--color-app-border); background-clip: content-box; }
 
 /* ── Profundidad ─────────────────────────────────────────────────────────────
 

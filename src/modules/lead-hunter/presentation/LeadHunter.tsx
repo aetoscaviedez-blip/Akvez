@@ -284,10 +284,10 @@ export default function LeadHunter({
         lead="El sistema calcula un Opportunity Score para cada negocio y explica la fuga financiera de su sitio actual."
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:items-start">
 
         {/* Left Side: Search Form matching screenshot */}
-        <div className="lg:col-span-4 space-y-5 animate-fade-in" id="sidebar-filters">
+        <div className="lg:col-span-4 space-y-5 lg:sticky lg:top-6 lg:self-start animate-fade-in" id="sidebar-filters">
 
           <NicheSelector
             nicheDropdownOpen={nicheDropdownOpen}

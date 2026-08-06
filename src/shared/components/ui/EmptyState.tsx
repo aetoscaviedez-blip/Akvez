@@ -73,7 +73,7 @@ export default function EmptyState({
         </div>
       )}
       {title && (
-        <p className="font-display text-xl font-bold tracking-tight text-app-text">
+        <p className="font-display text-xl font-semibold text-app-text">
           {title}
         </p>
       )}

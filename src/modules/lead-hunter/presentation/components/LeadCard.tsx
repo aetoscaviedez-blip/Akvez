@@ -147,7 +147,7 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
           <button
             type="button"
             onClick={() => onOpenOpportunity(lead.id)}
-            className="block cursor-pointer text-left font-display text-xl font-bold leading-tight tracking-tight text-app-text transition-colors hover:text-brand"
+            className="block cursor-pointer text-left font-display text-xl font-semibold leading-snug text-app-text transition-colors hover:text-brand"
           >
             {lead.name}
           </button>

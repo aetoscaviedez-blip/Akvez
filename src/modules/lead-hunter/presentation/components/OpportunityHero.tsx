@@ -88,7 +88,7 @@ export default function OpportunityHero({ lead }: { lead: Prospect }) {
             )}
           </div>
 
-          <h2 className="max-w-2xl font-display text-4xl font-bold leading-[1.05] tracking-tight text-app-text sm:text-5xl">
+          <h2 className="max-w-2xl font-display text-3xl font-semibold leading-[1.15] text-app-text sm:text-4xl">
             {lead.name}
           </h2>
 

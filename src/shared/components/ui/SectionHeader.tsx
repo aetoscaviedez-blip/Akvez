@@ -61,11 +61,11 @@ export default function SectionHeader({
 
   const heading =
     level === "screen" ? (
-      <h2 className="max-w-3xl font-display text-4xl font-bold leading-[1.1] tracking-tight text-app-text sm:text-5xl">
+      <h2 className="max-w-3xl font-display text-3xl font-semibold leading-[1.15] text-app-text sm:text-4xl">
         {title}
       </h2>
     ) : (
-      <h3 className="flex items-center gap-2.5 font-display text-2xl font-bold tracking-tight text-app-text">
+      <h3 className="flex items-center gap-2.5 font-display text-2xl font-semibold text-app-text">
         {/* Sin eyebrow, el icono acompaña al título. Con eyebrow, sube a su
             fila: dos iconos en la misma columna competirían. */}
         {!eyebrow && icon}

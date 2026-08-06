@@ -113,7 +113,7 @@ export default function ExecutiveDashboard({
   const latest = leads.slice(0, 3);
 
   return (
-    <div className="space-y-16 pb-4">
+    <div className="space-y-12 pb-4">
 
       {/* ── 1 · HERO ────────────────────────────────────────────────────────── */}
       <SectionHeader

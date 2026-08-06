@@ -73,7 +73,7 @@ export default function AIShowcase({
   const [showArithmetic, setShowArithmetic] = React.useState(false);
 
   return (
-    <div className="space-y-16 pb-4">
+    <div className="space-y-12 pb-4">
 
       <Button
         variant="ghost"
