@@ -29,7 +29,7 @@ export default function CitySelector({
       >
         <div className="flex flex-col">
           <span className="text-xs font-bold uppercase tracking-widest text-app-text font-display">Ciudad</span>
-          <span className="text-[11px] text-brand font-semibold mt-0.5">{city}</span>
+          <span className="text-xs text-brand font-semibold mt-0.5">{city}</span>
         </div>
         <ChevronDown className={`w-4 h-4 text-brand transition-transform duration-200 ${cityDropdownOpen ? 'rotate-180' : ''}`} />
       </button>

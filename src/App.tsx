@@ -169,7 +169,7 @@ export default function App() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-black font-display uppercase tracking-widest text-app-text text-lg">VEZ</span>
-                <span className="text-[10px] text-app-text font-black uppercase tracking-widest px-2.5 py-1 rounded border border-app-border bg-surface-raised/40">
+                <span className="text-eyebrow text-app-text font-black uppercase tracking-widest px-2.5 py-1 rounded border border-app-border bg-surface-raised/40">
                   PRO
                 </span>
               </div>

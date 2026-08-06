@@ -95,18 +95,24 @@ export default function SectionHeader({
         </div>
       )}
 
-      <div className="space-y-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="max-w-3xl space-y-2">
+      {/* **Ritmo editorial.** El encabezado se separa de su contenido más de lo
+          que sus propias piezas se separan entre sí: es lo que hace que el ojo
+          lea «título → cuerpo» como un bloque y no como una lista comprimida. */}
+      <div className="space-y-7">
+        <div className="flex flex-wrap items-end justify-between gap-5">
+          <div className="space-y-3">
             {eyebrow && (
-              <span className="flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-app-muted">
+              <span className="flex items-center gap-2 font-sans text-eyebrow font-bold uppercase tracking-[0.2em] text-app-muted">
                 {icon && !isStep && <span className="text-brand">{icon}</span>}
                 {eyebrow}
               </span>
             )}
             {heading}
+            {/* **La entradilla se acota a la medida de lectura**, no al ancho del
+                contenedor. A 16 px, `max-w-3xl` daba ~96 caracteres por línea:
+                el ojo pierde el renglón al volver al margen izquierdo. */}
             {lead && (
-              <p className="font-sans text-sm leading-relaxed text-app-muted">
+              <p className="max-w-measure font-sans text-sm text-app-muted">
                 {lead}
               </p>
             )}

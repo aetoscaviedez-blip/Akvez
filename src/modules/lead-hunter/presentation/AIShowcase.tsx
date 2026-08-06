@@ -73,7 +73,7 @@ export default function AIShowcase({
   const [showArithmetic, setShowArithmetic] = React.useState(false);
 
   return (
-    <div className="space-y-14 pb-4">
+    <div className="space-y-16 pb-4">
 
       <Button
         variant="ghost"
@@ -149,7 +149,7 @@ export default function AIShowcase({
                     <h4 className="font-display text-sm font-bold leading-tight text-app-text">
                       {entry.category}
                     </h4>
-                    <p className="mt-0.5 font-mono text-[10px] text-app-muted">
+                    <p className="mt-0.5 font-mono text-eyebrow text-app-muted">
                       peso {entry.weight}% · {measured ? "medida" : "no medible"}
                     </p>
                   </div>
@@ -175,7 +175,7 @@ export default function AIShowcase({
       >
         <div className="space-y-6">
           {lead.description ? (
-            <p className="max-w-3xl font-sans text-sm leading-relaxed text-app-muted">
+            <p className="max-w-measure font-sans text-sm text-app-muted">
               {lead.description}
             </p>
           ) : (
@@ -187,13 +187,13 @@ export default function AIShowcase({
           {/* Lista vacía = **el análisis no detectó problemas**. Es un
               resultado, y se declara. */}
           {lead.flaws.length > 0 ? (
-            <ul className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {lead.flaws.map((flaw, index) => (
                 <Surface
                   as="li"
                   key={index}
                   padding="md"
-                  className="flex items-start gap-3 font-sans text-xs leading-relaxed text-app-muted motion-safe:animate-ak-rise"
+                  className="flex items-start gap-3 font-sans text-sm text-app-muted motion-safe:animate-ak-rise"
                   style={{ animationDelay: `${Math.min(index, 8) * 50}ms` }}
                 >
                   <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warn" />
@@ -253,7 +253,7 @@ export default function AIShowcase({
                   onClick={() => setShowArithmetic((v) => !v)}
                   className="flex w-full cursor-pointer items-center justify-between gap-4 px-6 py-4 text-left"
                 >
-                  <span className="font-sans text-[11px] font-bold uppercase tracking-widest text-brand">
+                  <span className="font-sans text-xs font-bold uppercase tracking-widest text-brand">
                     Comprobar la aritmética
                   </span>
                   <ChevronDown
@@ -305,7 +305,7 @@ export default function AIShowcase({
           <StatTile label="Confianza" value={lead.confidence} />
         </StatGrid>
         {lead.scoreVersion && (
-          <p className="mt-3 font-mono text-[10px] text-app-muted/70">
+          <p className="mt-3 font-mono text-eyebrow text-app-muted">
             Perfil de Ponderación {lead.scoreVersion}
           </p>
         )}

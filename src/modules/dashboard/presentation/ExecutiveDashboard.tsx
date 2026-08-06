@@ -252,7 +252,7 @@ export default function ExecutiveDashboard({
                 propios**: AKVEZ no descarta ningún Lead por su puntuación. */}
             {bands.length > 0 && (
               <Surface level="raised" padding="lg" className="mt-8">
-                <h4 className="font-sans text-[10px] font-bold uppercase tracking-widest text-app-muted">
+                <h4 className="font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted">
                   Reparto por nivel de oportunidad
                 </h4>
                 <div className="mt-4 flex flex-wrap gap-3">
@@ -265,7 +265,7 @@ export default function ExecutiveDashboard({
                     </Badge>
                   ))}
                 </div>
-                <p className="mt-4 font-sans text-[11px] leading-relaxed text-app-muted">
+                <p className="mt-4 font-sans text-xs leading-relaxed text-app-muted">
                   El nivel es una <strong>etiqueta de prioridad</strong>, nunca un
                   filtro: ningún negocio se descarta por su puntuación.
                 </p>

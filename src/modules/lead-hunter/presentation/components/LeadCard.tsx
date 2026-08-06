@@ -233,7 +233,7 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
             )}
           </div>
           {!hasScore && (
-            <p className="mt-1.5 font-sans text-[11px] text-app-muted">Sin evaluar</p>
+            <p className="mt-1.5 font-sans text-xs text-app-muted">Sin evaluar</p>
           )}
         </div>
       </div>
@@ -310,7 +310,7 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
       )}
 
       {/* ── 3 · POR QUÉ ────────────────────────────────────────────────────── */}
-      <div className="space-y-5 border-t border-app-border px-6 py-6">
+      <div className="space-y-7 border-t border-app-border px-6 py-7">
 
         {/* Se omite si el análisis no la produjo. */}
         {lead.description && (
@@ -353,15 +353,15 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
           {/* Lista vacía = **el análisis no detectó problemas**. Es un
               resultado, y se declara (R-38). */}
           {lead.flaws.length > 0 ? (
-            <ul className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {lead.flaws.map((flaw, index) => (
                 <Surface
                   as="li"
                   key={index}
                   level="raised"
                   radius="card"
-                  padding="sm"
-                  className="flex items-start gap-2.5 font-sans text-xs leading-relaxed text-app-muted motion-safe:animate-ak-rise"
+                  padding="md"
+                  className="flex items-start gap-3 font-sans text-sm text-app-muted motion-safe:animate-ak-rise"
                   style={{ animationDelay: `${Math.min(index, 8) * 45}ms` }}
                 >
                   <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warn" />

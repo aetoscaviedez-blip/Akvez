@@ -57,7 +57,7 @@ export default function PitchOutput({
       {/* Encabezado */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-app-border px-6 py-4">
         <div className="min-w-0 space-y-1">
-          <span className="block font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-app-muted">
+          <span className="block font-sans text-eyebrow font-bold uppercase tracking-[0.2em] text-app-muted">
             Mensaje generado
           </span>
           <span className="block font-display text-sm font-bold text-app-text">
@@ -112,7 +112,7 @@ export default function PitchOutput({
         {/* ── Asunto ───────────────────────────────────────────────────────── */}
         {showsSubject && (
           <Surface level="raised" radius="inset" padding="sm" className="space-y-1.5">
-            <span className="flex items-center gap-1.5 font-sans text-[10px] font-bold uppercase tracking-widest text-app-muted">
+            <span className="flex items-center gap-1.5 font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted">
               <Mail className="h-3 w-3" />
               Asunto sugerido
             </span>

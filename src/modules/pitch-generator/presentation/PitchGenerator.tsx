@@ -180,7 +180,7 @@ export default function PitchGenerator({
         <div className="space-y-1.5">
           <label
             htmlFor="lead-selector"
-            className="block font-sans text-[10px] font-bold uppercase tracking-widest text-app-muted"
+            className="block font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted"
           >
             Negocio
           </label>
@@ -251,7 +251,7 @@ export default function PitchGenerator({
                   {/* **`typeof === "number"`, nunca `!!score`**: `0` es una
                       puntuación real y `null` una ausencia legítima (R-45). */}
                   {typeof activeLead.score === "number" && (
-                    <span className="inline-flex items-center gap-1.5 rounded-md border border-brand/30 bg-brand/10 px-2.5 py-1 font-sans text-[10px] font-bold uppercase tracking-widest text-brand">
+                    <span className="inline-flex items-center gap-1.5 rounded-md border border-brand/30 bg-brand/10 px-2.5 py-1 font-sans text-eyebrow font-bold uppercase tracking-widest text-brand">
                       <Flame className="h-3 w-3" />
                       Score {activeLead.score}
                       {activeLead.band ? ` · ${activeLead.band}` : ""}
@@ -321,11 +321,11 @@ export default function PitchGenerator({
                 {/* **`flaws` no se mostraba en esta pantalla.** Es el hallazgo
                     más concreto del análisis y el que sostiene el mensaje. */}
                 {activeLead.flaws.length > 0 ? (
-                  <ul className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                  <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     {activeLead.flaws.map((flaw, index) => (
                       <li
                         key={index}
-                        className="flex items-start gap-3 rounded-container border border-app-border bg-dark-surface p-5 font-sans text-xs leading-relaxed text-app-muted motion-safe:animate-ak-rise"
+                        className="flex items-start gap-3 rounded-container border border-app-border bg-dark-surface p-6 font-sans text-sm text-app-muted motion-safe:animate-ak-rise"
                         style={{ animationDelay: `${Math.min(index, 8) * 50}ms` }}
                       >
                         <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warn" />
@@ -410,7 +410,7 @@ export default function PitchGenerator({
 
                 {/* Canal */}
                 <div className="space-y-2.5">
-                  <span className="block font-sans text-[10px] font-bold uppercase tracking-widest text-app-muted">
+                  <span className="block font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted">
                     Canal de contacto
                   </span>
                   <div className="grid grid-cols-3 gap-3">
@@ -436,7 +436,7 @@ export default function PitchGenerator({
                 <div className="space-y-2.5">
                   <label
                     htmlFor="custom-instructions"
-                    className="block font-sans text-[10px] font-bold uppercase tracking-widest text-app-muted"
+                    className="block font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted"
                   >
                     Instrucciones adicionales · opcional
                   </label>
@@ -446,7 +446,7 @@ export default function PitchGenerator({
                     onChange={(e) => setCustomInstructions(e.target.value)}
                     rows={2}
                     placeholder="Ej.: menciona que eres de su misma ciudad."
-                    className="w-full rounded-control border border-app-border bg-surface-raised p-4 font-sans text-xs leading-relaxed text-app-text placeholder:text-app-muted/60 transition-colors focus:border-brand focus:outline-none"
+                    className="w-full rounded-control border border-app-border bg-surface-raised p-4 font-sans text-xs leading-relaxed text-app-text placeholder:text-app-muted transition-colors focus:border-brand focus:outline-none"
                   />
                 </div>
 
@@ -557,7 +557,7 @@ function NextActions({ lead }: { lead: Prospect }) {
   return (
     <div className="space-y-5">
       <Surface padding="lg">
-        <span className="block font-sans text-[10px] font-bold uppercase tracking-widest text-app-muted">
+        <span className="block font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted">
           Canal del mensaje redactado
         </span>
         <p className="mt-2 font-display text-lg font-bold text-app-text">

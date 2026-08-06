@@ -50,7 +50,7 @@ export default function Badge({
   return (
     <span
       className={`inline-flex items-center gap-1.5 rounded-control border border-app-border bg-surface-raised px-2.5 py-1 font-sans font-bold uppercase tracking-widest text-app-muted ${
-        size === "xs" ? "text-[10px]" : "text-[11px]"
+        size === "xs" ? "text-eyebrow" : "text-xs"
       }`}
     >
       {/* **Solo el icono lleva color.** El texto se mantiene neutro para que

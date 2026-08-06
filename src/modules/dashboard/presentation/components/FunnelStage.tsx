@@ -43,7 +43,7 @@ export default function FunnelStage({
       <Surface padding="lg" className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0 space-y-1">
           <h4 className="font-display text-base font-bold text-app-text">{label}</h4>
-          <p className="font-sans text-[11px] leading-snug text-app-muted">{caption}</p>
+          <p className="font-sans text-xs leading-snug text-app-muted">{caption}</p>
         </div>
 
         <div className="flex shrink-0 items-baseline gap-3">
@@ -51,7 +51,7 @@ export default function FunnelStage({
             {value}
           </span>
           {previous !== undefined && (
-            <span className="font-mono text-[11px] text-app-muted">
+            <span className="font-mono text-xs text-app-muted">
               de {previous}
             </span>
           )}

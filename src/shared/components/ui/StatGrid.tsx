@@ -128,13 +128,13 @@ export function StatTile({
       {/* La definición viaja con la cifra: sin ella, el número no se puede
           comprobar. */}
       {caption && (
-        <p className="mt-2.5 font-sans text-[11px] leading-snug text-app-muted">
+        <p className="mt-2.5 font-sans text-xs leading-snug text-app-muted">
           {caption}
         </p>
       )}
 
       {hint && (
-        <p className="mt-2 truncate font-mono text-[10px] text-app-muted/70">{hint}</p>
+        <p className="mt-2 truncate font-mono text-eyebrow text-app-muted">{hint}</p>
       )}
     </div>
   );

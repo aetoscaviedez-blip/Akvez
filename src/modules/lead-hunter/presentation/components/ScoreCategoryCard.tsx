@@ -80,7 +80,7 @@ export default function ScoreCategoryCard({
             </span>
             {measured && <span className="font-mono text-xs text-app-muted">/100</span>}
           </div>
-          <div className="mt-1.5 font-sans text-[10px] uppercase tracking-widest text-app-muted">
+          <div className="mt-1.5 font-sans text-eyebrow uppercase tracking-widest text-app-muted">
             {measured ? "obtenido" : "sin medir"}
           </div>
         </div>
@@ -97,7 +97,7 @@ export default function ScoreCategoryCard({
                 comprobar (ADR-14 §6.3, Reproducibilidad). */}
             {measured ? `+${entry.contribution.toFixed(2)}` : "—"}
           </div>
-          <div className="mt-1.5 font-sans text-[10px] uppercase tracking-widest text-app-muted">
+          <div className="mt-1.5 font-sans text-eyebrow uppercase tracking-widest text-app-muted">
             aporta
           </div>
         </div>

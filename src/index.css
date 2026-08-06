@@ -83,25 +83,87 @@
   --radius-control: 0.625rem;    /* 10px — botón, chip, campo, fila */
 
   /* ── Escala tipográfica ──────────────────────────────────────────────────
-     **La ratio que define el carácter: 96 / 13 ≈ 7,4×.** Entre el dato
-     protagonista y el texto base hay siete veces de diferencia. Es una escala
-     editorial, no de formulario, y es la razón principal de que una pantalla
-     se lea como producto y no como panel de administración.
 
-     Se declara aquí; **la Fase 4 decide qué elemento la ocupa** — y solo uno
-     por pantalla puede ocuparla. */
-  --text-score: 6rem;
-  --text-score--line-height: 0.92;
-  --text-score--letter-spacing: -0.03em;
-  --text-score--font-weight: 900;
+     **H-07 Fase 4 — la escala se reconstruyó entera.**
 
-  --text-figure: 3rem;
-  --text-figure--line-height: 1;
-  --text-figure--letter-spacing: -0.02em;
+     La auditoría encontró que **117 de los ~122 elementos con tamaño estaban a
+     12 px o menos**: 59 por debajo de 12 px (`text-[9px]`, `[10px]`, `[11px]`)
+     y 58 exactamente a 12. El sistema era consistente, pero consistentemente
+     ilegible a la distancia a la que se ve una demo.
 
-  --text-eyebrow: 0.6875rem;
-  --text-eyebrow--line-height: 1.2;
-  --text-eyebrow--letter-spacing: 0.12em;
+     **No se han subido tamaños al azar: se ha remapeado la escala**, de modo que
+     cada punto de uso conserva su papel relativo y solo cambia su magnitud. El
+     nombre semántico manda; el píxel es una consecuencia.
+
+     | Token        | Antes | Después | Papel                                |
+     | ------------ | ----- | ------- | ------------------------------------ |
+     | `eyebrow`    |   10  |    12   | versalitas y distintivos             |
+     | `xs`         |   12  |    14   | texto auxiliar                       |
+     | `sm`         |   14  |    16   | **texto normal — párrafos**          |
+     | `base`       |   16  |    17   | cuerpo destacado                     |
+     | `lg`         |   18  |    20   | subtítulo                            |
+     | `xl`         |   20  |    22   | subtítulo mayor                      |
+     | `2xl`        |   24  |    26   | título de sección                    |
+     | `3xl`        |   30  |    32   |                                      |
+     | `4xl`        |   36  |    40   | título principal                     |
+     | `5xl`        |   48  |    48   | cifra destacada                      |
+     | `6xl`        |   60  |    60   | Hero Score                           |
+
+     **12 px sobrevive en un solo sitio: las versalitas.** Es la excepción que el
+     encargo admite y está justificada — van en mayúsculas y con `+0.1em` de
+     tracking, de modo que su altura de x y su mancha ocupan lo que un texto
+     normal de 14. Bajarlas de ahí las convertiría en ruido; subirlas les daría
+     más peso que al dato que etiquetan.
+
+     ── Interlineado ──────────────────────────────────────────────────────────
+
+     **Cuanto más pequeño el texto, más aire necesita entre líneas**, y cuanto
+     más grande, menos. Un titular a 40 px con interlineado de párrafo se
+     desmonta; un párrafo a 16 px con interlineado de titular se apelmaza. */
+
+  --text-eyebrow: 0.75rem;          /* 12 */
+  --text-eyebrow--line-height: 1.25;
+  --text-eyebrow--letter-spacing: 0.1em;
+
+  --text-xs: 0.875rem;              /* 14 */
+  --text-xs--line-height: 1.55;
+
+  --text-sm: 1rem;                  /* 16 */
+  --text-sm--line-height: 1.65;
+
+  --text-base: 1.0625rem;           /* 17 */
+  --text-base--line-height: 1.7;
+
+  --text-lg: 1.25rem;               /* 20 */
+  --text-lg--line-height: 1.45;
+
+  --text-xl: 1.375rem;              /* 22 */
+  --text-xl--line-height: 1.35;
+
+  --text-2xl: 1.625rem;             /* 26 */
+  --text-2xl--line-height: 1.25;
+
+  --text-3xl: 2rem;                 /* 32 */
+  --text-3xl--line-height: 1.15;
+
+  --text-4xl: 2.5rem;               /* 40 */
+  --text-4xl--line-height: 1.1;
+
+  --text-5xl: 3rem;                 /* 48 */
+  --text-5xl--line-height: 1;
+
+  --text-6xl: 3.75rem;              /* 60 */
+  --text-6xl--line-height: 0.95;
+
+  /* ── Medida de lectura ───────────────────────────────────────────────────
+     **60-75 caracteres por línea.** Por encima, el ojo pierde el renglón al
+     volver al margen izquierdo; por debajo, el texto se trocea. `ch` se mide
+     sobre el «0» de la fuente en curso, así que la medida se mantiene aunque
+     cambie el cuerpo.
+
+     **Cuando un párrafo es demasiado ancho se estrecha el contenedor, nunca se
+     baja la tipografía.** */
+  --container-measure: 68ch;
 
   /* ── Animaciones ─────────────────────────────────────────────────────────
      Nombres con prefijo `ak-` para no colisionar con las utilidades de

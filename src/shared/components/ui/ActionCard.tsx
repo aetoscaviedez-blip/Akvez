@@ -87,7 +87,7 @@ export default function ActionCard({
         </span>
         {detail && (
           <span
-            className={`mt-0.5 block truncate font-sans text-[11px] ${
+            className={`mt-0.5 block truncate font-sans text-xs ${
               solid ? "opacity-70" : "text-app-muted"
             }`}
           >

@@ -5,7 +5,7 @@ import React from "react";
  *
  * ── POR QUÉ EXISTE ───────────────────────────────────────────────────────────
  *
- * `text-[10px] font-bold uppercase tracking-widest text-app-muted` era **la
+ * `text-eyebrow font-bold uppercase tracking-widest text-app-muted` era **la
  * cadena de clases más repetida de todo el producto**: encabeza cada campo del
  * Pitch Generator, cada celda de `StatTile`, cada eyebrow de `SectionHeader`,
  * cada `Field` de la firma del diseñador y los sub-rótulos de la Opportunity
@@ -42,7 +42,7 @@ export default function Eyebrow({
 }) {
   return (
     <Tag
-      className={`flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest ${
+      className={`flex items-center gap-2 font-sans text-eyebrow font-bold uppercase tracking-widest ${
         tone === "brand" ? "text-brand" : "text-app-muted"
       } ${className}`.trim()}
     >

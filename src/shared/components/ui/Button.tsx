@@ -50,7 +50,7 @@ export default function Button({
   className?: string;
 }) {
   const height =
-    size === "sm" ? "px-4 py-2.5 text-[11px]" : size === "lg" ? "px-7 py-4 text-xs" : "px-6 py-3.5 text-[11px]";
+    size === "sm" ? "px-4 py-2.5 text-xs" : size === "lg" ? "px-7 py-4 text-xs" : "px-6 py-3.5 text-xs";
 
   const skin =
     variant === "primary"

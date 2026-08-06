@@ -71,7 +71,7 @@ export default function OpportunityView({
     !!lead.description || !!lead.whyWebsiteNeeded || !!lead.revenueLoss || lead.flaws.length > 0;
 
   return (
-    <div className="space-y-14 pb-4">
+    <div className="space-y-16 pb-4">
 
       {/* ── Navegación ──────────────────────────────────────────────────────── */}
       <Button
@@ -123,7 +123,7 @@ export default function OpportunityView({
                 level="raised"
                 className="flex flex-col gap-2 px-6 py-5 sm:flex-row sm:items-center sm:justify-between"
               >
-                <span className="font-sans text-[11px] uppercase tracking-widest text-app-muted">
+                <span className="font-sans text-xs uppercase tracking-widest text-app-muted">
                   Suma de las {breakdown.length} contribuciones
                 </span>
                 <span className="font-mono text-sm text-app-muted">
@@ -168,7 +168,7 @@ export default function OpportunityView({
               <Eyebrow as="h4">Hallazgos del análisis del negocio</Eyebrow>
 
               {lead.description && (
-                <p className="max-w-3xl font-sans text-sm leading-relaxed text-app-muted">
+                <p className="max-w-measure font-sans text-sm text-app-muted">
                   {lead.description}
                 </p>
               )}
@@ -176,13 +176,13 @@ export default function OpportunityView({
               {/* Lista vacía = **el análisis no detectó problemas**. Es un
                   resultado, y se declara. */}
               {lead.flaws.length > 0 && (
-                <ul className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   {lead.flaws.map((flaw, index) => (
                     <Surface
                       as="li"
                       key={index}
                       padding="md"
-                      className="flex items-start gap-3 font-sans text-xs leading-relaxed text-app-muted motion-safe:animate-ak-rise"
+                      className="flex items-start gap-3 font-sans text-sm text-app-muted motion-safe:animate-ak-rise"
                       style={{ animationDelay: `${Math.min(index, 8) * 45}ms` }}
                     >
                       <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warn" />

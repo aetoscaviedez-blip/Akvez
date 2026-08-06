@@ -23,7 +23,7 @@ export default function SearchingLoader({ activeNicheName, city, scanStep, scanM
       </div>
 
       <div className="mx-auto max-w-md space-y-2">
-        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-app-muted">
+        <p className="font-sans text-eyebrow font-bold uppercase tracking-[0.2em] text-app-muted">
           Radar de oportunidad activo
         </p>
         <h4 className="font-display text-lg font-bold tracking-tight text-app-text">

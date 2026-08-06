@@ -28,7 +28,7 @@ export default function DesignStyleConfigPanel({
         <button
           type="button"
           onClick={() => setShowStyleConfig(!showStyleConfig)}
-          className="text-[10px] text-brand hover:underline cursor-pointer font-bold"
+          className="text-eyebrow text-brand hover:underline cursor-pointer font-bold"
         >
           {showStyleConfig ? "Ocultar" : "Personalizar"}
         </button>
@@ -50,7 +50,7 @@ export default function DesignStyleConfigPanel({
 
       {/* Custom Niche switch */}
       <div className="flex items-center justify-between pt-2.5 border-t border-app-border/40">
-        <span className="text-[10px] uppercase font-bold text-app-muted tracking-wider">¿Usar nicho personalizado?</span>
+        <span className="text-eyebrow uppercase font-bold text-app-muted tracking-wider">¿Usar nicho personalizado?</span>
         <input
           type="checkbox"
           checked={useCustomNiche}

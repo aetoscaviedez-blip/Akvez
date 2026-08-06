@@ -81,7 +81,7 @@ export default function LeadLibrary() {
             {activeProfileVersion && (
               /* Trazabilidad del criterio (ADR-14 R-VIN · §6.4): el usuario debe
                  poder saber con qué Perfil se puntuó lo que está viendo. */
-              <p className="text-[10px] text-app-muted/80 mt-1.5 font-mono">
+              <p className="text-eyebrow text-app-muted/80 mt-1.5 font-mono">
                 Perfil de Ponderación <span className="text-brand">{activeProfileVersion}</span>
                 {scored < total && ` · ${scored} de ${total} evaluados`}
               </p>
@@ -199,19 +199,19 @@ function LeadLibraryRow({ lead }: { lead: RegisteredLeadView }) {
             <h3 className="text-sm font-bold text-app-text font-display truncate">{lead.name}</h3>
 
             {/* Estadio del Lead. Vocabulario sujeto a la desviación A-01. */}
-            <span className="text-[10px] text-app-muted font-mono uppercase tracking-wider px-2 py-0.5 rounded border border-app-border bg-surface-raised">
+            <span className="text-eyebrow text-app-muted font-mono uppercase tracking-wider px-2 py-0.5 rounded border border-app-border bg-surface-raised">
               {lead.status}
             </span>
 
             {/* Banda de APS-08 §8, o ausencia de Evaluación como ESTADO VÁLIDO
                 (UI-7 · R-45). Ninguna de las dos cosas oculta el Lead. */}
             {hasScore ? (
-              <span className="flex items-center gap-1 text-[10px] text-brand font-semibold px-2 py-0.5 rounded border border-brand/30 bg-brand/5">
+              <span className="flex items-center gap-1 text-eyebrow text-brand font-semibold px-2 py-0.5 rounded border border-brand/30 bg-brand/5">
                 <Sparkles className="w-3 h-3" />
                 {lead.band}
               </span>
             ) : (
-              <span className="flex items-center gap-1 text-[10px] text-app-muted font-medium px-2 py-0.5 rounded border border-app-border bg-surface-raised">
+              <span className="flex items-center gap-1 text-eyebrow text-app-muted font-medium px-2 py-0.5 rounded border border-app-border bg-surface-raised">
                 <Sparkles className="w-3 h-3 text-app-muted" />
                 Sin evaluar
               </span>
@@ -222,7 +222,7 @@ function LeadLibraryRow({ lead }: { lead: RegisteredLeadView }) {
             {hasScore && lead.confidence && lead.confidence !== "alta" && (
               <span
                 title={`Confianza ${lead.confidence}: parte de los factores de evaluación no son medibles con los datos públicos disponibles.`}
-                className="flex items-center gap-1 text-[10px] text-app-muted font-medium px-2 py-0.5 rounded border border-app-border bg-surface-raised"
+                className="flex items-center gap-1 text-eyebrow text-app-muted font-medium px-2 py-0.5 rounded border border-app-border bg-surface-raised"
               >
                 <AlertTriangle className="w-3 h-3" />
                 Confianza {lead.confidence}
@@ -271,7 +271,7 @@ function LeadLibraryRow({ lead }: { lead: RegisteredLeadView }) {
             <span className={`font-display font-black text-base ${hasScore ? "text-brand" : "text-app-muted"}`}>
               {hasScore ? lead.score : "—"}
             </span>
-            <span className="text-[9px] text-app-muted uppercase tracking-wider">Score</span>
+            <span className="text-eyebrow text-app-muted uppercase tracking-wider">Score</span>
           </span>
 
           <span className="flex items-center gap-1.5 text-app-muted">
@@ -304,7 +304,7 @@ function LeadLibraryRow({ lead }: { lead: RegisteredLeadView }) {
             type="button"
             onClick={() => setShowBreakdown((open) => !open)}
             aria-expanded={showBreakdown}
-            className="mt-2 flex items-center gap-1 text-[10px] text-app-muted hover:text-brand transition font-semibold uppercase tracking-wider cursor-pointer"
+            className="mt-2 flex items-center gap-1 text-eyebrow text-app-muted hover:text-brand transition font-semibold uppercase tracking-wider cursor-pointer"
           >
             {showBreakdown ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
             {showBreakdown ? "Ocultar" : "Por qué"} este Score

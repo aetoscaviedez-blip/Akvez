@@ -172,21 +172,24 @@ export default function OpportunityHero({ lead }: { lead: Prospect }) {
 
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               {/* **Ausencia explícita**: «—», nunca un número de relleno. */}
+              {/* **Hero Score a 60 px.** Es la cifra protagonista de la pantalla
+                  más importante del recorrido, y el ADN pide que domine sin
+                  competencia. A 48 px empataba con el nombre del negocio. */}
               <span
-                className={`font-display text-5xl font-black leading-none tabular-nums ${
+                className={`font-display text-6xl font-black leading-none tabular-nums ${
                   hasScore ? "text-app-text" : "text-app-muted/40"
                 }`}
               >
                 {hasScore ? lead.score : "—"}
               </span>
-              <span className="mt-1 font-mono text-[10px] text-app-muted">
+              <span className="mt-1 font-mono text-eyebrow text-app-muted">
                 {hasScore ? "/ 100" : "sin score"}
               </span>
             </div>
           </div>
 
           <div className="space-y-2 text-center">
-            <span className="block font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-app-muted">
+            <span className="block font-sans text-eyebrow font-bold uppercase tracking-[0.2em] text-app-muted">
               Opportunity Score
             </span>
             {/* Banda de APS-08 §8 — **etiqueta de prioridad, nunca criterio de
@@ -259,7 +262,7 @@ function HeroStat({
     <div className="flex items-center gap-4 px-8 py-6">
       <IconFrame size="sm">{icon}</IconFrame>
       <div className="min-w-0 flex-1 space-y-1">
-        <div className="font-sans text-[10px] uppercase tracking-widest text-app-muted">
+        <div className="font-sans text-eyebrow uppercase tracking-widest text-app-muted">
           {label}
         </div>
         <div className="truncate font-display text-base font-bold capitalize text-app-text">
@@ -267,7 +270,7 @@ function HeroStat({
         </div>
         {meter !== undefined && <Meter value={meter} size="xs" delay={220} />}
         {hint && (
-          <div className="truncate font-mono text-[10px] text-app-muted/70">{hint}</div>
+          <div className="truncate font-mono text-eyebrow text-app-muted">{hint}</div>
         )}
       </div>
     </div>

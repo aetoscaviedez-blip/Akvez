@@ -14,7 +14,7 @@ export default function ResultsHeader({ visibleCount, totalLeads, references }: 
       </h3>
 
       {references.length > 0 && (
-        <div className="text-[11px] text-brand flex items-center gap-1 shrink-0">
+        <div className="text-xs text-brand flex items-center gap-1 shrink-0">
           <span className="font-bold">Fuentes de Búsqueda:</span>
           <div className="flex gap-1.5">
             {references.slice(0, 3).map((ref, idx) => (

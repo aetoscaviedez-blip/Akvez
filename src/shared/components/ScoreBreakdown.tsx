@@ -42,7 +42,7 @@ export default function ScoreBreakdown({
 
   return (
     <div className="mt-3 pt-3 border-t border-app-border space-y-2">
-      <p className="text-[10px] text-app-muted uppercase tracking-widest font-display">
+      <p className="text-eyebrow text-app-muted uppercase tracking-widest font-display">
         Cómo se compone el Score
       </p>
 
@@ -68,10 +68,10 @@ export default function ScoreBreakdown({
               />
             </div>
 
-            <p className="text-[10px] text-app-muted mt-1 leading-relaxed">{entry.rationale}</p>
+            <p className="text-eyebrow text-app-muted mt-1 leading-relaxed">{entry.rationale}</p>
 
             {entry.unmeasuredFactors.length > 0 && (
-              <p className="text-[10px] text-app-muted/70 mt-0.5 italic">
+              <p className="text-eyebrow text-app-muted mt-0.5 italic">
                 No medible con datos públicos: {entry.unmeasuredFactors.join(", ")}.
               </p>
             )}

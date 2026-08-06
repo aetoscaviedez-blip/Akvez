@@ -325,11 +325,11 @@ export default function LeadHunter({
           {/* Preset details tip if using presets */}
           {!useCustomNiche && (
             <Surface level="raised" padding="sm" radius="container" className="space-y-2">
-              <span className="text-[10px] font-bold text-brand uppercase tracking-wide flex items-center gap-1">
+              <span className="text-eyebrow font-bold text-brand uppercase tracking-wide flex items-center gap-1">
                 <Target className="w-3.5 h-3.5" />
                 Problemas Comunes Identificados:
               </span>
-              <ul className="text-[11px] text-app-muted space-y-1.5 font-sans">
+              <ul className="text-xs text-app-muted space-y-1.5 font-sans">
                 {NICHE_PRESETS.find(p => p.id === selectedPresetId)?.commonPainPoints.map((pt, i) => (
                   <li key={i} className="flex items-start gap-1">
                     <span className="text-brand mt-0.5">•</span>

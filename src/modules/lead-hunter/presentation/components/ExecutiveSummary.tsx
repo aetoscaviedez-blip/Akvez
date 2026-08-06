@@ -169,7 +169,7 @@ export default function ExecutiveSummary({ lead }: { lead: Prospect }) {
               enumerado más abajo, sin omitir nada.
             </p>
             {lead.scoreVersion && (
-              <p className="font-mono text-[10px] text-app-muted/70">
+              <p className="font-mono text-eyebrow text-app-muted">
                 Perfil de Ponderación {lead.scoreVersion}
               </p>
             )}
@@ -209,7 +209,7 @@ function SignalList({
             tone={tone === "strong" ? "brand" : "neutral"}
             size="xs"
           />
-          <p className="font-mono text-[10px] text-app-muted/70">
+          <p className="font-mono text-eyebrow text-app-muted">
             {entry.partialScore}/100 · peso {entry.weight}%
           </p>
         </li>
@@ -252,7 +252,7 @@ function SummaryTile({
         <IconFrame size="sm">{icon}</IconFrame>
         <div className="min-w-0">
           <h4 className="font-display text-sm font-bold text-app-text">{title}</h4>
-          <p className="mt-0.5 font-sans text-[11px] leading-snug text-app-muted">
+          <p className="mt-0.5 font-sans text-xs leading-snug text-app-muted">
             {caption}
           </p>
         </div>

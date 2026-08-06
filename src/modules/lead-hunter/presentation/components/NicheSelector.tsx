@@ -66,11 +66,11 @@ export default function NicheSelector({
         <div className="flex flex-col">
           <span className="text-xs font-bold uppercase tracking-widest text-app-text font-display">Selecciona tu nicho</span>
           {!useCustomNiche ? (
-            <span className="text-[11px] text-brand font-semibold mt-0.5">
+            <span className="text-xs text-brand font-semibold mt-0.5">
               {NICHE_PRESETS.find(p => p.id === selectedPresetId)?.industry || "Fotógrafos"}
             </span>
           ) : (
-            <span className="text-[11px] text-brand font-semibold mt-0.5">
+            <span className="text-xs text-brand font-semibold mt-0.5">
               Personalizado: {customNiche || "Ninguno"}
             </span>
           )}

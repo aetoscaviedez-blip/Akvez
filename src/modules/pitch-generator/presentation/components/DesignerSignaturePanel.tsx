@@ -35,7 +35,7 @@ export default function DesignerSignaturePanel({
         <span className="flex min-w-0 items-center gap-3">
           <PenLine className="h-4 w-4 shrink-0 text-brand" />
           <span className="min-w-0">
-            <span className="block font-sans text-[10px] font-bold uppercase tracking-widest text-app-muted">
+            <span className="block font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted">
               Firma del diseñador
             </span>
             <span className="block truncate font-display text-sm font-bold text-app-text">
@@ -46,7 +46,7 @@ export default function DesignerSignaturePanel({
             </span>
           </span>
         </span>
-        <span className="shrink-0 font-sans text-[10px] font-bold uppercase tracking-widest text-brand">
+        <span className="shrink-0 font-sans text-eyebrow font-bold uppercase tracking-widest text-brand">
           {open ? <X className="h-4 w-4" /> : "Editar"}
         </span>
       </button>
@@ -86,7 +86,7 @@ export default function DesignerSignaturePanel({
               value={designerProfile.skills}
               onChange={(e) => setDesignerProfile({ ...designerProfile, skills: e.target.value })}
               placeholder="Webflow, React, WordPress…"
-              className="w-full rounded-control border border-app-border bg-surface-raised px-3 py-2 font-sans text-xs text-app-text placeholder:text-app-muted/60 transition-colors focus:border-brand focus:outline-none"
+              className="w-full rounded-control border border-app-border bg-surface-raised px-3 py-2 font-sans text-xs text-app-text placeholder:text-app-muted transition-colors focus:border-brand focus:outline-none"
             />
           </Field>
         </div>
@@ -98,7 +98,7 @@ export default function DesignerSignaturePanel({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-1.5">
-      <span className="block font-sans text-[10px] font-bold uppercase tracking-widest text-app-muted">
+      <span className="block font-sans text-eyebrow font-bold uppercase tracking-widest text-app-muted">
         {label}
       </span>
       {children}

@@ -64,14 +64,14 @@ export default function Callout({
       <div className="min-w-0 space-y-1.5">
         {title && (
           <h4
-            className={`font-sans text-[10px] font-bold uppercase tracking-widest ${
+            className={`font-sans text-eyebrow font-bold uppercase tracking-widest ${
               tone === "neutral" ? "text-app-text/70" : TONE[tone].text
             }`}
           >
             {title}
           </h4>
         )}
-        <div className="font-sans text-xs leading-relaxed text-app-text">
+        <div className="max-w-measure font-sans text-sm text-app-text">
           {children}
         </div>
       </div>
