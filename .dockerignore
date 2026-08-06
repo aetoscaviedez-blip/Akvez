@@ -1,0 +1,44 @@
+# Contexto de build de AKVEZ.
+#
+# Criterio: entra lo que `npm run build` necesita; se queda fuera todo lo
+# demás. Reduce el contexto enviado al daemon, evita invalidar capas por
+# cambios de documentación y —sobre todo— impide que una credencial local
+# acabe dentro de una imagen.
+
+# Dependencias y artefactos: se reconstruyen dentro de la imagen.
+# Copiar el node_modules del host además arriesga binarios de otra plataforma.
+node_modules
+dist
+build
+coverage
+
+# Credenciales. Nunca deben entrar en el contexto de build.
+.env
+.env.*
+
+# Control de versiones y metadatos de herramientas.
+.git
+.gitignore
+.gitattributes
+.github
+.claude
+.vscode
+.idea
+
+# Documentación y utilidades: no participan en el build.
+docs
+tools
+README.md
+AGENTS.md
+CLAUDE.md
+handoff.md
+
+# Artefactos de despliegue: describen cómo se construye la imagen,
+# no forman parte de ella.
+Dockerfile
+.dockerignore
+cloudbuild.yaml
+
+# Ruido del sistema de ficheros.
+.DS_Store
+*.log

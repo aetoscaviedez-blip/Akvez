@@ -2,17 +2,137 @@
 @import url('https://fonts.cdnfonts.com/css/cabinet-grotesk');
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   AKVEZ — Design System · H-07 Fase 1
+   ═══════════════════════════════════════════════════════════════════════════
+
+   Los valores proceden de APS-04 §10-11 y de la referencia visual oficial
+   («Visual DNA of AKVEZ Demo»). Ambas fuentes coinciden: lo que divergía era
+   el código.
+
+   ── LO QUE SE CORRIGE AQUÍ ────────────────────────────────────────────────
+
+   Los dos tokens de acento **mentían sobre su propio nombre**:
+
+       --color-accent-green:     #ff7a00   ← era NARANJA
+       --color-secondary-orange: #8b5cf6   ← era VIOLETA
+
+   Con un token llamado «verde» que pintaba naranja, cada pantalla acabó
+   usando el mismo color para marca, acción, inteligencia y validación. **La
+   regla del ADN —tres colores, tres significados— no podía cumplirse: no
+   existía el vocabulario para expresarla.**
+
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 @theme {
   --font-sans: "Cabinet Grotesk", "Space Grotesk", "Inter", sans-serif;
   --font-display: "Clash Display", "Outfit", sans-serif;
-  
-  --color-dark-bg: #0a0a0a;
-  --color-dark-surface: #121212;
-  --color-accent-green: #ff7a00;
-  --color-secondary-orange: #8b5cf6;
+
+  /* ── Superficies ─────────────────────────────────────────────────────────
+     **Jerarquía lumínica ascendente: cada nivel de anidamiento sube.** Es lo
+     que da profundidad sin una sola sombra proyectada — y lo que separa una
+     interfaz sobria de una plantilla con `box-shadow` genérica.
+
+         dark-bg          lienzo de la aplicación
+           └── dark-surface     tarjeta            (+6 puntos de luz)
+                 └── surface-raised   tarjeta interior   (+8 puntos)
+
+     El tinte es **azul-violáceo, no gris neutro**. Un `#0a0a0a` plano —el
+     valor anterior— produce una interfaz apagada; los tres dígitos finales
+     cambian la percepción de toda la aplicación. */
+  --color-dark-bg: #0a0a0f;
+  --color-dark-surface: #121218;
+  --color-surface-raised: #1a1a24;
+  --color-app-border: #22222c;
+
   --color-app-text: #fafafa;
   --color-app-muted: #9ca3af;
-  --color-app-border: #1f1f1f;
+
+  /* ── Color semántico ─────────────────────────────────────────────────────
+     **Tres colores, tres significados, cero excepciones.** Nada más lleva
+     color. Una interfaz que usa el color como *información* se lee como
+     sistema; una que lo usa como decoración, no.
+
+     La asignación de cada elemento a su color corresponde a la Fase 4: aquí
+     se declara el vocabulario, no se reparte. */
+
+  /** Marca y acción. Isotipo, pestaña activa, CTA primaria, el Score. */
+  --color-brand: #f97316;
+
+  /** Inteligencia y análisis. Iconos de razonamiento, confianza, selección. */
+  --color-intel: #8b5cf6;
+
+  /** Dinero y validación. Verificaciones, banda del Score, agente activo. */
+  --color-success: #22c55e;
+
+  /* Acentos puntuales. **Dos, y con un solo uso cada uno.** */
+  --color-warn: #f59e0b;
+  --color-danger: #ef4444;
+
+  /* ── Radios ──────────────────────────────────────────────────────────────
+     **Cuanto más contenedor, más radio.** Los controles se quedan en 10 px y
+     el círculo se reserva a píldoras, barras e iconos.
+
+     ⚠️ Discrepancia registrada: **APS-04 §13** asigna `radius-full` a botones
+     y chips; **la referencia oficial los muestra a 10 px**. Conforme al orden
+     de autoridad de H-07 prevalece la imagen. Anotado en el Visual DNA §11
+     para su corrección en APS-04 §27. */
+  --radius-container: 1rem;      /* 16px — tarjeta mayor, hero, sección */
+  --radius-card: 0.875rem;       /* 14px — tarjeta de contenido */
+  --radius-inset: 0.75rem;       /* 12px — contenedor dentro de tarjeta */
+  --radius-control: 0.625rem;    /* 10px — botón, chip, campo, fila */
+
+  /* ── Escala tipográfica ──────────────────────────────────────────────────
+     **La ratio que define el carácter: 96 / 13 ≈ 7,4×.** Entre el dato
+     protagonista y el texto base hay siete veces de diferencia. Es una escala
+     editorial, no de formulario, y es la razón principal de que una pantalla
+     se lea como producto y no como panel de administración.
+
+     Se declara aquí; **la Fase 4 decide qué elemento la ocupa** — y solo uno
+     por pantalla puede ocuparla. */
+  --text-score: 6rem;
+  --text-score--line-height: 0.92;
+  --text-score--letter-spacing: -0.03em;
+  --text-score--font-weight: 900;
+
+  --text-figure: 3rem;
+  --text-figure--line-height: 1;
+  --text-figure--letter-spacing: -0.02em;
+
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.12em;
+
+  /* ── Animaciones ─────────────────────────────────────────────────────────
+     Nombres con prefijo `ak-` para no colisionar con las utilidades de
+     Tailwind. Se aplican siempre bajo el variante `motion-safe:`, de modo que
+     quien haya pedido movimiento reducido ve la interfaz completa, sin animar. */
+  --animate-ak-rise: ak-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-ak-bar: ak-bar 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-ak-ring: ak-ring 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Entrada: aparición ascendente breve. Escalonada mediante `animationDelay`
+   en línea, para que una rejilla se componga en cascada. */
+@keyframes ak-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Crecimiento de una barra de puntuación desde su borde izquierdo.
+   Anima la escala, nunca el ancho: el ancho ES el dato. */
+@keyframes ak-bar {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Trazado del anillo del Opportunity Score, de vacío a su valor.
+   `--ak-ring-c` es la circunferencia completa y `--ak-ring-o` el desfase que
+   corresponde al Score. Ambos los fija el componente en línea: la animación
+   no conoce ningún número, solo recorre el que se le da. */
+@keyframes ak-ring {
+  from { stroke-dashoffset: var(--ak-ring-c); }
+  to   { stroke-dashoffset: var(--ak-ring-o); }
 }
 
 body {
@@ -21,16 +141,16 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Custom glow effects for card elements */
-.neon-glow {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 122, 0, 0.03);
-}
+/* ── Profundidad ─────────────────────────────────────────────────────────────
 
-.neon-border {
-  border-color: rgba(255, 122, 0, 0.15);
-}
+   **Aquí vivían `.neon-glow` y `.neon-border`, y se han retirado.**
 
-.neon-border:focus {
-  border-color: var(--color-accent-green);
-  box-shadow: 0 0 0 2px rgba(255, 122, 0, 0.08);
-}
+   Proyectaban una sombra genérica y un resplandor naranja al 3 % que la
+   referencia no tiene en ninguna parte. Su propio nombre describía un lenguaje
+   —brillo, neón— ajeno a la dirección de arte del producto.
+
+   **La profundidad de AKVEZ es lumínica: tres superficies, dos bordes de 1 px,
+   cero sombras.** Es lo que hace que la interfaz se sienta sólida en lugar de
+   flotante, y lo que la salva de parecer una plantilla.
+
+   ────────────────────────────────────────────────────────────────────────── */

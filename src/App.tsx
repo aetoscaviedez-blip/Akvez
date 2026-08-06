@@ -1,10 +1,20 @@
 import React from "react";
-import { DesignerProfile, Prospect } from "./types";
-import LeadHunter from "./components/LeadHunter";
-import PitchGenerator from "./components/PitchGenerator";
-import { Sparkles, Search, Send, Compass, Code, Info, Moon, Sliders, ArrowRight, MapPin, Mail, Settings, User, MessageSquare } from "lucide-react";
+import { DesignerProfile, Prospect, SearchSummary } from "./shared/types";
+import LeadHunter from "./modules/lead-hunter/presentation/LeadHunter";
+import LeadLibrary from "./modules/lead-hunter/presentation/LeadLibrary";
+import PitchGenerator from "./modules/pitch-generator/presentation/PitchGenerator";
+import ExecutiveDashboard from "./modules/dashboard/presentation/ExecutiveDashboard";
+import { Sparkles, Search, Send, Compass, Code, Info, Moon, Sliders, ArrowRight, MapPin, Mail, Settings, User, MessageSquare, Library, LayoutDashboard } from "lucide-react";
 
-// Initializing Colombian sample leads for premium instant functionality
+// ── DATOS DE EJEMPLO — NO SON RESULTADOS REALES ─────────────────────────────
+//
+// Se cargan **solo cuando no hay nada guardado**, para que la aplicación no
+// arranque vacía. **Cada uno lleva `isDemo: true`**, y la interfaz los rotula
+// como ejemplo allí donde se muestran.
+//
+// **La marca no es decorativa:** sin ella, un Lead inventado —con score,
+// clasificación y problemas detectados— es indistinguible de uno devuelto por
+// una búsqueda real. **Ningún Lead procedente del servidor lleva `isDemo`.**
 const CL_SAMPLE_LEADS: Prospect[] = [
   {
     id: "sample-col-1",
@@ -17,6 +27,7 @@ const CL_SAMPLE_LEADS: Prospect[] = [
       "La tipografía del sitio web tiene poquísimo contraste y el diseño usa colores oscuros opacos que dificultan leer el horario de atención"
     ],
     angle: "Reemplazar el PDF estático por una carta digital interactiva e instantánea adaptada a móviles. Introducir un popup de reserva rápida por WhatsApp para asegurar las cenas de eventos empresariales.",
+    isDemo: true,
     status: "Prospect",
     dateCreated: "Jun 5",
     score: 85,
@@ -34,6 +45,7 @@ const CL_SAMPLE_LEADS: Prospect[] = [
       "No es responsive en tablets y pantallas móviles pequeñas, desconfigurando los datos de la dirección física"
     ],
     angle: "Crear una landing page moderna con foco en retratos humanos de alta definición. Añadir testimonios en video optimizados de pacientes reales y un widget conversacional interactivo para reservas instantáneas.",
+    isDemo: true,
     status: "Prospect",
     dateCreated: "Jun 4",
     score: 72,
@@ -52,8 +64,26 @@ const DEFAULT_PROFILE: DesignerProfile = {
 };
 
 export default function App() {
-  // Tabs: "hunter" (Lead Hunter) or "pitch" (Pitch Generator)
-  const [activeTab, setActiveTab] = React.useState<"hunter" | "pitch">("hunter");
+  // Vistas: "hunter" (Workspace), "library" (Biblioteca, P-08) o "pitch".
+  //
+  // APS-04 §A.3.4 distingue Workspace y Biblioteca, y son dos vistas distintas
+  // por decisión vinculante: el Workspace muestra «el resultado de una
+  // ejecución» y la Biblioteca contiene «todo». Por eso el Workspace conserva su
+  // estado local y la Biblioteca lee siempre del servidor.
+  const [activeTab, setActiveTab] = React.useState<"dashboard" | "hunter" | "library" | "pitch">("dashboard");
+
+  /**
+   * Búsquedas ejecutadas en esta sesión.
+   *
+   * ⚠️ **Es lo único que este sprint añade y que antes no existía.** No es
+   * telemetría del backend ni un histórico persistido: **vive en memoria y
+   * muere con la pestaña.** Cuenta ejecuciones reales, nunca estimadas, y el
+   * panel lo rotula como recuento de sesión.
+   */
+  const [searchHistory, setSearchHistory] = React.useState<SearchSummary[]>([]);
+
+  /** Negocio que el panel pide abrir en la Opportunity View del Hunter. */
+  const [requestedLeadId, setRequestedLeadId] = React.useState<string | null>(null);
 
   // State: Leads Scouted in Colombia
   const [leads, setLeads] = React.useState<Prospect[]>(() => {
@@ -117,8 +147,15 @@ export default function App() {
     setActiveTab("pitch");
   };
 
+  /** Desde el panel: abre un negocio en la Opportunity View del Hunter. */
+  const handleOpenOpportunity = (id: string) => {
+    setSelectedLeadId(id);
+    setRequestedLeadId(id);
+    setActiveTab("hunter");
+  };
+
   return (
-    <div className="min-h-screen bg-dark-bg text-app-text font-sans antialiased selection:bg-accent-green/20 selection:text-accent-green flex flex-col">
+    <div className="min-h-screen bg-dark-bg text-app-text font-sans antialiased selection:bg-brand/20 selection:text-brand flex flex-col">
       
       {/* Global Header matching screenshot */}
       <header className="bg-dark-surface border-b border-app-border sticky top-0 z-40">
@@ -127,34 +164,50 @@ export default function App() {
             
             {/* Logo Group */}
             <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 bg-[#E28A5D] rounded-full flex items-center justify-center text-white font-extrabold text-sm shadow-md">
+              <div className="w-10 h-10 bg-brand rounded-full flex items-center justify-center text-white font-extrabold text-sm">
                 AK
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-black font-display uppercase tracking-widest text-app-text text-lg">VEZ</span>
-                <span className="text-[10px] text-app-text font-black uppercase tracking-widest px-2.5 py-1 rounded border border-app-border bg-dark-bg/40">
+                <span className="text-[10px] text-app-text font-black uppercase tracking-widest px-2.5 py-1 rounded border border-app-border bg-surface-raised/40">
                   PRO
                 </span>
               </div>
             </div>
 
             {/* Live active agent indicator */}
-            <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-dark-bg/45 border border-app-border/80">
+            <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-surface-raised/45 border border-app-border/80">
               <span className="relative flex h-2.5 w-2.5 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success"></span>
               </span>
+              {/*
+                ⚠️ **Aquí había una cifra fabricada:** `leads.length * 11 + 72`.
+
+                Era el único dato inventado que quedaba en AKVEZ, y estaba en el
+                sitio de mayor exposición del producto: la cabecera, visible en
+                las cinco pantallas y durante toda la demo. **Era también la
+                primera cifra que un jurado leía.**
+
+                Se sustituye por el **recuento real** de negocios en el espacio
+                de trabajo — el mismo número que el usuario puede comprobar
+                contando tarjetas. La escala se insinúa con lo que hay, no con
+                una multiplicación.
+              */}
               <span className="text-xs sm:text-sm text-app-text font-medium font-sans">
-                Agente activo <span className="opacity-50">•</span> <strong className="font-semibold text-[#E28A5D]">{leads.length * 11 + 72} oportunidades encontradas</strong>
+                Agente activo <span className="opacity-50">•</span>{" "}
+                <strong className="font-semibold text-brand">
+                  {leads.length} {leads.length === 1 ? "negocio" : "negocios"} en tu espacio de trabajo
+                </strong>
               </span>
             </div>
 
             {/* Settings & Profile Icons */}
             <div className="flex items-center gap-3">
-              <button type="button" className="p-2.5 rounded-full hover:bg-dark-bg text-app-muted hover:text-app-text transition cursor-pointer">
+              <button type="button" className="p-2.5 rounded-full hover:bg-surface-raised text-app-muted hover:text-app-text transition cursor-pointer">
                 <Settings className="w-5 h-5" />
               </button>
-              <div className="w-9 h-9 rounded-full bg-[#E28A5D]/20 border border-[#E28A5D]/30 flex items-center justify-center text-[#E28A5D]">
+              <div className="w-9 h-9 rounded-full bg-brand/20 border border-brand/30 flex items-center justify-center text-brand">
                 <User className="w-4 h-4" />
               </div>
             </div>
@@ -170,43 +223,78 @@ export default function App() {
         <div className="border-b border-app-border pb-px">
           <div className="flex space-x-8">
             <button
+              onClick={() => setActiveTab("dashboard")}
+              id="tab-dashboard"
+              type="button"
+              className={`flex items-center gap-2.5 py-4 px-1 border-b-2 text-sm font-bold font-display uppercase tracking-wider transition-all cursor-pointer ${
+                activeTab === "dashboard"
+                  ? "border-brand text-app-text"
+                  : "border-transparent text-app-muted hover:text-app-text hover:border-app-border/40"
+              }`}
+            >
+              <LayoutDashboard className="w-4 h-4 text-brand" />
+              <span>Panel</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab("hunter")}
               id="tab-hunter"
               type="button"
               className={`flex items-center gap-2.5 py-4 px-1 border-b-2 text-sm font-bold font-display uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === "hunter"
-                  ? "border-accent-green text-app-text"
+                  ? "border-brand text-app-text"
                   : "border-transparent text-app-muted hover:text-app-text hover:border-app-border/40"
               }`}
             >
-              <MapPin className="w-4 h-4 text-accent-green" />
+              <MapPin className="w-4 h-4 text-brand" />
               <span>Oportunidades</span>
             </button>
             
+            <button
+              onClick={() => setActiveTab("library")}
+              id="tab-library"
+              type="button"
+              className={`flex items-center gap-2.5 py-4 px-1 border-b-2 text-sm font-bold font-display uppercase tracking-wider transition-all cursor-pointer ${
+                activeTab === "library"
+                  ? "border-brand text-app-text"
+                  : "border-transparent text-app-muted hover:text-app-text hover:border-app-border/40"
+              }`}
+            >
+              <Library className="w-4 h-4 text-brand" />
+              <span>Biblioteca</span>
+            </button>
+
             <button
               onClick={() => setActiveTab("pitch")}
               id="tab-pitch"
               type="button"
               className={`flex items-center gap-2.5 py-4 px-1 border-b-2 text-sm font-bold font-display uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === "pitch"
-                  ? "border-accent-green text-app-text"
+                  ? "border-brand text-app-text"
                   : "border-transparent text-app-muted hover:text-app-text hover:border-app-border/40"
               }`}
             >
-              <MessageSquare className="w-4 h-4 text-accent-green" />
+              <MessageSquare className="w-4 h-4 text-brand" />
               <span>Generar mensaje</span>
             </button>
           </div>
         </div>
 
-        {/* Dynamic Context Strategy Compass */}
-        <div className="bg-dark-surface border border-app-border rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* Dynamic Context Strategy Compass.
+            **No se rinde en el Panel:** esa pantalla trae su propio encabezado y
+            su propia llamada a la acción, y superponerle una segunda guía
+            duplicaría el mensaje de entrada. */}
+        <div className={`bg-dark-surface border border-app-border rounded-2xl p-4 flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+          activeTab === "dashboard" ? "hidden" : "flex"
+        }`}>
           <div className="flex items-start gap-3">
-            <Compass className="w-5 h-5 text-[#ff6b35] shrink-0 mt-0.5" />
+            <Compass className="w-5 h-5 text-brand shrink-0 mt-0.5" />
             <div>
               <h4 className="text-xs font-bold text-app-text uppercase tracking-widest font-display">BrÚjula del Freelancer</h4>
               <p className="text-xs text-app-muted mt-0.5 leading-relaxed font-sans max-w-3xl">
-                {activeTab === "hunter" && "Configura los filtros de nicho y ciudad colombiana, opcionalmente detalla tu estilo de diseño y escanea en tiempo real para extraer leads verificados con alta viabilidad comercial."}
+                {/* «verificados» y «alta viabilidad comercial» eran afirmaciones sin respaldo: el sistema no verifica negocios ni garantiza viabilidad. Devuelve negocios de Google Places con un Opportunity Score calculado. */}
+                {activeTab === "hunter" && "Configura los filtros de nicho y ciudad colombiana, opcionalmente detalla tu estilo de diseño y busca negocios reales en Google Places con su Opportunity Score calculado."}
+                {activeTab === "library" && "Tu memoria comercial completa: todas las empresas que el agente ha registrado, con independencia de su puntuación. La Biblioteca solo crece — de aquí no se elimina ningún Lead."}
                 {activeTab === "pitch" && "Selecciona cualquier lead mapeado en tu buscador y genera una propuesta de outreach hiper-personalizada para Email, LinkedIn o Instagram de baja presión y alto retorno."}
               </p>
             </div>
@@ -215,7 +303,7 @@ export default function App() {
           {activeTab === "hunter" && (
             <button
               onClick={() => setActiveTab("pitch")}
-              className="text-xs text-accent-green hover:underline flex items-center gap-1 font-semibold shrink-0 cursor-pointer"
+              className="text-xs text-brand hover:underline flex items-center gap-1 font-semibold shrink-0 cursor-pointer"
             >
               Ver Generador de Mensajes
               <ArrowRight className="w-3.5 h-3.5" />
@@ -225,7 +313,18 @@ export default function App() {
 
         {/* Workspace Display Area */}
         <div className="transition-all duration-300">
-          {activeTab === "hunter" ? (
+          {activeTab === "dashboard" ? (
+            /* Panel del agente — solo presenta lo que ya existe en este estado
+               y en los resúmenes de búsqueda de la sesión. */
+            <ExecutiveDashboard
+              leads={leads}
+              searchHistory={searchHistory}
+              activeLeadId={selectedLeadId}
+              onStartSearch={() => setActiveTab("hunter")}
+              onOpenOpportunity={handleOpenOpportunity}
+              onGeneratePitch={handleSelectLeadContext}
+            />
+          ) : activeTab === "hunter" ? (
             <LeadHunter
               designerStyle={designerStyle}
               setDesignerStyle={setDesignerStyle}
@@ -233,7 +332,18 @@ export default function App() {
               onAddLeads={handleAddLeads}
               onSelectLead={handleSelectLeadContext}
               activeLeadId={selectedLeadId}
+              onSearchCompleted={(summary) =>
+                setSearchHistory((prev) => [...prev, summary])
+              }
+              requestedLeadId={requestedLeadId}
+              onRequestedLeadConsumed={() => setRequestedLeadId(null)}
             />
+          ) : activeTab === "library" ? (
+            /* Biblioteca — lee del servidor en cada visita. No recibe el estado
+               local del Workspace: son dos vistas distintas sobre datos distintos
+               (APS-04 §A.3.4), y la Biblioteca es la única que refleja lo que
+               realmente quedó registrado en persistencia. */
+            <LeadLibrary />
           ) : (
             <PitchGenerator
               leads={leads}
@@ -252,12 +362,16 @@ export default function App() {
       {/* Footer */}
       <footer className="bg-dark-surface border-t border-app-border py-6 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-app-muted">
+          {/* **El producto se llama AKVEZ.** El pie nombraba «LeadFlow Colombia
+              Suite» en las cinco pantallas: una ruptura de identidad literal,
+              permanente y en texto. */}
           <p className="font-sans">
-            © 2026 LeadFlow Colombia Suite. Todas las comunicaciones generadas cumplen normas de contacto profesional ético.
+            © 2026 AKVEZ. Todas las comunicaciones generadas cumplen normas de
+            contacto profesional ético.
           </p>
           <div className="flex items-center gap-1 font-mono">
-            <Code className="w-3.5 h-3.5 text-accent-green" />
-            Bautizado con Google Gemini en Español
+            <Code className="w-3.5 h-3.5 text-brand" />
+            Análisis con Google Gemini · Descubrimiento con Google Places
           </div>
         </div>
       </footer>
