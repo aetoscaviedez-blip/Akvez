@@ -296,6 +296,69 @@ Los diecisiete del §16 se adoptan sin cambios, con dos precisiones:
 
 ---
 
+## 9-bis. 🔴 BLOQUEO DE H-14.A — `flaws` no es evidencia
+
+Detectado en la auditoría §16 de H-14.A, que obliga a detenerse si «la lógica
+actual ya contiene afirmaciones que no puede demostrar».
+
+**La contiene.** `lead.flaws[]` —único origen del bloque a transformar— es prosa
+generada, no observación. Ocurre en los dos caminos:
+
+### Camino determinista — `fallbackAnalysis.ts`
+
+Para un negocio sin web, el único hecho observado es `websiteUri` ausente. Aun
+así el motor afirma:
+
+| Afirmación | ¿Observada? |
+|---|:---:|
+| «Falta de optimización para dispositivos móviles» (L51) | 🔴 nunca se mide |
+| «Tiempos de carga lentos» (L52) | 🔴 nunca se mide |
+| «Ausencia de llamados a la acción claros (CTAs)» (L53) | 🔴 nunca se mide |
+| «Falta de presencia en Google (SEO local)» (L19) | 🔴 nunca se mide |
+| «**Decenas de usuarios** buscan… y contratan a la competencia» (L44) | 🔴 cifra inventada |
+
+**AKVEZ nunca descarga ni inspecciona el sitio web.** No hay Lighthouse, ni
+fetch, ni análisis de DOM.
+
+### Camino IA — `leadAnalysisAdapter.ts`
+
+El prompt **ordena** producir exactamente tres defectos:
+
+> L164: «Describe 3 debilidades claras de su web **lenta, desactualizada, sin
+> llamados a la acción** o de difícil navegación.»
+
+Gemini recibe solo `name`, `rating`, `reviewCount` y la **URL** del sitio. Nunca
+su contenido. Se le pide afirmar velocidad, actualidad y ausencia de CTA sobre
+una página que no ha visto — y **exactamente tres**, haya o no haya algo que
+observar.
+
+### Por qué esto bloquea el sprint
+
+Los ejemplos que H-14.A §4 declara **NO válidos** están literalmente dentro de
+`flaws` hoy:
+
+| Prohibido por §4 | Presente en |
+|---|---|
+| «Su web convierte mal» | `fallbackAnalysis.ts:53` |
+| «Necesita SEO» | `fallbackAnalysis.ts:19` |
+| «Necesita reservas online» | `fallbackAnalysis.ts:18` |
+
+**El reframe agrava el problema en lugar de ser neutral.** «Lo que puedes
+arreglar», en gris apagado y con icono de advertencia, se lee como un
+diagnóstico blando. «Oportunidades para ti», con tratamiento premium y jerarquía
+elevada, se lee como una afirmación sobre la que el profesional **va a actuar y
+que puede repetirle al dueño del negocio**. Subir el peso visual de una
+afirmación no verificable es aumentar su daño.
+
+Criterios de aceptación imposibles de cumplir con esta fuente: **#6** (cada
+oportunidad respaldada por evidencia) y **#15** (no añadir datos ficticios).
+
+### Salida
+
+Corregir `flaws` exige tocar `fallbackAnalysis.ts` y el prompt de
+`leadAnalysisAdapter.ts` — **backend y dominio**, que H-14.A §12 prohíbe
+expresamente. De ahí el bloqueo.
+
 ## 10. Propuesta de troceo
 
 | Fase | Alcance | Bloqueos |
