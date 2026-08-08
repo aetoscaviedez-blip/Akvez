@@ -1,5 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { toPlaceEvidence } from "./placeEvidence";
+import { readFileSync } from "node:fs";
+import { toPlaceEvidence, describeVisualEvidence, PlaceEvidence } from "./placeEvidence";
+import { deriveOpportunities } from "./opportunityDerivation";
+
+/** Evidencia mínima; solo se varía lo que cada test observa. */
+const evidencia = (over: Partial<PlaceEvidence>): PlaceEvidence => ({
+  version: "PE-1.0", websiteUrl: null, phone: null, rating: null,
+  reviewCount: null, photoCount: null, ...over
+});
 
 /**
  * Estos tests vigilan **la distinción de tres estados**, que es la única razón
@@ -94,5 +102,76 @@ describe("toPlaceEvidence — PE-1.0", () => {
       const entrada = { website: "https://x.co", photoCount: 2 };
       expect(toPlaceEvidence(entrada)).toEqual(toPlaceEvidence(entrada));
     });
+  });
+});
+
+describe("describeVisualEvidence — H-14.G.1", () => {
+  it("photoCount === 0 se presenta como evidencia observada, no como ausencia", () => {
+    expect(describeVisualEvidence(evidencia({ photoCount: 0 }))).toEqual({ kind: "none" });
+  });
+
+  it("photoCount > 0 conserva el número exacto", () => {
+    expect(describeVisualEvidence(evidencia({ photoCount: 12 }))).toEqual({
+      kind: "some",
+      count: 12
+    });
+  });
+
+  it("photoCount === null no produce ninguna afirmación", () => {
+    expect(describeVisualEvidence(evidencia({ photoCount: null }))).toEqual({ kind: "absent" });
+  });
+
+  it("evidencia ausente por completo tampoco afirma nada", () => {
+    expect(describeVisualEvidence(undefined)).toEqual({ kind: "absent" });
+  });
+
+  it("0 y null NUNCA producen el mismo resultado", () => {
+    const cero = describeVisualEvidence(evidencia({ photoCount: 0 }));
+    const nulo = describeVisualEvidence(evidencia({ photoCount: null }));
+    expect(cero).not.toEqual(nulo);
+    expect(cero.kind).toBe("none");
+    expect(nulo.kind).toBe("absent");
+  });
+
+  it("una sola fotografía sigue siendo `some`, no un caso especial", () => {
+    expect(describeVisualEvidence(evidencia({ photoCount: 1 }))).toEqual({ kind: "some", count: 1 });
+  });
+
+  it("es determinista", () => {
+    const e = evidencia({ photoCount: 4 });
+    expect(describeVisualEvidence(e)).toEqual(describeVisualEvidence(e));
+  });
+
+  it("no muta la evidencia recibida", () => {
+    const e = evidencia({ photoCount: 3 });
+    const copia = { ...e };
+    describeVisualEvidence(e);
+    expect(e).toEqual(copia);
+  });
+});
+
+describe("la evidencia visual no genera oportunidades ni toca el Score", () => {
+  it("photoCount no produce ninguna oportunidad", () => {
+    // `deriveOpportunities` deriva solo de `website`. La evidencia visual es
+    // dato de contexto, no una necesidad del negocio (H-14.G §6.1).
+    const sinFotos = deriveOpportunities({ website: "https://propio.co" });
+    expect(sinFotos).toEqual([]);
+  });
+
+  it("ninguna oportunidad menciona fotografía", () => {
+    const todas = [
+      ...deriveOpportunities({}),
+      ...deriveOpportunities({ website: "https://instagram.com/x" })
+    ];
+    for (const op of todas) {
+      const texto = `${op.title} ${op.evidence} ${op.offer}`.toLowerCase();
+      expect(texto).not.toMatch(/fotograf|fotógrafo|imagen|visual/);
+    }
+  });
+
+  it("el módulo de evidencia no importa nada del scoring", () => {
+    const src = readFileSync(new URL("./placeEvidence.ts", import.meta.url), "utf8");
+    const imports = src.match(/^import[\s\S]*?from\s+".*?";$/gm) ?? [];
+    expect(imports.join("\n")).not.toMatch(/score|scoring/i);
   });
 });

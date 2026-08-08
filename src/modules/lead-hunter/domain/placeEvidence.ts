@@ -50,6 +50,46 @@ export interface PlaceEvidence {
   photoCount: number | null;
 }
 
+/**
+ * **Qué debe presentarse sobre la evidencia visual (H-14.G.1).**
+ *
+ * ── POR QUÉ ES UNA FUNCIÓN Y NO UN `if` EN EL COMPONENTE ─────────────────────
+ *
+ * La decisión de qué se puede decir sobre `photoCount` es una **regla de
+ * integridad**, no una cuestión de maquetación: colapsar `null` con `0` haría
+ * que AKVEZ afirmara «no tiene fotografías» sobre un negocio que nunca miró.
+ * Vive aquí para poder probarse exhaustivamente sin montar React —el proyecto
+ * corre sus tests en `environment: "node"`— y para que ninguna pantalla futura
+ * reinvente el criterio.
+ *
+ * ── NO ES UNA OPORTUNIDAD ────────────────────────────────────────────────────
+ *
+ * Devuelve **un dato observado**, nunca una necesidad. `VISUAL_ASSETS` como
+ * oportunidad queda bloqueado hasta que la evidencia persista (H-14.G §6.1): una
+ * oportunidad que aparece al buscar y desaparece al recargar la Biblioteca sería
+ * peor que ninguna.
+ */
+export type VisualEvidenceDisplay =
+  /** No se observó el dato. **No se presenta nada** — ni «0», ni «no disponible». */
+  | { kind: "absent" }
+  /** Se observó que la ficha no registra fotografías. */
+  | { kind: "none" }
+  /** Se observaron `count` fotografías. */
+  | { kind: "some"; count: number };
+
+/**
+ * Traduce la evidencia a lo único que puede afirmarse de ella.
+ *
+ * ⚠️ **`typeof === "number"`, jamás `photoCount || 0`.** Es exactamente la
+ * distinción que `PE-1.0` existe para preservar: `0` es un hecho observado y
+ * `null` es la ausencia de observación.
+ */
+export function describeVisualEvidence(evidence?: PlaceEvidence): VisualEvidenceDisplay {
+  const count = evidence?.photoCount;
+  if (typeof count !== "number") return { kind: "absent" };
+  return count === 0 ? { kind: "none" } : { kind: "some", count };
+}
+
 /** Cadena presente y no vacía, o `null`. Nunca `""`. */
 function textOrNull(value: unknown): string | null {
   if (typeof value !== "string") return null;

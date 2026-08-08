@@ -6,9 +6,10 @@ import {
 import {
   MapPin, Globe, AlertTriangle, Zap, DollarSign, Target, Phone,
   MessageSquare, Star, Calendar, Search, ShieldCheck, Gauge, Award, Quote, CheckCheck,
-  Sparkles
+  Sparkles, Image as ImageIcon
 } from "lucide-react";
 import { deriveOpportunities } from "../../domain/opportunityDerivation";
+import { describeVisualEvidence } from "../../domain/placeEvidence";
 import { estimateProjectValue, formatProjectValue } from "../../domain/projectValue";
 import { PV_01 } from "../../../../config/projectValueModel";
 
@@ -86,6 +87,11 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
     () => estimateProjectValue(opportunities, PV_01),
     [opportunities]
   );
+
+  // **Evidencia visual — H-14.G.1.** La decisión de qué puede afirmarse vive en
+  // `domain/`, no aquí: colapsar `null` con `0` haría que la tarjeta declarara
+  // «sin fotografías» sobre un negocio que nunca se miró.
+  const visualEvidence = describeVisualEvidence(lead.placeEvidence);
 
   const hasReputation = (lead.rating ?? 0) > 0 || (lead.reviewCount ?? 0) > 0;
   const hasIntelligence =
@@ -244,11 +250,13 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
             siempre, con `0`—, de modo que el distintivo aparecía vacío
             reclamando una verificación que no respaldaba ningún dato.
           */}
-          {hasReputation && (
+          {(hasReputation || visualEvidence.kind !== "absent") && (
             <div className="flex flex-wrap items-center gap-2">
+              {hasReputation && (
               <Badge tone="success" icon={<ShieldCheck className="h-3 w-3" />}>
                 Maps verificado
               </Badge>
+              )}
               {lead.rating && lead.rating > 0 ? (
                 <Badge tone="warn" icon={<Star className="h-3 w-3" />}>
                   {lead.rating.toFixed(1)} / 5.0
@@ -257,6 +265,36 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
               {lead.reviewCount && lead.reviewCount > 0 ? (
                 <Badge>{lead.reviewCount} reseñas</Badge>
               ) : null}
+
+              {/*
+                **Evidencia visual — H-14.G.1.**
+
+                Vive entre los demás datos observados de la ficha porque **eso es
+                lo que es**: un hecho sobre el perfil de Google, del mismo rango
+                que la calificación o el número de reseñas.
+
+                **Tono neutro y sin icono de advertencia, deliberadamente.** Cero
+                fotografías no es un problema del negocio: es un dato. Pintarlo
+                en ámbar lo convertiría en un diagnóstico que AKVEZ no puede
+                sostener.
+
+                **El texto dice «Ficha de Google», nunca «el negocio»:** un
+                comercio sin fotos en Maps puede tener un Instagram excelente, y
+                afirmar lo contrario sería inventar.
+
+                `kind: "absent"` no rinde nada — ni «0», ni «sin datos».
+              */}
+              {visualEvidence.kind === "none" && (
+                <Badge icon={<ImageIcon className="h-3 w-3" />}>
+                  Ficha de Google sin fotografías
+                </Badge>
+              )}
+              {visualEvidence.kind === "some" && (
+                <Badge icon={<ImageIcon className="h-3 w-3" />}>
+                  Ficha de Google · {visualEvidence.count}{" "}
+                  {visualEvidence.count === 1 ? "fotografía" : "fotografías"}
+                </Badge>
+              )}
             </div>
           )}
         </div>
