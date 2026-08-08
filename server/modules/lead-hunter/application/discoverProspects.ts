@@ -174,7 +174,11 @@ export function createDiscoverProspects(
           status: "Prospect",
           identityKey: key,
           identitySource: identity?.kind === "sourceReference" ? identity.reference.source : null,
-          identityDesignation: identity?.kind === "sourceReference" ? identity.reference.designation : null
+          identityDesignation: identity?.kind === "sourceReference" ? identity.reference.designation : null,
+          // **Evidencia observada (H-14.H).** El candidato la trae del adapter.
+          // typeof, no truthy: 0 es un valor observado.
+          evidenceVersion: typeof candidate.photoCount === "number" ? "PE-1.0" : null,
+          photoCount: typeof candidate.photoCount === "number" ? candidate.photoCount : null
         });
 
         // Se entrega el candidato enriquecido con la identidad que asignó la

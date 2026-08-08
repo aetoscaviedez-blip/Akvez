@@ -29,6 +29,8 @@ export function toLeadModel(lead: Lead, meta: LeadPersistenceMeta): LeadModel {
     identityKey: lead.identityKey,
     identitySource: lead.identitySource,
     identityDesignation: lead.identityDesignation,
+    evidenceVersion: lead.evidenceVersion,
+    photoCount: lead.photoCount,
     createdAt: meta.createdAt,
     updatedAt: meta.updatedAt
   };
@@ -46,6 +48,8 @@ export function toLead(model: LeadModel): Lead {
     status: model.status,
     identityKey: model.identityKey,
     identitySource: model.identitySource,
-    identityDesignation: model.identityDesignation
+    identityDesignation: model.identityDesignation,
+    evidenceVersion: model.evidenceVersion,
+    photoCount: model.photoCount
   };
 }

@@ -24,6 +24,10 @@ export interface LeadModel {
   reviewCount: number;
   source: string;
   status: LeadStatus;
+  /** Ver Lead.evidenceVersion (H-14.H). null = Lead anterior a PE-1.0. */
+  evidenceVersion: string | null;
+  /** Ver Lead.photoCount (H-14.H). null = no observado; 0 = cero real. */
+  photoCount: number | null;
   /**
    * Identidad natural (ADR-12 §7). Junto con `userId` forma la identidad completa
    * del Lead, `(Referencia de Origen, Usuario)`, sobre la que se apoya la

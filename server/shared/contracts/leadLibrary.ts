@@ -51,6 +51,13 @@ export interface LeadLibraryItemDTO {
   source: string;
   status: string;
 
+  /**
+   * **Evidencia observada — PE-1.0 (H-14.H).** Aditivo y opcional.
+   * Ausente = Lead anterior a PE-1.0: no se observo, que no es lo mismo
+   * que haber observado cero.
+   */
+  photoCount?: number | null;
+
   /** Opportunity Score 0-100 (APS-08 §7). Ausente si el Lead no fue evaluado. */
   score?: number | null;
   /** Banda de APS-08 §8. **Etiqueta de prioridad, nunca criterio de admisión.** */

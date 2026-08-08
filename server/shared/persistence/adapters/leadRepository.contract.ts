@@ -17,6 +17,8 @@ const sampleLead: Lead = {
   reviewCount: 12,
   source: "Google Maps",
   status: "Prospect",
+  evidenceVersion: "PE-1.0",
+  photoCount: 7,
   identityKey: "ref:google maps|PLACE-001",
   identitySource: "Google Maps",
   identityDesignation: "PLACE-001"

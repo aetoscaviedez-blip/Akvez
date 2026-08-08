@@ -91,6 +91,10 @@ export function createInMemoryLeadAdapter(): LeadRepository {
         source: lead.source,
         identitySource: lead.identitySource,
         identityDesignation: lead.identityDesignation,
+        // Un redescubrimiento trae observacion fresca: se reemplaza, no se
+        // acumula historial (ADR-13 §10.4, U-1).
+        evidenceVersion: lead.evidenceVersion,
+        photoCount: lead.photoCount,
         updatedAt: new Date().toISOString()
       };
 

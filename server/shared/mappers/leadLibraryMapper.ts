@@ -21,6 +21,8 @@ export interface InternalRegisteredLead {
   reviewCount: number;
   source: string;
   status: string;
+  evidenceVersion?: string | null;
+  photoCount?: number | null;
   /** Presentes solo si el Lead fue evaluado. Ausencia = sin Evaluación (R-45). */
   score?: number | null;
   band?: string | null;
@@ -65,7 +67,10 @@ export function mapToLeadLibraryItemDTO(lead: InternalRegisteredLead): LeadLibra
     rating: lead.rating,
     reviewCount: lead.reviewCount,
     source: lead.source,
-    status: lead.status
+    status: lead.status,
+    // Solo viaja si la evidencia se observo. evidenceVersion es el
+    // indicador; sin el, el campo no se publica (mismo criterio que el Score).
+    ...(lead.evidenceVersion ? { photoCount: lead.photoCount ?? null } : {})
   };
 
   // Los campos de Score **solo se añaden si el Lead fue evaluado**. Se comprueba

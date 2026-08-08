@@ -43,6 +43,10 @@ export interface RegisteredLead {
   reviewCount: number;
   source: string;
   status: string;
+  /** Evidencia observada (H-14.H). null = Lead anterior a PE-1.0. */
+  evidenceVersion: string | null;
+  /** null = no observado. 0 = observado y realmente cero. */
+  photoCount: number | null;
 }
 
 /**
@@ -87,7 +91,9 @@ export function createListLeadLibrary(
       rating: lead.rating,
       reviewCount: lead.reviewCount,
       source: lead.source,
-      status: lead.status
+      status: lead.status,
+      evidenceVersion: lead.evidenceVersion,
+      photoCount: lead.photoCount
     }));
 
     return { leads, total: leads.length };

@@ -39,4 +39,21 @@ export interface Lead {
   identitySource: string | null;
   /** Designación estable emitida por la fuente, si la aportó. */
   identityDesignation: string | null;
+
+  /**
+   * **Evidencia observada — H-14.H.**
+   *
+   * Se persiste **solo lo que no está ya en los campos de arriba**. `rating`,
+   * `reviewCount`, `website` y `phone` **no se duplican**: guardarlos dos veces
+   * crearía una segunda fuente de verdad y abriría la puerta a que divergieran.
+   * `PlaceEvidence` se **reconstruye** al leer, combinando esos campos con
+   * estos dos.
+   *
+   * `evidenceVersion === null` significa **Lead anterior a `PE-1.0`**: la
+   * evidencia nunca se observó — y eso **no es lo mismo** que haber observado
+   * cero fotografías.
+   */
+  evidenceVersion: string | null;
+  /** `null` = no observado. `0` = **observado y realmente cero**. */
+  photoCount: number | null;
 }
