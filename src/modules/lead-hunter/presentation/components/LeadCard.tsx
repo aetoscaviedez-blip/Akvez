@@ -5,8 +5,10 @@ import {
 } from "../../../../shared/components/ui";
 import {
   MapPin, Globe, AlertTriangle, Zap, DollarSign, Target, Phone,
-  MessageSquare, Star, Calendar, Search, ShieldCheck, Gauge, Award, Quote, CheckCheck
+  MessageSquare, Star, Calendar, Search, ShieldCheck, Gauge, Award, Quote, CheckCheck,
+  Sparkles
 } from "lucide-react";
+import { deriveOpportunities } from "../../domain/opportunityDerivation";
 
 interface LeadCardProps {
   lead: Prospect;
@@ -57,6 +59,23 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
   // **`typeof === "number"`, NO `!!score`**: un Score de **0 es una puntuación
   // real** y `null` es una ausencia legítima (**R-45**).
   const hasScore = typeof lead.score === "number";
+
+  // **La tarjeta no sabe cómo se derivan las oportunidades.** Pide el resultado
+  // a `domain/` y lo rinde. Las reglas y su evidencia viven fuera de React
+  // (H-14.A′), de modo que se pueden probar sin montar un componente.
+  const opportunities = React.useMemo(
+    () => deriveOpportunities({ website: lead.website }),
+    [lead.website]
+  );
+
+  // Con una sola oportunidad, la rejilla de dos columnas dejaba media fila
+  // vacía y la tarjeta se leía como un resto. Una sola ocupa el ancho completo;
+  // varias comparten. Ambas cadenas son literales: Tailwind v4 no puede
+  // resolver clases compuestas en tiempo de ejecución.
+  const opportunityGridClass =
+    opportunities.length === 1
+      ? "grid grid-cols-1 gap-4"
+      : "grid grid-cols-1 gap-4 md:grid-cols-2";
 
   const hasReputation = (lead.rating ?? 0) > 0 || (lead.reviewCount ?? 0) > 0;
   const hasIntelligence =
@@ -401,33 +420,61 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
           )}
         </div>
 
+        {/*
+          ⭐ **«Oportunidades para ti» — H-14.A′.**
+
+          Aquí se renderizaba `lead.flaws` bajo el título «Lo que puedes
+          arreglar»: superficies grises con icono de advertencia ámbar. Comunicaba
+          avería, no negocio.
+
+          **El problema no era el color, era la fuente.** La auditoría H-14
+          demostró que `flaws` afirma velocidad de carga, adaptación móvil,
+          ausencia de CTA y SEO sobre sitios que AKVEZ nunca descarga. Darle
+          tratamiento premium habría amplificado afirmaciones no verificables:
+          subir el peso visual de algo que no se puede demostrar aumenta su daño.
+
+          Ahora la sección consume `deriveOpportunities`, que solo emite lo que
+          se puede justificar contra un dato observado. `lead.flaws` **sigue
+          intacto** —no se toca su contrato— pero deja de alimentar este bloque.
+
+          El icono pasa de `AlertTriangle` ámbar a `Sparkles` en color de marca:
+          el mismo lenguaje que el resto de los hallazgos del producto.
+        */}
         <div className="space-y-3">
-          <Eyebrow as="h4" icon={<AlertTriangle className="h-3.5 w-3.5 text-warn" />}>
-            Lo que puedes arreglar
+          <Eyebrow as="h4" icon={<Sparkles className="h-3.5 w-3.5 text-brand" />}>
+            Oportunidades para ti
           </Eyebrow>
 
-          {/* Lista vacía = **el análisis no detectó problemas**. Es un
-              resultado, y se declara (R-38). */}
-          {lead.flaws.length > 0 ? (
-            <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {lead.flaws.map((flaw, index) => (
+          {opportunities.length > 0 ? (
+            <ul className={opportunityGridClass}>
+              {opportunities.map((opportunity, index) => (
                 <Surface
                   as="li"
-                  key={index}
+                  key={opportunity.id}
                   level="raised"
                   radius="card"
                   padding="md"
-                  className="flex items-start gap-3 font-sans text-sm text-app-muted motion-safe:animate-ak-rise"
+                  className="space-y-2.5 motion-safe:animate-ak-rise"
                   style={{ animationDelay: `${Math.min(index, 8) * 45}ms` }}
                 >
-                  <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warn" />
-                  {flaw}
+                  <p className="font-display text-base font-bold tracking-tight text-app-text">
+                    {opportunity.title}
+                  </p>
+                  {/* La oferta va antes que la evidencia: es lo que el
+                      profesional puede vender, y es a lo que vino. */}
+                  <p className="font-sans text-sm text-app-text/85">{opportunity.offer}</p>
+                  {/* La evidencia queda debajo, en tono secundario, pero
+                      **siempre visible**: es lo que hace defendible la tarjeta. */}
+                  <p className="font-sans text-xs text-app-muted">{opportunity.evidence}</p>
                 </Surface>
               ))}
             </ul>
           ) : (
-            <p className="font-sans text-xs italic text-app-muted">
-              El análisis no detectó problemas web para este negocio.
+            /* **Estado honesto.** Sin sitio inspeccionado no hay nada
+               demostrable, y se dice en lugar de rellenar con supuestos (R-38). */
+            <p className="max-w-measure font-sans text-xs text-app-muted">
+              No encontramos oportunidades verificables con los datos disponibles.
+              AKVEZ no inspecciona el contenido de los sitios web.
             </p>
           )}
         </div>

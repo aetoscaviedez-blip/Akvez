@@ -359,6 +359,70 @@ Corregir `flaws` exige tocar `fallbackAnalysis.ts` y el prompt de
 `leadAnalysisAdapter.ts` — **backend y dominio**, que H-14.A §12 prohíbe
 expresamente. De ahí el bloqueo.
 
+## 9-ter. ✅ H-14.A′ — implementado
+
+Resuelve el bloqueo de §9-bis sin tocar `flaws`: se construye una fuente nueva en
+lugar de intentar sanear la existente.
+
+### Arquitectura
+
+```
+src/modules/lead-hunter/domain/opportunityDerivation.ts
+```
+
+Vive en `domain/` del módulo, no en el componente. No importa React, es
+determinista y se prueba sin montar nada. `LeadCard` pide el resultado y lo
+rinde; **no conoce ninguna regla**.
+
+### Modelo
+
+```ts
+interface EvidenceBasedOpportunity {
+  id: OpportunityId;   // vocabulario cerrado
+  title: string;       // nombre comercial
+  evidence: string;    // qué sabe AKVEZ — un hecho
+  offer: string;       // qué puede ofrecer el profesional
+  rule: string;        // la regla que la produjo
+}
+```
+
+`evidence` y `rule` son **obligatorios**. Si no se pueden rellenar con un hecho,
+la oportunidad no se emite.
+
+### Reglas implementadas
+
+| Oportunidad | Dato observado | Regla |
+|---|---|---|
+| **Presencia web propia** | `websiteUri` ausente | sin sitio registrado en Places |
+| **Dominio propio** | `websiteUri` apunta a plataforma de terceros | coincidencia de host conocida |
+
+La segunda reutiliza el criterio determinista que `calculateScore` ya aplica para
+`Sitio web básico`: **se lee la cadena del enlace, no su contenido.** Es
+observación, no inferencia.
+
+### Oportunidades excluidas deliberadamente
+
+| Descartada | Motivo |
+|---|---|
+| Todo lo procedente de `flaws` | Prosa generada — §9-bis |
+| Teléfono ausente | «Places no lo registra» ≠ «el negocio no tiene». Sin interpretación inequívoca para un diseñador web |
+| Señales de reputación | Exigirían un umbral (¿20 reseñas? ¿50?) que sería un parámetro inventado |
+| `Sitio web deficiente` | **La propia clasificación afirma lo que no se ha medido** |
+| Reservas · SEO · fotografía · CTA · velocidad | Sin dato que las sostenga |
+
+### Validación
+
+Typecheck ✅ · 210 tests ✅ (13 nuevos) · build ✅ · navegador ✅ con los cuatro
+casos: sin web · perfil de terceros · dominio propio (estado vacío) · nombre
+largo sin web. Sin desbordes con el contenedor forzado a 360 px.
+
+### Hallazgo adicional
+
+`calculateScore` etiqueta como **`Sitio web deficiente`** cualquier dominio
+propio, sin haber inspeccionado nada. Es la misma clase de afirmación no
+demostrable que `flaws`, y **está en el nombre de una clasificación del dominio**.
+No se toca en este sprint. Queda reportado.
+
 ## 10. Propuesta de troceo
 
 | Fase | Alcance | Bloqueos |
