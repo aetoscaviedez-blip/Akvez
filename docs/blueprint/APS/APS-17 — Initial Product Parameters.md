@@ -164,7 +164,27 @@ El encargo de este sprint proponía dos parámetros que **vulneran el dominio en
 
 ---
 
-# 8. Tabla Consolidada
+# 8. Parámetros del Modelo de Valor de Proyecto
+
+> **Añadido en H-14.C.** Diseño en `H-14.B — Project Value Model.md`; origen de las cifras en `H-14.B.1 — PV-D1 Proposal.md`.
+
+| Código | Parámetro | Valor inicial | Capa | ¿Cambia el conjunto de Leads? |
+| --- | --- | ---: | --- | --- |
+| **PV-01** | Rango de valor potencial · tier «Sitio web» | **COP 2.500.000 – 6.000.000** | Experiencia de Usuario | **No** — no filtra, no ordena, no descarta |
+| **PV-02** | Moneda de presentación | **COP** | Experiencia de Usuario | **No** |
+| **PV-03** | Confianza declarada del modelo | **Media** | Experiencia de Usuario | **No** |
+
+**Prueba del §3.** Si PV-01 se duplicase, se redujese a la mitad o desapareciese, el usuario tendría **exactamente el mismo conjunto de Leads** en su Biblioteca: el rango se presenta junto a una oportunidad ya derivada y no participa en el descubrimiento, la deduplicación, el registro ni la ordenación. → **Admisible**, en la capa de Experiencia de Usuario conforme a G-3.
+
+**PV-01.** Un solo tier, activado por los tipos de oportunidad `WEB_PRESENCE` y `OWNED_DOMAIN`. Ambos comparten rango porque significan el mismo trabajo —construir un sitio— y ninguna fuente de mercado cotiza por separado la migración desde una red social. Diferenciarlos exigiría inventar la distancia entre ambos.
+
+**PV-03.** La confianza es **Media y no Alta**: las cifras proceden de precios publicados, no de transacciones verificadas, y en su mayoría publicados por quien vende el servicio. No podrá elevarse hasta que existan proyectos cerrados que las confirmen.
+
+> ⚠️ **La admisibilidad de PV-01 es condicional.** Si el rango llegara alguna vez a ordenar, filtrar o puntuar Leads, dejaría de superar la prueba del §3 y pasaría a ser regla de dominio disfrazada de configuración. El valor potencial y el Opportunity Score son magnitudes paralelas: APS-08 y WP-01 no lo incorporan, y ADR-14 no se ve afectado.
+
+---
+
+# 8bis. Tabla Consolidada
 
 | Capa | Parámetros | Naturaleza |
 | --- | --- | --- |
@@ -172,9 +192,9 @@ El encargo de este sprint proponía dos parámetros que **vulneran el dominio en
 | **Aplicación** | PG-02 | Coordinación, sin reducción del conjunto |
 | **Infraestructura** | WS-01 · WS-02 · WS-03 · PG-01 · PG-04 · SY-03 · SY-04 · SY-07 | Tanda, concurrencia, espera, reintentos |
 | **Integración** | SY-01 · SY-02 · SY-05 · SY-06 | Cupos de proveedor. Obligan a paginar, nunca a truncar |
-| **Experiencia de Usuario** | WS-04 · WS-05 · WS-06 · BL-03 · BL-04 | Vistas recorribles y filtros reversibles |
+| **Experiencia de Usuario** | WS-04 · WS-05 · WS-06 · BL-03 · BL-04 · **PV-01 · PV-02 · PV-03** | Vistas recorribles, filtros reversibles y presentación del valor orientativo |
 
-**Total: 21 parámetros. Ninguno reside en el dominio.** Los tres declarados en la fila de Dominio no son configurables: se enumeran para dejar constancia de que no existe valor que los altere.
+**Total: 24 parámetros. Ninguno reside en el dominio.** Los tres declarados en la fila de Dominio no son configurables: se enumeran para dejar constancia de que no existe valor que los altere.
 
 ---
 

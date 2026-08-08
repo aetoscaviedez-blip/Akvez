@@ -9,6 +9,8 @@ import {
   Sparkles
 } from "lucide-react";
 import { deriveOpportunities } from "../../domain/opportunityDerivation";
+import { estimateProjectValue, formatProjectValue } from "../../domain/projectValue";
+import { PV_01 } from "../../../../config/projectValueModel";
 
 interface LeadCardProps {
   lead: Prospect;
@@ -76,6 +78,14 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
     opportunities.length === 1
       ? "grid grid-cols-1 gap-4"
       : "grid grid-cols-1 gap-4 md:grid-cols-2";
+
+  // **PV-1.0 (H-14.C).** La tarjeta no conoce ninguna cifra: pide la estimación
+  // al dominio pasándole los parámetros gobernados de `config/`. `null` cuando
+  // no hay oportunidad compatible — y entonces no se rinde nada, nunca `COP 0`.
+  const projectValue = React.useMemo(
+    () => estimateProjectValue(opportunities, PV_01),
+    [opportunities]
+  );
 
   const hasReputation = (lead.rating ?? 0) > 0 || (lead.reviewCount ?? 0) > 0;
   const hasIntelligence =
@@ -476,6 +486,35 @@ export default function LeadCard({ lead, isActive, onSelectLead, onOpenOpportuni
               No encontramos oportunidades verificables con los datos disponibles.
               AKVEZ no inspecciona el contenido de los sitios web.
             </p>
+          )}
+
+          {/*
+            **Valor estimado del proyecto — PV-1.0.**
+
+            Va **después** de las oportunidades y no antes: la cifra solo es
+            defendible porque existe la oportunidad que la produce, y ese es el
+            orden en que debe leerse.
+
+            **Sin oportunidad compatible no se rinde nada.** Ni `COP 0`, ni
+            «N/A», ni un rango genérico: la ausencia de estimación no es una
+            estimación de cero.
+
+            El verde es el color que APS-04 §10.3 reserva para valores
+            monetarios. «Rango orientativo» no es un matiz de estilo: es lo que
+            separa una herramienta de una promesa de precio (R-48).
+          */}
+          {projectValue !== null && (
+            <Surface level="raised" radius="card" padding="md" tone="success" className="space-y-1">
+              <Eyebrow as="h5" icon={<DollarSign className="h-3.5 w-3.5 text-success" />}>
+                Valor estimado del proyecto
+              </Eyebrow>
+              <p className="font-display text-xl font-bold tracking-tight tabular-nums text-success">
+                {formatProjectValue(projectValue)}
+              </p>
+              <p className="font-sans text-xs text-app-muted">
+                Rango orientativo · según el tipo de oportunidad detectada
+              </p>
+            </Surface>
           )}
         </div>
       </div>
