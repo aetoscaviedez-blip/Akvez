@@ -67,7 +67,15 @@ async function searchGooglePlaces(
       headers: {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": apiKey,
-        "X-Goog-FieldMask": "places.id,places.displayName,places.websiteUri,places.nationalPhoneNumber,places.googleMapsUri,places.rating,places.userRatingCount"
+        // `places.photos` se añade en H-14.F.1. Pertenece al nivel **Essentials**
+        // y AKVEZ ya factura **Enterprise** por `rating`, `websiteUri`,
+        // `nationalPhoneNumber` y `userRatingCount`: al facturarse el nivel más
+        // alto que toque la petición, **el coste adicional es cero**.
+        //
+        // Solo se usa su **longitud**. Ni se descarga la imagen, ni se conserva
+        // `name`, ni `widthPx`/`heightPx` —la resolución no es calidad—, ni
+        // `authorAttributions`.
+        "X-Goog-FieldMask": "places.id,places.displayName,places.websiteUri,places.nationalPhoneNumber,places.googleMapsUri,places.rating,places.userRatingCount,places.photos"
       },
       body: JSON.stringify({ textQuery: query, pageSize: 20 })
     });
@@ -168,6 +176,23 @@ async function searchGooglePlaces(
     googleMapsUrl: place.googleMapsUri || "",
     rating: place.rating || 0,
     reviewCount: place.userRatingCount || 0,
+    // ⚠️ **Único campo del adapter que preserva la ausencia (H-14.F.1).**
+    //
+    // El resto de esta función colapsa la ausencia con `|| 0` y `|| ""`, de modo
+    // que un negocio sin calificar y uno calificado con 0 llegan idénticos. Es un
+    // defecto anterior a este sprint, documentado en H-14.F §3.1, y **no se
+    // corrige aquí**: hacerlo cambiaría el Score de negocios reales.
+    //
+    // `photoCount` **no lo hereda**:
+    //
+    //   `photos` ausente  → 0     Google omite el campo cuando no hay ninguna,
+    //                             y `PE-1.0` sí lo pide. Es cero observado.
+    //   lista vacía       → 0
+    //   lista con N       → N
+    //
+    // `null` queda reservado a evidencia recogida antes de `PE-1.0`, que este
+    // adapter nunca produce.
+    photoCount: Array.isArray(place.photos) ? place.photos.length : 0,
     source: SOURCE
   }));
 }

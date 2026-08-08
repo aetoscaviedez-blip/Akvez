@@ -56,6 +56,23 @@ export interface LeadResponseDTO {
   // ⚠️ **`score` (arriba) se conserva obligatorio** para no romper el contrato
   // vigente. Su nulabilidad es una cuestión distinta y no se decide aquí.
 
+  /**
+   * **Evidencia observada — `PE-1.0` (H-14.F.1).** Recuento de fotografías en la
+   * ficha de la fuente.
+   *
+   * **Ampliación aditiva y opcional**, igual que los campos del Score de arriba:
+   * ningún consumidor actual se rompe por su adición.
+   *
+   * - `N` — se observaron N fotografías.
+   * - `0` — **se observó que no hay ninguna.** Es un hecho, no una ausencia.
+   * - ausente / `null` — **no se observó.** Evidencia recogida antes de `PE-1.0`.
+   *
+   * ⚠️ Solo autoriza afirmar qué contiene **la ficha de la fuente**. No permite
+   * afirmar nada sobre el negocio, ni sobre calidad, ni sobre necesidad de
+   * fotografía (H-14.F §8.5).
+   */
+  photoCount?: number | null;
+
   /** Banda de APS-08 §8. **Etiqueta de prioridad, nunca criterio de admisión.** */
   band?: string | null;
   /**

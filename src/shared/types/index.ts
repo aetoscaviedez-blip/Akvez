@@ -1,3 +1,4 @@
+import type { PlaceEvidence } from "../../modules/lead-hunter/domain/placeEvidence";
 /**
  * Perfil del freelance que usa AKVEZ.
  *
@@ -151,6 +152,20 @@ export interface Prospect {
   whyWebsiteNeeded?: string;
   phone?: string;
   source?: string;
+
+  /**
+   * **Evidencia observada — `PE-1.0` (H-14.F.1).**
+   *
+   * Canal **paralelo** a `website`, `rating`, `reviewCount` y `phone`, que
+   * permanecen intactos para no romper a sus consumidores actuales (F-1).
+   *
+   * La diferencia es la **fidelidad**: aquí `0` y «no observado» son estados
+   * distintos; en los campos de arriba el adapter los colapsó con `|| 0`
+   * (H-14.F §3.1). Las reglas nuevas deben leer de aquí.
+   *
+   * Opcional porque los Leads guardados antes de `PE-1.0` no lo traen.
+   */
+  placeEvidence?: PlaceEvidence;
 }
 
 /**

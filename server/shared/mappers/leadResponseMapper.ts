@@ -59,6 +59,15 @@ export interface InternalAnalyzedLead {
    * que la ruta agrega a nivel de respuesta, no de lead.
    */
   usedFallbackAnalysis: boolean;
+  /**
+   * Recuento de fotografías observado en la ficha de la fuente (H-14.F.1 ·
+   * `PE-1.0`). Llega hasta aquí porque `analyzeProspects` propaga el candidato
+   * completo con `{ ...p }`.
+   *
+   * **Opcional y nulable, y la distinción importa:** `0` es «se observó que no
+   * hay ninguna»; ausente o `null` es «no se observó». Nunca se colapsan.
+   */
+  photoCount?: number | null;
 }
 
 /**
@@ -114,6 +123,16 @@ export function mapToLeadResponseDTO(lead: InternalAnalyzedLead, id: string): Le
     if (lead.scoreCoverage !== undefined) dto.coverage = lead.scoreCoverage;
     if (lead.calculatedAt !== undefined) dto.calculatedAt = lead.calculatedAt;
     if (lead.scoreBreakdown !== undefined) dto.breakdown = lead.scoreBreakdown;
+  }
+
+  // ── Evidencia observada — `PE-1.0` (H-14.F.1) ──────────────────────────────
+  //
+  // **`!== undefined`, deliberadamente, y no `?? null`.** `0` es un valor que
+  // debe viajar —«se observó que no hay fotografías»— y `undefined` significa
+  // que la evidencia no se recogió. Un `|| 0` aquí destruiría exactamente la
+  // distinción que este sprint existe para preservar.
+  if (lead.photoCount !== undefined) {
+    dto.photoCount = lead.photoCount;
   }
 
   return dto;

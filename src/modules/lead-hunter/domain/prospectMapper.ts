@@ -1,3 +1,4 @@
+import { toPlaceEvidence } from "./placeEvidence";
 import { Prospect } from "../../../shared/types";
 
 /**
@@ -87,6 +88,14 @@ export function mapRawProspectToProspect(raw: any): Prospect {
     phone: textOrAbsent(raw.phone),
     // Solo se conserva la fuente que el servidor declare. **No se infiere
     // ninguna**: las únicas fuentes reales son las que produce el descubrimiento.
-    source: textOrAbsent(raw.source)
+    source: textOrAbsent(raw.source),
+
+    // **Evidencia observada — `PE-1.0` (H-14.F.1).**
+    //
+    // Canal **paralelo y aditivo**: los campos de arriba conservan intactos su
+    // tipo y su semántica, de modo que ningún consumidor actual cambia (F-1).
+    // La diferencia es la fidelidad — aquí `0` y «no observado» siguen siendo
+    // cosas distintas, y arriba no.
+    placeEvidence: toPlaceEvidence(raw)
   };
 }
